@@ -1,5 +1,9 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Ticket from "./components/ticket/ticket";
+import CreateLine from "./components/create_line/createLine";
+import Line from "./components/line/line";
+import About from "./components/about/about";
 import "./App.css";
 
 function App() {
