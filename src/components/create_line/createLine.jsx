@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import styles from "./createLine.module.css";
+import MyMapComponent from "../map/map";
+
 const CreateLine = () => {
   const [serviceTimeOptions, setServiceTimeOptions] = useState([
     ...Array(30).keys(),
   ]);
+  const [lat, setLat] = useState();
+  const [lng, setLng] = useState();
+  const [location, setLocation] = useState();
+  const [submittedLocation, setSubmittedLocation] = useState();
   return (
     <div>
       <header className={styles.header}>
@@ -22,7 +28,23 @@ const CreateLine = () => {
 
           <Form.Group controlId="location">
             <Form.Label>Store location*</Form.Label>
-            <Form.Control required type="text" placeholder="Enter store name" />
+            <Form.Control
+              required
+              type="text"
+              value={location}
+              placeholder="Enter store name"
+            />
+            {submittedLocation && (
+              <MyMapComponent
+                lat={lat}
+                lng={lng}
+                isMarkerShown
+                googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+                loadingElement={<div style={{ height: `100%` }} />}
+                containerElement={<div style={{ height: `400px` }} />}
+                mapElement={<div style={{ height: `100%` }} />}
+              />
+            )}
           </Form.Group>
 
           <Form.Group controlId="serviceTime">
