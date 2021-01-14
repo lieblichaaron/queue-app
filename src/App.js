@@ -5,12 +5,14 @@ import CreateLine from "./components/create_line/createLine";
 import Line from "./components/line/line";
 import About from "./components/about/about";
 import Account from "./components/account/account";
+import CustomNavbar from "./components/navbar/customNavbar";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
     <Router>
+      <CustomNavbar />
       <Switch>
         <Route path="/ticket">
           <Ticket />
