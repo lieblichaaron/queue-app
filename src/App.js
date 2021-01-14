@@ -6,6 +6,7 @@ import Line from "./components/line/line";
 import About from "./components/about/about";
 import Account from "./components/account/account";
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
