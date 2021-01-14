@@ -4,6 +4,7 @@ import Ticket from "./components/ticket/ticket";
 import CreateLine from "./components/create_line/createLine";
 import Line from "./components/line/line";
 import About from "./components/about/about";
+import Account from "./components/account/account";
 import "./App.css";
 
 function App() {
@@ -12,6 +13,9 @@ function App() {
       <Switch>
         <Route path="/ticket">
           <Ticket />
+        </Route>
+        <Route path="/account">
+          <Account />
         </Route>
         <Route path="/create">
           <CreateLine />
