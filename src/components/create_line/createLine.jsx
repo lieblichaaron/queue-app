@@ -23,7 +23,7 @@ const CreateLine = () => {
   return (
     <div>
       <TitleBanner title="Line Setup" />
-      <div className={styles["page-container"]}>
+      <div className="p-3" style={{ color: "#ffffff" }}>
         <p className="text-center pb-3">
           Please enter the following information to start your queue.
         </p>
