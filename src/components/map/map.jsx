@@ -27,7 +27,9 @@ const MyMapComponent = withScriptjs(
         )}
         <InfoWindow position={{ lat: props.lat + 0.0018, lng: props.lng }}>
           <div>
-            <span>{props.address}</span>
+            <span style={{ padding: 0, margin: 0, color: "black" }}>
+              {props.address}
+            </span>
           </div>
         </InfoWindow>
       </GoogleMap>
