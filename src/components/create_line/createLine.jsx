@@ -9,16 +9,18 @@ const CreateLine = () => {
   const [serviceTimeOptions, setServiceTimeOptions] = useState([
     ...Array(30).keys(),
   ]);
-  const [location, setLocation] = useState();
+  const [address, setAddress] = useState();
+  const [locationPicked, setLocationPicked] = useState();
   const [lat, setLat] = useState(-34.397);
   const [lng, setLng] = useState(150.644);
   const setMap = (place) => {
-    setLocation(false);
+    setLocationPicked(false);
     setLat(place.geometry.location.lat());
     setLng(place.geometry.location.lng());
+    setAddress(place.formatted_address);
   };
   useEffect(() => {
-    setLocation(true);
+    setLocationPicked(true);
   }, [lng]);
   return (
     <div>
@@ -47,10 +49,11 @@ const CreateLine = () => {
               }}
               types={["address"]}
             />
-            {location && (
+            {locationPicked && (
               <MyMapComponent
                 lat={lat}
                 lng={lng}
+                address={address}
                 isMarkerShown
                 googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyA0Kx9Y9puWzmvyo9yVW_fCZvAiDNnKhlA&v=3.exp&libraries=geometry,drawing,places`}
                 loadingElement={<div style={{ height: `100%` }} />}
