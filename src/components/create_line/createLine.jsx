@@ -3,6 +3,7 @@ import { Form, Button } from "react-bootstrap";
 import styles from "./createLine.module.css";
 import Autocomplete from "react-google-autocomplete";
 import MyMapComponent from "../map/map";
+import TitleBanner from "../title_banner/titleBanner";
 
 const CreateLine = () => {
   const [serviceTimeOptions, setServiceTimeOptions] = useState([
@@ -21,9 +22,7 @@ const CreateLine = () => {
   }, [lng]);
   return (
     <div>
-      <header className={styles.header}>
-        <h3>Line Setup</h3>
-      </header>
+      <TitleBanner title="Line Setup" />
       <div className={styles["page-container"]}>
         <p className="text-center pb-3">
           Please enter the following information to start your queue.
