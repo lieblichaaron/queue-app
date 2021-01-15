@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import styles from "./customNavbar.module.css";
 const CustomNavbar = () => {
   return (
-    <Navbar style={{ "background-color": "#FCA311" }}>
+    <Navbar style={{ backgroundColor: "#FCA311" }}>
       <Navbar.Brand>
         {/* change to logo */}
         <NavLink to="/">Logo</NavLink>
