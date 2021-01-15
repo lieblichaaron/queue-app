@@ -4,6 +4,7 @@ import {
   Marker,
   withGoogleMap,
   withScriptjs,
+  InfoWindow,
 } from "react-google-maps";
 
 const MyMapComponent = withScriptjs(
@@ -24,6 +25,11 @@ const MyMapComponent = withScriptjs(
             }}
           />
         )}
+        <InfoWindow position={{ lat: props.lat + 0.0018, lng: props.lng }}>
+          <div>
+            <span>{props.address}</span>
+          </div>
+        </InfoWindow>
       </GoogleMap>
     );
   })
