@@ -1,5 +1,11 @@
-const Account = () => {
-  return <div>account</div>;
-};
+import React from 'react'
 
-export default Account;
+function Account(props) {
+  return (
+    <div>
+      
+    </div>
+  )
+}
+
+export default Account

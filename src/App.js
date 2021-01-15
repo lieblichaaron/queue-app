@@ -4,6 +4,7 @@ import Ticket from "./components/ticket/ticket";
 import CreateLine from "./components/create_line/createLine";
 import Line from "./components/line/line";
 import About from "./components/about/about";
+import Dashboard from "./components/dashboard/Dashboard";
 import Account from "./components/account/account";
 import CustomNavbar from "./components/navbar/customNavbar";
 import "./App.css";
@@ -14,6 +15,9 @@ function App() {
     <Router>
       <CustomNavbar />
       <Switch>
+        <Route path="/dashboard">
+          <Dashboard />
+        </Route>
         <Route path="/ticket">
           <Ticket />
         </Route>

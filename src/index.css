@@ -3,3 +3,7 @@ body {
   background: #14213d !important;
   height: 100%;
 }
+
+* {
+  color: white;
+}

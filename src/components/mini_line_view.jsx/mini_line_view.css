@@ -1,0 +1,21 @@
+.mini-line-view {
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  border: 4px solid black;
+}
+
+.mini-line-view * {
+  color: black;
+}
+
+.store-title {
+  font-weight: 700;
+}
+
+.manage-line-btn {
+  height: fit-content;
+  background-color: #FCA311;
+  border: 2px solid black;
+  color: black;
+}
