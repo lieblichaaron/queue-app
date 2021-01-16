@@ -4,7 +4,7 @@ const Ticket = () => {
   return (
     <div className={styles["ticket-container"]}>
       <h5 className="text-center">Ticket #63</h5>
-      <NowServing />
+      <NowServing textColor="#e5e5e5" backgroundColor="#14213d" />
     </div>
   );
 };
