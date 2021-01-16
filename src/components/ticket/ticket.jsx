@@ -1,11 +1,5 @@
-import TitleBanner from "../title_banner/titleBanner";
-
 const Ticket = () => {
-  return (
-    <div>
-      <TitleBanner title="Store Name" />
-    </div>
-  );
+  return null;
 };
 
 export default Ticket;
