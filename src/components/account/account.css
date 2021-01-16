@@ -1,0 +1,13 @@
+.form-input {
+  color: black;
+  width: 100%;
+  padding: 4px 2px 4px 2px;
+}
+
+.no-edit-field {
+  background-color: #E5E5E5;
+}
+
+.account-form-fieldset {
+  margin-top: 1.5rem;
+}
