@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
-import styles from "./createLine.module.css";
 import Autocomplete from "react-google-autocomplete";
 import MyMapComponent from "../map/map";
 import TitleBanner from "../title_banner/titleBanner";
@@ -68,6 +67,13 @@ const CreateLine = () => {
               ))}
             </Form.Control>
           </Form.Group>
+          {/* Prevent implicit submission of the form  */}
+          <button
+            type="submit"
+            disabled
+            style={{ display: "none" }}
+            aria-hidden="true"
+          ></button>
           <Button
             style={{
               backgroundColor: "#fca311",
