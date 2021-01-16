@@ -11,7 +11,7 @@ const MyMapComponent = withScriptjs(
   withGoogleMap((props) => {
     return (
       <GoogleMap
-        defaultZoom={8}
+        defaultZoom={15}
         defaultCenter={{
           lat: props.lat,
           lng: props.lng,

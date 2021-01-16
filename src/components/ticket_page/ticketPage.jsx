@@ -1,6 +1,7 @@
 import TitleBanner from "../title_banner/titleBanner";
 import Ticket from "../ticket/ticket";
 import { Button } from "react-bootstrap";
+import StoreInfo from "../store_info/storeInfo";
 const TicketPage = () => {
   return (
     <div>
@@ -19,7 +20,7 @@ const TicketPage = () => {
         >
           Confirm ticket/Leave line
         </Button>
-        {/* <StoreInfo /> */}
+        <StoreInfo />
       </div>
     </div>
   );
