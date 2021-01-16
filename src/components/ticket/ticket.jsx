@@ -1,5 +1,5 @@
 const Ticket = () => {
-  return null;
+  return <div></div>;
 };
 
 export default Ticket;
