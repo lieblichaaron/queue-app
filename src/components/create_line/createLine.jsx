@@ -70,7 +70,7 @@ const CreateLine = () => {
               ))}
             </Form.Control>
           </Form.Group>
-          {/* Prevent implicit submission of the form  */}
+          {/* Button to prevent implicit submission of the form  */}
           <button
             type="submit"
             disabled
@@ -82,6 +82,7 @@ const CreateLine = () => {
               backgroundColor: "#fca311",
               color: "#14213d",
               border: "none",
+              height: "2.5rem",
             }}
             className="w-100"
             type="submit"
