@@ -5,6 +5,14 @@ const Ticket = () => {
     <div className={styles["ticket-container"]}>
       <h5 className="text-center">Ticket #63</h5>
       <NowServing textColor="#e5e5e5" backgroundColor="#14213d" />
+      <div className="p-3">
+        <span>
+          <b>Join time:</b> waiting for confirmation <br />
+        </span>
+        <span>
+          <b>Estimated wait time:</b> 10min
+        </span>
+      </div>
     </div>
   );
 };
