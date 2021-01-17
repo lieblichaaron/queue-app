@@ -1,0 +1,33 @@
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:visited {
+  background-color: #fca311 !important;
+  color: black !important;
+  border-color: #fca311 !important;
+}
+
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:active,
+.btn-secondary:visited {
+  background-color: #14213d !important;
+  color: white !important;
+  border-color: #14213d !important;
+}
+
+.what-we-do {
+  background-color: #fca311 !important;
+  height: 24rem;
+  color: black;
+}
+
+.contact-us {
+  height: 24rem;
+  color: white;
+}
+
+.form-styles {
+  width: 80%;
+  font-size: 80%;
+}

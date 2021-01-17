@@ -13,6 +13,7 @@
     "react-geocode": "^0.2.2",
     "react-google-autocomplete": "^1.2.6",
     "react-google-maps": "^9.4.5",
+    "react-modal": "^3.12.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "web-vitals": "^0.2.4"
