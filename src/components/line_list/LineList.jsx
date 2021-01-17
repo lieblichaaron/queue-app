@@ -7,9 +7,11 @@ function LineList(props) {
   ));
   return (
     <div className="container">
-      {lines.length > 0 ? lines : 
-      <p className="text-center">You do not have any lines.</p>
-      }
+      {lines.length > 0 ? (
+        lines
+      ) : (
+        <p className="text-center">You do not have any lines.</p>
+      )}
     </div>
   );
 }
