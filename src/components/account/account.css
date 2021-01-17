@@ -5,9 +5,12 @@
 }
 
 .no-edit-field {
-  background-color: #E5E5E5;
+  background: none;
+  border: none;
+  outline: none;
+  color: white;
 }
 
-.account-form-fieldset {
-  margin-top: 1.5rem;
+.modal-content * {
+  color: black;
 }
