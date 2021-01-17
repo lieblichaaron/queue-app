@@ -1,7 +1,7 @@
 import { Navbar, Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import styles from "./customNavbar.module.css";
-const CustomNavbar = () => {
+const CustomNavbar = (props) => {
   return (
     <Navbar style={{ backgroundColor: "#FCA311" }}>
       <Navbar.Brand>
@@ -18,10 +18,21 @@ const CustomNavbar = () => {
             </NavLink>
           )}
           {/* display when signed in && confirm modal on click */}
-          {false && <div className={styles["nav-link"]}>Sign out</div>}
+          {props.isLoggedIn && (
+            <div
+              className={styles["nav-link"]}
+              onClick={(event) => props.handleSignOut(event)}
+            >
+              Sign out
+            </div>
+          )}
           {/* display when signed out */}
-          {true && (
-            <NavLink className={styles["nav-link"]} to="/">
+          {!props.isLoggedIn && (
+            <NavLink
+              className={styles["nav-link"]}
+              to="/"
+              onClick={(event) => props.handleSignIn(event)}
+            >
               Sign in
             </NavLink>
           )}

@@ -6,6 +6,7 @@ import Line from "./components/line/line";
 import About from "./components/about/about";
 import Account from "./components/account/account";
 import CustomNavbar from "./components/navbar/customNavbar";
+import LoginModal from "./components/login/loginModal"
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -14,16 +15,24 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      hasAccount: true,
       isLoggedIn: false,
+      showLoginModal: false
     }
   }
+  manageLoginModal() {
+    this.setState({ showLoginModal: !this.state.showLoginModal })    
+  }
 
+  handleLogout() {
+    this.setState({isLoggedIn:false})
+  }
 
-  render () {
+  render() {
+    const { showLoginModal, isLoggedIn } = this.state;
   return (
     <Router>
-      <CustomNavbar />
+      <CustomNavbar isLoggedIn={isLoggedIn} handleSignIn={ () => this.manageLoginModal() }/>
+      
       <Switch>
         <Route path="/ticket">
           <Ticket />
@@ -39,6 +48,7 @@ class App extends React.Component {
         </Route>
         <Route path="/">
           <About />
+          <LoginModal showModal={showLoginModal} closeModal={ () => this.manageLoginModal() }/>
         </Route>
       </Switch>
     </Router>
