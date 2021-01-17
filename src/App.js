@@ -9,7 +9,18 @@ import CustomNavbar from "./components/navbar/customNavbar";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function App() {
+class App extends React.Component {
+  
+  constructor(props) {
+    super(props)
+    this.state = {
+      hasAccount: true,
+      isLoggedIn: false,
+    }
+  }
+
+
+  render () {
   return (
     <Router>
       <CustomNavbar />
@@ -31,7 +42,8 @@ function App() {
         </Route>
       </Switch>
     </Router>
-  );
+    );
+    }
 }
 
 export default App;

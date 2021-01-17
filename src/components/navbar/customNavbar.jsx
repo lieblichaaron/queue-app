@@ -14,13 +14,13 @@ const CustomNavbar = () => {
           {/* display when signed in */}
           {true && (
             <NavLink className={styles["nav-link"]} to="/account">
-              Acount settings
+              Account settings
             </NavLink>
           )}
           {/* display when signed in && confirm modal on click */}
-          {true && <div className={styles["nav-link"]}>Sign out</div>}
+          {false && <div className={styles["nav-link"]}>Sign out</div>}
           {/* display when signed out */}
-          {false && (
+          {true && (
             <NavLink className={styles["nav-link"]} to="/">
               Sign in
             </NavLink>
