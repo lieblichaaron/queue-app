@@ -1,5 +1,5 @@
 import React from "react";
-import MiniLineView from "../mini_line_view.jsx/MiniLineView";
+import MiniLineView from "../mini_line_view/MiniLineView";
 
 function LineList(props) {
   const lines = props.lines.map((line) => (
