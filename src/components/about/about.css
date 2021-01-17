@@ -16,10 +16,6 @@
   border-color: #14213d !important;
 }
 
-/* .carousel-text-color {
-  color: #14213d !important;
-} */
-
 .what-we-do {
   background-color: #fca311 !important;
   height: 24rem;
@@ -34,12 +30,4 @@
 .form-styles {
   width: 80%;
   font-size: 80%;
-}
-
-.footer {
-  height: 4rem;
-}
-
-.social-media-icons {
-  height: 1.5rem;
 }

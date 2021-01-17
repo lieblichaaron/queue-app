@@ -1,6 +1,7 @@
-import React from "react";
-import { Button, Carousel, Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
+import Footer from "../footer/footer";
 import "./about.css";
+import CarouselComponent from "./carousel";
 
 const About = () => {
   return (
@@ -12,42 +13,7 @@ const About = () => {
           Get started today
         </Button>
       </div>
-      <div className="mt-4">
-        <Carousel>
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src={process.env.PUBLIC_URL + "/People-standing-in-line.png"}
-              alt="People In  Line"
-            />
-            <Carousel.Caption>
-              <h5>No time wasted waiting in line</h5>
-            </Carousel.Caption>
-          </Carousel.Item>
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src={process.env.PUBLIC_URL + "/Burger-Food-Truck.png"}
-              alt="Food Truck"
-            />
-
-            <Carousel.Caption>
-              <h5>Help to avoid overcrowded public places</h5>
-            </Carousel.Caption>
-          </Carousel.Item>
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src={process.env.PUBLIC_URL + "/wooden-hut-shop.png"}
-              alt="Wooden Hut Shop"
-            />
-
-            <Carousel.Caption>
-              <h5>Simple and jsut perfect for local businesses</h5>
-            </Carousel.Caption>
-          </Carousel.Item>
-        </Carousel>
-      </div>
+      <CarouselComponent />
       <div className="what-we-do d-flex flex-column align-items-center pt-5 ">
         <h4 className="text-center">What we do</h4>
         <p className="px-4 mt-2 text-justify">
@@ -96,23 +62,7 @@ const About = () => {
           </Button>
         </Form>
       </div>
-      <div className="footer d-flex flex-row align-items-end pb-3">
-        <img
-          className="social-media-icons ml-3"
-          src={process.env.PUBLIC_URL + "/Facebook_icon.png"}
-          alt="Facebook Icon"
-        ></img>
-        <img
-          className="social-media-icons ml-3"
-          src={process.env.PUBLIC_URL + "/Twitter_icon.png"}
-          alt="Twitter Icon"
-        ></img>
-        <img
-          className="social-media-icons ml-3"
-          src={process.env.PUBLIC_URL + "/Instagram_icon.png"}
-          alt="Instagram Icon"
-        ></img>
-      </div>
+      <Footer />
     </div>
   );
 };
