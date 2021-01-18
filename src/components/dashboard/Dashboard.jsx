@@ -31,7 +31,7 @@ function Dashboard() {
       </p>
       <span className="d-flex justify-content-center">
         <Link to="/create_line">
-          <Button className="create-line-btn py-4 px-5 my-5">
+          <Button className="create-line-btn py-4 px-5 my-5 font-weight-bolder">
             Create a new line
           </Button>
         </Link>
