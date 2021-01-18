@@ -3,3 +3,27 @@ body {
   background: #14213d !important;
   height: 100%;
 }
+
+.white-text {
+  color: white !important;
+}
+
+.blue-text {
+  color: #14213d !important;
+}
+
+.black-text {
+  color: black !important;
+}
+
+.grey-text {
+  color: #e5e5e5 !important;
+}
+
+.green-text {
+  color: rgb(12, 53, 0) !important;
+}
+
+.red-text {
+  color: rgb(139, 0, 0) !important;
+}
