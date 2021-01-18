@@ -1,0 +1,8 @@
+.ticket-container {
+  background-color: #e5e5e5;
+  height: 300px;
+  padding: 1rem;
+  margin-top: 2rem;
+  border-radius: 5%;
+  color: #14213d;
+}
