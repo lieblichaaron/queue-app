@@ -17,11 +17,10 @@ const About = () => {
       <div className="what-we-do d-flex flex-column align-items-center pt-5 ">
         <h4 className="text-center">What we do</h4>
         <p className="px-4 mt-2 text-justify">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-          condimentum eleifend congue. Cras egestas suscipit turpis quis
-          venenatis. Vivamus eget orci nec sem dapibus commodo. Sed vitae
-          aliquam augue, vel sollicitudin felis. Nullam ullamcorper blandit
-          convallis.
+          Why are queues still a thing in {new Date().getFullYear()}? <br /><br /> In an age
+          where customers expect instant service, nothing says "poor customer
+          experience" like a long line. Create a virtual queue and let your
+          customers scan a QR code to join the line. It's as simple as that.
         </p>
         <Button type="button" className="btn btn-secondary mt-4 py-3 px-5">
           Get started today
