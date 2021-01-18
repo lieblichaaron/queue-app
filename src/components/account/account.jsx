@@ -39,7 +39,7 @@ function Account(props) {
         onCloseModal={handleCloseModal}
         centered
       />
-      <h2 className="w-100 py-3 px-1 text-center text-wrap">
+      <h2 className="w-100 py-3 px-1 text-center text-wrap white-text">
         Account Settings
       </h2>
       <Formik
@@ -55,7 +55,12 @@ function Account(props) {
           <Form>
             <Container fluid className="px-5">
               <FormGroup>
-                <FormLabel htmlFor="displayName">Display name</FormLabel>
+                <FormLabel
+                  className="white-text font-weight-bold"
+                  htmlFor="displayName"
+                >
+                  Display name
+                </FormLabel>
                 <Field
                   className={`form-input ${canEdit || "no-edit-field"}`}
                   name="displayName"
@@ -63,7 +68,12 @@ function Account(props) {
                 />
               </FormGroup>
               <FormGroup>
-                <FormLabel htmlFor="email">Email address</FormLabel>
+                <FormLabel
+                  className="white-text font-weight-bold"
+                  htmlFor="email"
+                >
+                  Email address
+                </FormLabel>
                 <Field
                   className={`form-input ${canEdit || "no-edit-field"}`}
                   name="email"

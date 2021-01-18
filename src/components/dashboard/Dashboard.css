@@ -2,10 +2,6 @@
   background-color: #fca311;
 }
 
-.existing-lines-container * {
-  color: black;
-}
-
 .create-line-btn {
   font-size: 1.2rem !important;
 }

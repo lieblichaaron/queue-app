@@ -5,10 +5,6 @@
   border: 4px solid black;
 }
 
-.mini-line-view * {
-  color: black;
-}
-
 .store-title {
   font-weight: 700;
   font-size: 1.1rem;
@@ -18,12 +14,4 @@
 .manage-line-btn {
   height: fit-content;
   border: 2px solid black !important;
-}
-
-.green {
- color: rgb(12, 53, 0) !important;
-}
-
-.red {
-color: rgb(139, 0, 0) !important;
 }

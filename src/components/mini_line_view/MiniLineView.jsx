@@ -10,7 +10,10 @@ function MiniLineView(props) {
       <div>
         <p className="store-title mb-1">{store}</p>
         <p className="mb-1">
-          status: <span className={active ? "green" : "red"}>{active ? "active" : "inactive"}</span>
+          status:{" "}
+          <span className={active ? "green-text" : "red-text"}>
+            {active ? "active" : "inactive"}
+          </span>
         </p>
         <p className="mb-1">
           queue length: <span>{length}</span>

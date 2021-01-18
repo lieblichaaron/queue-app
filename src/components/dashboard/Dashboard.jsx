@@ -23,14 +23,14 @@ function Dashboard() {
 
   return (
     <div>
-      <h2 className="w-100 py-3 px-1 text-center text-wrap">
+      <h2 className="w-100 py-3 px-1 text-center text-wrap white-text">
         Welcome back, {user.displayName}!
       </h2>
-      <p className="text-center mx-4">
+      <p className="text-center mx-4 white-text">
         Create a new line or manage existing lines at the press of a button
       </p>
       <span className="d-flex justify-content-center">
-        <Link to="/create_line">
+        <Link to="/create">
           <Button className="create-line-btn py-4 px-5 my-5 font-weight-bolder">
             Create a new line
           </Button>
