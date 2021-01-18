@@ -10,6 +10,7 @@ import {
 } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import PasswordModal from "../password_modal/PasswordModal";
+import * as Yup from "yup";
 
 function Account(props) {
   const user = {
@@ -23,6 +24,13 @@ function Account(props) {
   const handleCloseModal = () => {
     setShowPasswordModal(false);
   };
+
+  const validationSchema = Yup.object().shape({
+    displayName: Yup.string().required("You must have a display name"),
+    email: Yup.string()
+      .email("Please enter a valid email address")
+      .required("We can't identify you without an email address"),
+  });
 
   return (
     <div>
@@ -41,6 +49,7 @@ function Account(props) {
         }}
         enableReinitialize={true}
         onSubmit={(values) => console.log(values)}
+        validationSchema={validationSchema}
       >
         {(props) => (
           <Form>
@@ -66,7 +75,14 @@ function Account(props) {
                 {canEdit ? (
                   <>
                     <Col>
-                      <Button className="w-100" type="submit" value="submit">
+                      <Button
+                        className="w-100"
+                        type="submit"
+                        value="submit"
+                        disabled={
+                          !props.isValid || props.initialValues === props.values
+                        }
+                      >
                         Save changes
                       </Button>
                     </Col>
