@@ -27,7 +27,6 @@ class LoginModal extends React.Component {
 
   changeModalType(event) {
     event.preventDefault();
-    console.log("fire changeModalType");
     this.setState({ hasAccount: !this.state.hasAccount });
   }
 
@@ -69,7 +68,6 @@ class LoginModal extends React.Component {
         bottom: this.state.hasAccount ? "25%" : "15%",
       },
     };
-    console.log("loginModal shows???: ", this.props.showModal);
     return (
       <div className="vh-50">
         <Modal
@@ -77,7 +75,7 @@ class LoginModal extends React.Component {
           onRequestClose={this.props.closeModal}
           shouldCloseOnOverlayClick={true}
           style={modalStyles}
-          // ariaHideApp={false} // enabling this helps screen reader to understand that this is a Modal but it might lead to glitches
+          ariaHideApp={true} // enabling this helps screen reader to understand that this is a Modal but it might lead to glitches
           contentLabel="SignInModal"
         >
           <h2 className="mb-5">{hasAccount ? "Log in" : "Create Account"}</h2>
