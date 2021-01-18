@@ -1,0 +1,15 @@
+.existing-lines-container {
+  background-color: #fca311;
+}
+
+.existing-lines-container * {
+  color: black;
+}
+
+.create-line-btn {
+  background-color: #fca311;
+  color: black;
+  font-size: large;
+  font-weight: 600;
+  border: none;
+}

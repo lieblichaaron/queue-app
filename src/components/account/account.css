@@ -1,0 +1,16 @@
+.form-input {
+  color: black;
+  width: 100%;
+  padding: 4px 2px 4px 2px;
+}
+
+.no-edit-field {
+  background: none;
+  border: none;
+  outline: none;
+  color: white;
+}
+
+.modal-content * {
+  color: black;
+}

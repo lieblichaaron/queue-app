@@ -4,6 +4,7 @@ import TicketPage from "./components/ticket_page/ticketPage";
 import CreateLine from "./components/create_line/createLine";
 import Line from "./components/line/line";
 import About from "./components/about/about";
+import Dashboard from "./components/dashboard/Dashboard";
 import Account from "./components/account/account";
 import CustomNavbar from "./components/navbar/customNavbar";
 import LoginModal from "./components/login/loginModal"
@@ -34,6 +35,9 @@ class App extends React.Component {
       <CustomNavbar isLoggedIn={isLoggedIn} handleSignIn={ () => this.manageLoginModal() }/>
       
       <Switch>
+        <Route path="/dashboard">
+          <Dashboard />
+        </Route>
         <Route path="/ticket">
           <TicketPage />
         </Route>
