@@ -11,11 +11,19 @@
 
 .store-title {
   font-weight: 700;
+  font-size: 1.1rem;
+  width: 100%;
 }
 
 .manage-line-btn {
   height: fit-content;
-  background-color: #fca311;
-  border: 2px solid black;
-  color: black;
+  border: 2px solid black !important;
+}
+
+.green {
+ color: rgb(12, 53, 0) !important;
+}
+
+.red {
+color: rgb(139, 0, 0) !important;
 }
