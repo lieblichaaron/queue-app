@@ -13,8 +13,8 @@ const CustomNavbar = (props) => {
         <Nav className="ml-auto">
           {/* display when signed in */}
           {true && (
-            <NavLink className={styles["nav-link"]} to="/account">
-              Account settings
+            <NavLink className={styles["nav-link"]} to="/dashboard">
+              Dashboard
             </NavLink>
           )}
           {/* display when signed in && confirm modal on click */}
