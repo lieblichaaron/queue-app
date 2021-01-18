@@ -7,9 +7,9 @@ import {
   Col,
   FormGroup,
   FormLabel,
-  Modal,
 } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
+import PasswordModal from "../password_modal/PasswordModal";
 
 function Account(props) {
   const user = {
@@ -19,64 +19,18 @@ function Account(props) {
 
   const [canEdit, setCanEdit] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+
   const handleCloseModal = () => {
     setShowPasswordModal(false);
   };
 
   return (
     <div>
-      <Modal show={showPasswordModal} onHide={handleCloseModal} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Change Password</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Formik
-            initialValues={{
-              oldPassword: "",
-              newPassword: "",
-              newPasswordConfirm: "",
-            }}
-            onSubmit={(values) => {
-              console.log(values);
-            }}
-          >
-            <Form>
-              <Container fluid>
-                <FormGroup>
-                  <FormLabel htmlFor="oldPassword">Old password</FormLabel>
-                  <Field
-                    className="form-input"
-                    name="oldPassword"
-                    type="password"
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <FormLabel htmlFor="newPassword">New password</FormLabel>
-                  <Field
-                    className="form-input"
-                    name="newPassword"
-                    type="password"
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <FormLabel htmlFor="newPasswordConfirm">
-                    Confirm new password
-                  </FormLabel>
-                  <Field
-                    className="form-input"
-                    name="newPasswordConfirm"
-                    type="password"
-                  />
-                </FormGroup>
-              </Container>
-            </Form>
-          </Formik>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={handleCloseModal}>Save changes</Button>
-          <Button onClick={handleCloseModal}>Cancel</Button>
-        </Modal.Footer>
-      </Modal>
+      <PasswordModal
+        isOpen={showPasswordModal}
+        onCloseModal={handleCloseModal}
+        centered
+      />
       <h2 className="w-100 py-3 px-1 text-center text-wrap">
         Account Settings
       </h2>
@@ -135,7 +89,6 @@ function Account(props) {
                     type="button"
                     onClick={(e) => {
                       e.preventDefault();
-
                       setCanEdit(true);
                     }}
                   >
