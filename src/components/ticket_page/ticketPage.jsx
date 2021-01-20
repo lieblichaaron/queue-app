@@ -4,9 +4,15 @@ import { Button } from "react-bootstrap";
 import StoreInfo from "../store_info/storeInfo";
 const TicketPage = () => {
   return (
-    <div>
+    <div className="text-center">
       <TitleBanner title="Store Name" />
-      <div style={{ margin: "2rem 1rem" }}>
+      <div
+        style={{
+          margin: "2rem 1rem",
+          maxWidth: "382px",
+          display: "inline-block",
+        }}
+      >
         <Ticket />
         <Button
           style={{
