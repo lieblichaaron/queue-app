@@ -117,30 +117,34 @@ const Line = () => {
         }}
         types={["address"]}
       />
-      {locationPicked && (
-        <Map
-          lat={lat}
-          lng={lng}
-          address={address}
-          isMarkerShown
-          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyA0Kx9Y9puWzmvyo9yVW_fCZvAiDNnKhlA&v=3.exp&libraries=geometry,drawing,places`}
-          loadingElement={<div style={{ height: `100%` }} />}
-          containerElement={<div style={{ height: `300px` }} />}
-          mapElement={<div style={{ height: `100%` }} />}
-        />
-      )}
-      <Button
-        className="Buttons1"
-        style={{
-          backgroundColor: "#14213d",
-          color: "#fca311",
-          border: "none",
-          marginTop: 10,
-        }}
-        className="w-100"
-        type="submit">
-        Update Information
-      </Button>
+      <Container>
+        {locationPicked && (
+          <Map
+            lat={lat}
+            lng={lng}
+            address={address}
+            isMarkerShown
+            googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyA0Kx9Y9puWzmvyo9yVW_fCZvAiDNnKhlA&v=3.exp&libraries=geometry,drawing,places`}
+            loadingElement={<div style={{ height: `100%` }} />}
+            containerElement={<div style={{ height: `300px` }} />}
+            mapElement={<div style={{ height: `100%` }} />}
+          />
+        )}
+      </Container>
+      <Container>
+        <Button
+          className="Buttons1"
+          style={{
+            backgroundColor: "#14213d",
+            color: "#fca311",
+            border: "none",
+            marginTop: 10,
+          }}
+          className="w-100"
+          type="submit">
+          Update Information
+        </Button>
+      </Container>
     </Container>
   );
 };
