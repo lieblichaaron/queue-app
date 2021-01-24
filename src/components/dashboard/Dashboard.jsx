@@ -37,12 +37,12 @@ function Dashboard() {
         </Link>
       </span>
       <div className="existing-lines-container p-2 pb-3 my-3">
-        <h3 className="text-center">Current Lines</h3>
+        <h3 className="text-center black-text">Current Lines</h3>
         <LineList lines={user.lines} />
       </div>
       <span className="d-flex justify-content-center">
         <Link to="/account">
-          <Button className="account-settings-btn">Account settings</Button>
+          <Button className="account-settings-btn mb-3">Account settings</Button>
         </Link>
       </span>
     </div>
