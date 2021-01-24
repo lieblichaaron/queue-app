@@ -13,15 +13,6 @@ class LoginModal extends React.Component {
       hasAccount: false,
     };
 
-    this.customStyles = {
-      content: {
-        top: "20%",
-        left: "10%",
-        right: "10%",
-        bottom: this.state.hasAccount ? "40%" : "15%",
-      },
-    };
-
     Modal.setAppElement("#root");
   }
 
@@ -65,7 +56,7 @@ class LoginModal extends React.Component {
         top: "20%",
         left: "10%",
         right: "10%",
-        bottom: this.state.hasAccount ? "25%" : "15%",
+        bottom: this.state.hasAccount ? "19%" : "7%",
       },
     };
     return (
