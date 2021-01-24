@@ -1,0 +1,19 @@
+.circle {
+  background-color: white;
+}
+
+h1,
+h4 {
+  color: white;
+}
+.Container1 {
+  height: 500px;
+  margin-bottom: 30px;
+}
+.Container {
+  margin: 0;
+  padding: 0;
+}
+.Buttons {
+  margin-bottom: 30px;
+}
