@@ -17,6 +17,7 @@
     "react-modal": "^3.12.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
+    "rn-qr-generator": "^1.1.5",
     "web-vitals": "^0.2.4",
     "yup": "^0.32.8"
   },
