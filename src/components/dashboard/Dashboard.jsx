@@ -1,25 +1,26 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import UserContext from "../../contexts/UserContext";
 import LineList from "../line_list/LineList";
 import "./Dashboard.css";
 
 function Dashboard() {
-  const user = {
-    displayName: "Jake",
-    lines: [
-      {
-        store: "burgers",
-        active: true,
-        length: 4,
-      },
-      {
-        store: "pizza",
-        active: false,
-        length: 0,
-      },
-    ],
-  };
+
+  const [lines, setLines] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const user = useContext(UserContext);
+
+  const getLines = async () => {
+    const res = await axios.get("http://localhost:5000" + "/line/owned-by/" + user.id)
+    setLines(res.data)
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    getLines();
+  }, [])
 
   return (
     <div>
@@ -38,11 +39,13 @@ function Dashboard() {
       </span>
       <div className="existing-lines-container p-2 pb-3 my-3">
         <h3 className="text-center black-text">Current Lines</h3>
-        <LineList lines={user.lines} />
+        {isLoading ? <p>loading...</p> : <LineList lines={lines} />}
       </div>
       <span className="d-flex justify-content-center">
         <Link to="/account">
-          <Button className="account-settings-btn mb-3">Account settings</Button>
+          <Button className="account-settings-btn mb-3">
+            Account settings
+          </Button>
         </Link>
       </span>
     </div>

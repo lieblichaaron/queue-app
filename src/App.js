@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import TicketPage from "./components/ticket_page/ticketPage";
 import CreateLine from "./components/create_line/createLine";
@@ -8,32 +8,38 @@ import Dashboard from "./components/dashboard/Dashboard";
 import Account from "./components/account/account";
 import CustomNavbar from "./components/navbar/customNavbar";
 import LoginModal from "./components/login/loginModal";
+import UserContext from "./contexts/UserContext";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoggedIn: false,
-      showLoginModal: false,
-    };
-  }
-  manageLoginModal() {
-    this.setState({ showLoginModal: !this.state.showLoginModal });
-  }
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
-  handleLogout() {
-    this.setState({ isLoggedIn: false });
-  }
+  //temp user state until we link to backend
+  const [currentUser, setCurrentUser] = useState({
+    id: '600ecbad5d601d64b43cac9c',
+    displayName: 'Jake',
+    email: 'jakenudels@gmail.com',
+    lineIds: [
+      "600ed2a0c82668f8cafdc9ac",
+  ]
+  });
 
-  render() {
-    const { showLoginModal, isLoggedIn } = this.state;
-    return (
+  const manageLoginModal = () => {
+    setShowLoginModal(!showLoginModal);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setCurrentUser(null);
+  };
+  return (
+    <UserContext.Provider value={currentUser}>
       <Router>
         <CustomNavbar
           isLoggedIn={isLoggedIn}
-          handleSignIn={() => this.manageLoginModal()}
+          handleSignIn={() => manageLoginModal()}
         />
 
         <Switch>
@@ -53,16 +59,16 @@ class App extends React.Component {
             <Line />
           </Route>
           <Route path="/">
-            <About handleSignIn={() => this.manageLoginModal()} />
+            <About handleSignIn={() => manageLoginModal()} />
             <LoginModal
               showModal={showLoginModal}
-              closeModal={() => this.manageLoginModal()}
+              closeModal={() => manageLoginModal()}
             />
           </Route>
         </Switch>
       </Router>
-    );
-  }
+    </UserContext.Provider>
+  );
 }
 
 export default App;
