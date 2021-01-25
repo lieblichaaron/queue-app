@@ -4,7 +4,6 @@ import { useHistory } from "react-router-dom";
 import Autocomplete from "react-google-autocomplete";
 import MyMapComponent from "../map/map";
 import TitleBanner from "../title_banner/titleBanner";
-// import QRCode from "qrcode-svg";
 import QRCode from "qrcode.react";
 const saveSvgAsPng = require("save-svg-as-png");
 
@@ -150,7 +149,7 @@ const CreateLine = () => {
           <div className="text-center p-3">
             <QRCode
               id="qr"
-              value={`http://localhost:3000/ticket?line-id=${lineId}`}
+              value={`http://localhost:3000/ticket/${lineId}`}
               renderAs="svg"
             />
             <Button
