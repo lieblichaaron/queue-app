@@ -3,35 +3,81 @@ import { Form, Button } from "react-bootstrap";
 import Autocomplete from "react-google-autocomplete";
 import MyMapComponent from "../map/map";
 import TitleBanner from "../title_banner/titleBanner";
+// import QRCode from "qrcode-svg";
+import QRCode from "qrcode.react";
+const saveSvgAsPng = require("save-svg-as-png");
 
 const CreateLine = () => {
   const [serviceTimeOptions, setServiceTimeOptions] = useState([
     ...Array(30).keys(),
   ]);
-  const [address, setAddress] = useState();
-  const [locationPicked, setLocationPicked] = useState();
-  const [lat, setLat] = useState(-34.397);
-  const [lng, setLng] = useState(150.644);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [storeName, setStoreName] = useState();
+  const [lineId, setLineId] = useState();
+  const [serviceTime, setServiceTime] = useState();
+  const [address, setAddress] = useState(null);
+  const [lat, setLat] = useState(32.070343);
+  const [lng, setLng] = useState(34.774254);
   const setMap = (place) => {
-    setLocationPicked(false);
     setLat(place.geometry.location.lat());
     setLng(place.geometry.location.lng());
     setAddress(place.formatted_address);
   };
-  useEffect(() => {
-    setLocationPicked(true);
-  }, [lng]);
+  const handleServiceTime = (e) => {
+    setServiceTime(e.target.value);
+  };
+  const handleStoreName = (e) => {
+    setStoreName(e.target.value);
+  };
+  const createQueue = async (e) => {
+    e.preventDefault();
+    const lineObj = {
+      ownerId: /*owner id from state*/ 123456789,
+      isActive: false,
+      storeName: storeName,
+      estServiceTime: serviceTime,
+      location: {
+        lat: lat,
+        lng: lng,
+        address: address,
+      },
+    };
+    const data = await fetch("http://localhost:5000/line", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(lineObj),
+    });
+    setLineId(await data.json());
+    saveSvgAsPng.saveSvgAsPng(
+      document.getElementById("qr"),
+      "line-qr-code.png",
+      {
+        scale: 5,
+      }
+    );
+    setButtonDisabled(true);
+  };
   return (
     <div>
       <TitleBanner title="Line Setup" />
       <div className="p-3" style={{ color: "#ffffff" }}>
         <p className="text-center pb-3">
-          Please enter the following information to start your queue.
+          After submitting this form you will have the option to download the QR
+          code. All you need to do is put it up and manage the line from your
+          dashboard!
         </p>
-        <Form>
+        <Form onSubmit={createQueue}>
           <Form.Group controlId="storeName">
             <Form.Label>Store name*</Form.Label>
-            <Form.Control required type="text" placeholder="Enter store name" />
+            <Form.Control
+              required
+              autoComplete="off"
+              type="text"
+              placeholder="Enter store name"
+              onChange={handleStoreName}
+            />
           </Form.Group>
 
           <Form.Group controlId="location">
@@ -48,25 +94,26 @@ const CreateLine = () => {
               }}
               types={["address"]}
             />
-            {locationPicked && (
-              <MyMapComponent
-                lat={lat}
-                lng={lng}
-                address={address}
-                isMarkerShown
-                googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyA0Kx9Y9puWzmvyo9yVW_fCZvAiDNnKhlA&v=3.exp&libraries=geometry,drawing,places`}
-                loadingElement={<div style={{ height: `100%` }} />}
-                containerElement={<div style={{ height: `300px` }} />}
-                mapElement={<div style={{ height: `100%` }} />}
-              />
-            )}
+            <MyMapComponent
+              lat={lat}
+              lng={lng}
+              address={address}
+              isMarkerShown={address}
+              googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyA0Kx9Y9puWzmvyo9yVW_fCZvAiDNnKhlA&v=3.exp&libraries=geometry,drawing,places`}
+              loadingElement={<div style={{ height: `100%` }} />}
+              containerElement={<div style={{ height: `300px` }} />}
+              mapElement={<div style={{ height: `100%` }} />}
+            />
           </Form.Group>
 
           <Form.Group controlId="serviceTime">
             <Form.Label>Average service time - per customer*</Form.Label>
-            <Form.Control required as="select">
+            <Form.Control required as="select" onChange={handleServiceTime}>
+              <option value="" disabled selected>
+                Select time
+              </option>
               {serviceTimeOptions.map((option) => (
-                <option key={option}>{option + 1 + "min"}</option>
+                <option key={option}>{option + 1 + " min"}</option>
               ))}
             </Form.Control>
           </Form.Group>
@@ -84,12 +131,22 @@ const CreateLine = () => {
               border: "none",
               height: "2.5rem",
             }}
+            disabled={buttonDisabled}
             className="w-100"
             type="submit"
           >
             Start queue
           </Button>
         </Form>
+        <div className="text-center p-3">
+          {lineId && (
+            <QRCode
+              id="qr"
+              value={`http://localhost:3000/ticket/${lineId}`}
+              renderAs="svg"
+            />
+          )}
+        </div>
       </div>
     </div>
   );
