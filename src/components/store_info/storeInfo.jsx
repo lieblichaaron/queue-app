@@ -1,7 +1,6 @@
 import MyMapComponent from "../map/map";
 import styles from "./storeInfo.module.css";
 const StoreInfo = ({ line }) => {
-  console.log(line);
   return (
     <div className={styles["ticket-container"]}>
       <h2 className="text-center">Store Info</h2>

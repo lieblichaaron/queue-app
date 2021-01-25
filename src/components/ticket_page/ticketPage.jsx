@@ -9,8 +9,24 @@ const TicketPage = () => {
   const { lineId } = useParams();
   const [line, setLine] = useState();
   const [ticket, setTicket] = useState();
+  const [leftLine, setLeftLine] = useState();
 
-  const removeFromLine = () => {};
+  const removeFromLine = async () => {
+    const response = await fetch(
+      `http://localhost:5000/line/remove-shopper/${lineId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ticket),
+      }
+    );
+    const data = await response.json();
+    await localforage.removeItem("shopper");
+    setTicket(null);
+    setLeftLine(data);
+  };
   useEffect(async () => {
     const shopper = await localforage.getItem("shopper");
     if (shopper) {
@@ -28,13 +44,16 @@ const TicketPage = () => {
           .replace(/T/, " ")
           .replace(/\..+/, ""),
       };
-      const response2 = await fetch(`http://localhost:5000/line/${lineId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(shopper),
-      });
+      const response2 = await fetch(
+        `http://localhost:5000/line/add-shopper/${lineId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(shopper),
+        }
+      );
       const newLine = await response2.json();
       setLine(newLine);
       await localforage.setItem("shopper", shopper);
@@ -43,6 +62,9 @@ const TicketPage = () => {
   }, []);
   return (
     <div className="text-center">
+      {leftLine && (
+        <h2 className="p-3 white-text">{leftLine}. Thanks for using IQueue!</h2>
+      )}
       {ticket && (
         <div>
           <TitleBanner title={line.storeName} />
