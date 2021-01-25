@@ -67,7 +67,7 @@ const TicketPage = () => {
             >
               Leave line
             </Button>
-            <StoreInfo />
+            <StoreInfo line={line} />
           </div>
         </div>
       )}
