@@ -3,7 +3,7 @@ import MiniLineView from "../mini_line_view/MiniLineView";
 
 function LineList(props) {
   const lines = props.lines.map((line) => (
-    <MiniLineView key={line.store} data={line} />
+    <MiniLineView key={line.storeName} data={line} />
   ));
   return (
     <div className="container">

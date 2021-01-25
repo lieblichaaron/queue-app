@@ -1,25 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import LineList from "../line_list/LineList";
+import UserContext from "../../contexts/UserContext";
 import "./Dashboard.css";
 
 function Dashboard() {
-  const user = {
-    displayName: "Jake",
-    lines: [
-      {
-        store: "burgers",
-        active: true,
-        length: 4,
-      },
-      {
-        store: "pizza",
-        active: false,
-        length: 0,
-      },
-    ],
-  };
+  const user = useContext(UserContext)
 
   return (
     <div>
@@ -42,7 +29,9 @@ function Dashboard() {
       </div>
       <span className="d-flex justify-content-center">
         <Link to="/account">
-          <Button className="account-settings-btn mb-3">Account settings</Button>
+          <Button className="account-settings-btn mb-3">
+            Account settings
+          </Button>
         </Link>
       </span>
     </div>
