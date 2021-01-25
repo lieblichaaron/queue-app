@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import Autocomplete from "react-google-autocomplete";
 import MyMapComponent from "../map/map";
 import TitleBanner from "../title_banner/titleBanner";
@@ -8,6 +9,7 @@ import QRCode from "qrcode.react";
 const saveSvgAsPng = require("save-svg-as-png");
 
 const CreateLine = () => {
+  const history = useHistory();
   const [serviceTimeOptions, setServiceTimeOptions] = useState([
     ...Array(30).keys(),
   ]);
@@ -18,6 +20,7 @@ const CreateLine = () => {
   const [address, setAddress] = useState(null);
   const [lat, setLat] = useState(32.070343);
   const [lng, setLng] = useState(34.774254);
+  const [finished, setFinished] = useState(false);
   const setMap = (place) => {
     setLat(place.geometry.location.lat());
     setLng(place.geometry.location.lng());
@@ -50,7 +53,7 @@ const CreateLine = () => {
       body: JSON.stringify(lineObj),
     });
     setLineId(await data.json());
-    saveSvgAsPng.saveSvgAsPng(
+    await saveSvgAsPng.saveSvgAsPng(
       document.getElementById("qr"),
       "line-qr-code.png",
       {
@@ -59,6 +62,11 @@ const CreateLine = () => {
     );
     setButtonDisabled(true);
   };
+  if (finished) {
+    history.push({
+      pathname: `/line/${lineId}`,
+    });
+  }
   return (
     <div>
       <TitleBanner title="Line Setup" />
@@ -131,22 +139,34 @@ const CreateLine = () => {
               border: "none",
               height: "2.5rem",
             }}
-            disabled={buttonDisabled}
             className="w-100"
             type="submit"
+            disabled={buttonDisabled}
           >
             Start queue
           </Button>
         </Form>
-        <div className="text-center p-3">
-          {lineId && (
+        {lineId && (
+          <div className="text-center p-3">
             <QRCode
               id="qr"
-              value={`http://localhost:3000/ticket/${lineId}`}
+              value={`http://localhost:3000/ticket?line-id=${lineId}`}
               renderAs="svg"
             />
-          )}
-        </div>
+            <Button
+              style={{
+                backgroundColor: "#fca311",
+                color: "#14213d",
+                border: "none",
+                height: "2.5rem",
+              }}
+              className="w-100 mt-3"
+              onClick={() => setFinished(true)}
+            >
+              Head to line!
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
