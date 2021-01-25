@@ -3,7 +3,7 @@ import React from "react";
 import "./mini_line_view.css";
 
 function MiniLineView(props) {
-  const { storeName, active, length } = props.data;
+  const { storeName, active, tickets } = props.data;
 
   return (
     <div className="mini-line-view my-2 p-2">
@@ -16,7 +16,7 @@ function MiniLineView(props) {
           </span>
         </p>
         <p className="mb-1">
-          queue length: <span>{length}</span>
+          queue length: <span>{tickets.length}</span>
         </p>
       </div>
       <Button className="manage-line-btn">Manage</Button>
