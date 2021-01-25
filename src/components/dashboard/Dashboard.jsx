@@ -1,25 +1,13 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import UserContext from "../../contexts/UserContext";
 import LineList from "../line_list/LineList";
 import "./Dashboard.css";
 
 function Dashboard() {
-  const user = {
-    displayName: "Jake",
-    lines: [
-      {
-        store: "burgers",
-        active: true,
-        length: 4,
-      },
-      {
-        store: "pizza",
-        active: false,
-        length: 0,
-      },
-    ],
-  };
+
+  const user = useContext(UserContext)
 
   return (
     <div>

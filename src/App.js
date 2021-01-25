@@ -15,9 +15,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+
   //temp user state until we link to backend
-  setCurrentUser({
+  const [currentUser, setCurrentUser] = useState({
     id: '600ecbad5d601d64b43cac9c',
     displayName: 'Jake',
     email: 'jakenudels@gmail.com',
@@ -50,7 +50,7 @@ function App() {
       estServiceTime: 3,
     },
   ]
-  })
+  });
 
   const manageLoginModal = () => {
     setShowLoginModal(!showLoginModal);
