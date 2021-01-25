@@ -1,7 +1,8 @@
 import React from "react";
 import { Form, Button } from "react-bootstrap";
 import Modal from "react-modal";
-import "./loginModal.css";
+
+import axios from "axios";
 
 class LoginModal extends React.Component {
   constructor(props) {
@@ -22,7 +23,23 @@ class LoginModal extends React.Component {
   }
 
   handleFormSubmit(event) {
-    console.log("This goes to the back end eventually!!");
+    event.preventDefault();
+    const ownerObject = {
+      displayName: this.state.displayName,
+      email: this.state.email,
+      password: this.state.password,
+    };
+    return axios({
+      method: "post",
+      url: "http://localhost:5000/owner",
+      data: ownerObject,
+    }).then((res) => {
+      alert(
+        `Account creation successful. \nWelcome to iQueue ${res.data.displayName}!`
+      );
+      // Cookies.set("I-Pets", `${res.data.email}`, { path: "/" });
+      window.location.assign(`${window.location.origin}/dashboard`);
+    });
   }
 
   handleBodyChange(event) {

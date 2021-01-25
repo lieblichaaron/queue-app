@@ -1,5 +1,0 @@
-/*
-There might be cases when using react-modal, where you have to override the styles z-index with a css class instead of inline styles.   
-  .ReactModal__Overlay {
-  z-index: 9999;
-} */
