@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./account.css";
 import {
   Container,
@@ -9,20 +9,34 @@ import {
   FormLabel,
 } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
+import axios from "axios";
 import PasswordModal from "../password_modal/PasswordModal";
 import * as Yup from "yup";
+import UserContext from "../../contexts/UserContext";
 
 function Account(props) {
-  const user = {
-    displayName: "Jake",
-    email: "jakenudels@gmail.com",
-  };
+  const user = useContext(UserContext);
 
   const [canEdit, setCanEdit] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   const handleCloseModal = () => {
     setShowPasswordModal(false);
+  };
+
+  const updateInformation = async (form, actions) => {
+    await axios
+      .put("http://localhost:5000" + "/owner/edit", form, {
+        headers: { email: user.email },
+      })
+      .catch((err) => {
+        if (err.response.data.includes("exists")) {
+          actions.setFieldError(
+            "email",
+            "There is already an account registered with this email address"
+          );
+        }
+      });
   };
 
   const validationSchema = Yup.object().shape({
@@ -48,7 +62,7 @@ function Account(props) {
           email: user.email,
         }}
         enableReinitialize={true}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values, actions) => updateInformation(values, actions)}
         validationSchema={validationSchema}
       >
         {(props) => (
