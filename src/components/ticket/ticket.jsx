@@ -1,11 +1,9 @@
 import NowServing from "../now_serving/nowServing";
 import styles from "./ticket.module.css";
-const Ticket = ({ line }) => {
+const Ticket = ({ line, ticket }) => {
   return (
     <div className={`${styles["ticket-container"]} text-center`}>
-      <h3 className="text-center">
-        Ticket #{line.line[line.line.length - 1].number}
-      </h3>
+      <h3 className="text-center">Ticket #{ticket.number}</h3>
       <NowServing
         textColor="#e5e5e5"
         backgroundColor="#14213d"
@@ -13,10 +11,15 @@ const Ticket = ({ line }) => {
       />
       <div className="p-3">
         <span>
-          <b>Join time:</b> {line.line[line.line.length - 1].joinTime} <br />
+          <b>Join time:</b> {ticket.joinTime} <br />
         </span>
         <span>
-          <b>Estimated wait time:</b> {line.line.length * line.estServiceTime}
+          <b>Estimated wait time:</b>{" "}
+          {(line.line.findIndex(
+            (serverTicket) => serverTicket.number === ticket.number
+          ) +
+            1) *
+            line.estServiceTime}
           min
         </span>
       </div>

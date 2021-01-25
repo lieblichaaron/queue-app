@@ -4,31 +4,46 @@ import Ticket from "../ticket/ticket";
 import { Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import StoreInfo from "../store_info/storeInfo";
+import localforage from "localforage";
 const TicketPage = () => {
   const { lineId } = useParams();
   const [line, setLine] = useState();
+  const [ticket, setTicket] = useState();
 
   const removeFromLine = () => {};
   useEffect(async () => {
-    const response = await fetch(`http://localhost:5000/line/${lineId}`);
-    const originalLine = await response.json();
-    const shopper = {
-      number: originalLine.line[originalLine.line.length - 1].number + 1,
-      joinTime: new Date().toISOString().replace(/T/, " ").replace(/\..+/, ""),
-    };
-    const response2 = await fetch(`http://localhost:5000/line/${lineId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(shopper),
-    });
-    const newLine = await response2.json();
-    setLine(newLine);
+    const shopper = await localforage.getItem("shopper");
+    if (shopper) {
+      const response = await fetch(`http://localhost:5000/line/${lineId}`);
+      const serverLine = await response.json();
+      setLine(serverLine);
+      setTicket(shopper);
+    } else {
+      const response = await fetch(`http://localhost:5000/line/${lineId}`);
+      const originalLine = await response.json();
+      const shopper = {
+        number: originalLine.line[originalLine.line.length - 1].number + 1,
+        joinTime: new Date()
+          .toISOString()
+          .replace(/T/, " ")
+          .replace(/\..+/, ""),
+      };
+      const response2 = await fetch(`http://localhost:5000/line/${lineId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(shopper),
+      });
+      const newLine = await response2.json();
+      setLine(newLine);
+      await localforage.setItem("shopper", shopper);
+      setTicket(shopper);
+    }
   }, []);
   return (
     <div className="text-center">
-      {line && (
+      {ticket && (
         <div>
           <TitleBanner title={line.storeName} />
           <div
@@ -38,13 +53,14 @@ const TicketPage = () => {
               display: "inline-block",
             }}
           >
-            <Ticket line={line} />
+            <Ticket line={line} ticket={ticket} />
             <Button
               style={{
                 backgroundColor: "#fca311",
                 color: "#14213d",
                 border: "none",
                 height: "3rem",
+                fontSize: "1.5rem",
               }}
               className="w-100"
               onClick={removeFromLine}
