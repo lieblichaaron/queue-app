@@ -1,18 +1,18 @@
 import React from "react";
 import { Form, Button } from "react-bootstrap";
 import Modal from "react-modal";
+import "./loginModal.css";
 
 class LoginModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      displayName: "",
       email: "",
       password: "",
       passwordConfirm: "",
-      formSubmitDisabled: true,
       hasAccount: false,
     };
-
     Modal.setAppElement("#root");
   }
 
@@ -27,20 +27,8 @@ class LoginModal extends React.Component {
 
   handleBodyChange(event) {
     event.preventDefault();
-    const { email, password, passwordConfirm, hasAccount } = this.state;
-    // Disable submit button if not all fields are filled
-    if (
-      !hasAccount &&
-      email.length &&
-      password.length &&
-      passwordConfirm.length
-    )
-      this.setState({ formSubmitDisabled: false });
-    else if (hasAccount && email.length && password.length)
-      this.setState({ formSubmitDisabled: false });
-    else this.setState({ formSubmitDisabled: true });
-
-    // Set state per form input
+    if (event.target.id === "displayName")
+      this.setState({ displayName: event.target.value });
     if (event.target.id === "email")
       this.setState({ email: event.target.value });
     if (event.target.id === "password")
@@ -50,14 +38,21 @@ class LoginModal extends React.Component {
   }
 
   render() {
-    const { hasAccount, formSubmitDisabled } = this.state;
+    const {
+      displayName,
+      email,
+      password,
+      passwordConfirm,
+      hasAccount,
+    } = this.state;
     const modalStyles = {
       content: {
-        top: "20%",
+        top: "8%",
         left: "10%",
         right: "10%",
-        bottom: this.state.hasAccount ? "19%" : "7%",
+        bottom: this.state.hasAccount ? "31%" : "5%",
       },
+      overlay: { zIndex: 1000 },
     };
     return (
       <div className="vh-50">
@@ -66,11 +61,27 @@ class LoginModal extends React.Component {
           onRequestClose={this.props.closeModal}
           shouldCloseOnOverlayClick={true}
           style={modalStyles}
-          ariaHideApp={true} // enabling this helps screen reader to understand that this is a Modal but it might lead to glitches
+          ariaHideApp={true}
           contentLabel="SignInModal"
         >
           <h2 className="mb-5">{hasAccount ? "Log in" : "Create Account"}</h2>
           <Form onSubmit={(event) => this.handleFormSubmit(event)}>
+            {!hasAccount && (
+              <Form.Group>
+                <Form.Label> Display Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter your name"
+                  required
+                  maxLength="30"
+                  minLength="3"
+                  onInput={(event) => this.handleBodyChange(event)}
+                  id="displayName"
+                  value={displayName}
+                />
+              </Form.Group>
+            )}
+
             <Form.Group className="mt-3">
               <Form.Label>Email address</Form.Label>
               <Form.Control
@@ -79,6 +90,7 @@ class LoginModal extends React.Component {
                 required
                 onInput={(event) => this.handleBodyChange(event)}
                 id="email"
+                value={email}
               />
             </Form.Group>
 
@@ -92,6 +104,7 @@ class LoginModal extends React.Component {
                 minLength="7"
                 onInput={(event) => this.handleBodyChange(event)}
                 id="password"
+                value={password}
               />
             </Form.Group>
 
@@ -106,7 +119,17 @@ class LoginModal extends React.Component {
                   minLength="7"
                   onInput={(event) => this.handleBodyChange(event)}
                   id="passwordConfirm"
+                  value={passwordConfirm}
                 />
+                <p
+                  className="ml-2 mb-0"
+                  style={{
+                    color: password !== passwordConfirm ? "red" : "transparent",
+                    fontSize: "80%",
+                  }}
+                >
+                  Passwords don't match
+                </p>
               </Form.Group>
             )}
 
@@ -125,7 +148,13 @@ class LoginModal extends React.Component {
               variant="primary"
               type="submit"
               className="mt-4 float-right"
-              disabled={formSubmitDisabled}
+              disabled={
+                !displayName ||
+                !email ||
+                !password ||
+                !passwordConfirm ||
+                password !== passwordConfirm
+              }
             >
               {hasAccount ? "Sign In" : "Sign up"}
             </Button>
