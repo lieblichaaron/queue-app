@@ -13,6 +13,7 @@ class LoginModal extends React.Component {
       password: "",
       passwordConfirm: "",
       hasAccount: false,
+      submitDisabled: true,
     };
     Modal.setAppElement("#root");
   }
@@ -23,26 +24,59 @@ class LoginModal extends React.Component {
   }
 
   handleFormSubmit(event) {
+    const { hasAccount, displayName, email, password } = this.state;
     event.preventDefault();
-    const ownerObject = {
-      displayName: this.state.displayName,
-      email: this.state.email,
-      password: this.state.password,
-    };
-    return axios({
-      method: "post",
-      url: "http://localhost:5000/owner",
-      data: ownerObject,
-    }).then((res) => {
-      alert(
-        `Account creation successful. \nWelcome to iQueue ${res.data.displayName}!`
-      );
-      // Cookies.set("I-Pets", `${res.data.email}`, { path: "/" });
-      window.location.assign(`${window.location.origin}/dashboard`);
-    });
+    if (!hasAccount) {
+      const ownerObject = {
+        displayName: displayName,
+        email: email,
+        password: password,
+      };
+      return axios({
+        method: "post",
+        url: "http://localhost:5000/owner",
+        data: ownerObject,
+      })
+        .then((res) => {
+          alert(
+            `Account creation successful. \nWelcome to iQueue ${res.data.displayName}!`
+          );
+          // Cookies.set("I-Pets", `${res.data.email}`, { path: "/" });
+          window.location.assign(`${window.location.origin}/dashboard`);
+        })
+        .catch((err) => {
+          alert(err.response.data.error);
+        });
+    } else if (hasAccount) {
+      const ownerObject = {
+        email: email,
+        password: password,
+      };
+      return axios({
+        method: "post",
+        url: "http://localhost:5000/owner/login",
+        data: ownerObject,
+      })
+        .then((res) => {
+          alert(`Welcome back ${res.data.displayName}!`);
+          // Cookies.set("iQueue", `${res.data.email}`, { path: "/" });
+          window.location.assign(`${window.location.origin}/dashboard`);
+        })
+        .catch((err) => {
+          alert(err.response.data.error);
+        });
+    }
   }
 
   handleBodyChange(event) {
+    const {
+      displayName,
+      email,
+      password,
+      passwordConfirm,
+      hasAccount,
+    } = this.state;
+
     event.preventDefault();
     if (event.target.id === "displayName")
       this.setState({ displayName: event.target.value });
@@ -52,6 +86,20 @@ class LoginModal extends React.Component {
       this.setState({ password: event.target.value });
     if (event.target.id === "passwordConfirm")
       this.setState({ passwordConfirm: event.target.value });
+
+    if (!hasAccount) {
+      // horrible submit button validation, maybe not doable because of two modals in one component??
+      if (
+        displayName.length &&
+        email.length &&
+        password.length &&
+        passwordConfirm.length &&
+        password !== passwordConfirm
+      )
+        this.setState({ submitDisabled: false });
+    } else if (hasAccount) {
+      if (email && password) this.setState({ submitDisabled: false });
+    } else this.setState({ submitDisabled: true });
   }
 
   render() {
@@ -61,6 +109,7 @@ class LoginModal extends React.Component {
       password,
       passwordConfirm,
       hasAccount,
+      submitDisabled,
     } = this.state;
     const modalStyles = {
       content: {
@@ -71,6 +120,7 @@ class LoginModal extends React.Component {
       },
       overlay: { zIndex: 1000 },
     };
+
     return (
       <div className="vh-50">
         <Modal
@@ -165,13 +215,7 @@ class LoginModal extends React.Component {
               variant="primary"
               type="submit"
               className="mt-4 float-right"
-              disabled={
-                !displayName ||
-                !email ||
-                !password ||
-                !passwordConfirm ||
-                password !== passwordConfirm
-              }
+              disabled={submitDisabled}
             >
               {hasAccount ? "Sign In" : "Sign up"}
             </Button>
