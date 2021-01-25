@@ -3,13 +3,17 @@ import { Form, Button } from "react-bootstrap";
 import Autocomplete from "react-google-autocomplete";
 import MyMapComponent from "../map/map";
 import TitleBanner from "../title_banner/titleBanner";
-// import RNQRGenerator from "rn-qr-generator";
+// import QRCode from "qrcode-svg";
+import QRCode from "qrcode.react";
+const saveSvgAsPng = require("save-svg-as-png");
 
 const CreateLine = () => {
   const [serviceTimeOptions, setServiceTimeOptions] = useState([
     ...Array(30).keys(),
   ]);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
   const [storeName, setStoreName] = useState();
+  const [lineId, setLineId] = useState();
   const [serviceTime, setServiceTime] = useState();
   const [address, setAddress] = useState(null);
   const [lat, setLat] = useState(32.070343);
@@ -45,32 +49,22 @@ const CreateLine = () => {
       },
       body: JSON.stringify(lineObj),
     });
-    const lineId = await data.json();
-    console.log(lineId);
-    // RNQRGenerator.generate({
-    //   value: `http://localhost:3000/ticket/${lineId}`,
-    //   height: 100,
-    //   width: 100,
-    // })
-    //   .then((response) => {
-    //     const { uri, width, height, base64 } = response;
-    //     console.log(uri);
-    //   })
-    //   .catch((error) => console.log("Cannot create QR code", error));
-
-    /*send info to db
-                retreive store db id
-                generate qr with /ticket/storeId
-                send to email
-                redirect to line page
-                */
+    setLineId(await data.json());
+    saveSvgAsPng.saveSvgAsPng(
+      document.getElementById("qr"),
+      "line-qr-code.png",
+      {
+        scale: 5,
+      }
+    );
+    setButtonDisabled(true);
   };
   return (
     <div>
       <TitleBanner title="Line Setup" />
       <div className="p-3" style={{ color: "#ffffff" }}>
         <p className="text-center pb-3">
-          After submitting this form you will recieve an email with your QR
+          After submitting this form you will have the option to download the QR
           code. All you need to do is put it up and manage the line from your
           dashboard!
         </p>
@@ -137,12 +131,22 @@ const CreateLine = () => {
               border: "none",
               height: "2.5rem",
             }}
+            disabled={buttonDisabled}
             className="w-100"
             type="submit"
           >
             Start queue
           </Button>
         </Form>
+        <div className="text-center p-3">
+          {lineId && (
+            <QRCode
+              id="qr"
+              value={`http://localhost:3000/ticket/${lineId}`}
+              renderAs="svg"
+            />
+          )}
+        </div>
       </div>
     </div>
   );

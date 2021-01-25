@@ -30,7 +30,7 @@ const MyMapComponent = withScriptjs(
             }}
           />
         )}
-        {infoOpen && (
+        {infoOpen && props.address && (
           <InfoWindow
             position={{ lat: props.lat + 0.0018, lng: props.lng }}
             onCloseClick={() => setInfoOpen(false)}
