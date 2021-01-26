@@ -39,10 +39,11 @@ class LoginModal extends React.Component {
         data: ownerObject,
       })
         .then((res) => {
+          console.log(res);
           alert(
             `Account creation successful. \nWelcome to iQueue ${res.data.displayName}!`
           );
-          Cookie.set("iQueue", `JWT`, { path: "/" });
+          Cookie.set("iQueue", res.data.authToken, { path: "/" });
           window.location.assign(`${window.location.origin}/dashboard`);
         })
         .catch((err) => {
@@ -59,8 +60,9 @@ class LoginModal extends React.Component {
         data: ownerObject,
       })
         .then((res) => {
+          console.log(res);
           alert(`Welcome back ${res.data.displayName}!`);
-          Cookie.set("iQueue", `JWT`, { path: "/" });
+          Cookie.set("iQueue", res.data.authToken, { path: "/" });
           window.location.assign(`${window.location.origin}/dashboard`);
         })
         .catch((err) => {
