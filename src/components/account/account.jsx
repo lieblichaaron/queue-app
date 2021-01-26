@@ -12,15 +12,48 @@ import { Formik, Form, Field } from "formik";
 import PasswordModal from "../password_modal/PasswordModal";
 import * as Yup from "yup";
 import UserContext from "../../contexts/UserContext";
+import Cookie from "js-cookie";
+import jwt_decode from "jwt-decode";
+import axios from "axios";
 
 function Account(props) {
   const user = useContext(UserContext);
 
   const [canEdit, setCanEdit] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleCloseModal = () => {
     setShowPasswordModal(false);
+  };
+
+  const updateInformation = async (form, actions) => {
+    setLoadingSubmit(true);
+    await axios
+      .put("http://localhost:5000" + "/owner/edit", form, {
+        headers: { authorization: Cookie.get("iQueue") },
+      })
+      .then((res) => {
+        Cookie.set("iQueue", res.data, { path: "/" });
+        props.onUserInfoChange(jwt_decode(res.data));
+        setCanEdit(false);
+        setShowSuccess(true);
+        setTimeout(() => {
+          setShowSuccess(false);
+        }, 3000);
+      })
+      .catch((err) => {
+        if (err.response.data.includes("exists")) {
+          actions.setFieldError(
+            "email",
+            "There is already an account registered with this email address"
+          );
+        }
+      })
+      .finally(() => {
+        setLoadingSubmit(false);
+      });
   };
 
   const validationSchema = Yup.object().shape({
@@ -35,7 +68,9 @@ function Account(props) {
       <PasswordModal
         isOpen={showPasswordModal}
         user={user}
-        onUserInfoChange={(user) => {props.onUserInfoChange(user)}}
+        onUserInfoChange={(user) => {
+          props.onUserInfoChange(user);
+        }}
         onCloseModal={handleCloseModal}
         centered
       />
@@ -48,7 +83,7 @@ function Account(props) {
           email: user.email,
         }}
         enableReinitialize={true}
-        onSubmit={(values, actions) => props.handleChangeInfo(values, actions)}
+        onSubmit={(values, actions) => updateInformation(values, actions)}
         validationSchema={validationSchema}
       >
         {(props) => (
@@ -62,10 +97,17 @@ function Account(props) {
                   Display name
                 </FormLabel>
                 <Field
-                  className={`form-input ${canEdit || "no-edit-field"}`}
+                  className={`form-input ${
+                    canEdit
+                      ? `${props.errors.displayName && "invalid-field"}`
+                      : "no-edit-field"
+                  }`}
                   name="displayName"
                   disabled={!canEdit}
                 />
+                {props.errors.displayName && (
+                  <p className="invalid-message">{props.errors.displayName}</p>
+                )}
               </FormGroup>
               <FormGroup>
                 <FormLabel
@@ -75,12 +117,25 @@ function Account(props) {
                   Email address
                 </FormLabel>
                 <Field
-                  className={`form-input ${canEdit || "no-edit-field"}`}
+                  className={`form-input ${
+                    canEdit
+                      ? `${props.errors.email && "invalid-field"}`
+                      : "no-edit-field"
+                  }`}
                   name="email"
                   type="email"
                   disabled={!canEdit}
                 />
+                {props.errors.email && (
+                  <p className="invalid-message">{props.errors.email}</p>
+                )}
               </FormGroup>
+              {showSuccess && (
+                <p className="w-100 px-1 text-center text-wrap success-message green-text">
+                  Successfully changed settings
+                </p>
+              )}
+
               <Row className="d-flex justify-content-around mt-3">
                 {canEdit ? (
                   <>
