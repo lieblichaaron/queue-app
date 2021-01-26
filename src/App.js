@@ -13,6 +13,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Cookie from "js-cookie";
 import jwt_decode from "jwt-decode";
+import axios from "axios";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,12 +21,11 @@ function App() {
   const [currentUser, setCurrentUser] = useState(Cookie.get("iQueue"));
 
   useEffect(() => {
-      const newToken = Cookie.get("iQueue")
-      if (newToken) {
-        setCurrentUser(jwt_decode(newToken))
+    const newToken = Cookie.get("iQueue");
+    if (newToken) {
+      setCurrentUser(jwt_decode(newToken));
     }
-
-  }, [showLoginModal])
+  }, [showLoginModal]);
 
   const manageLoginModal = () => {
     setShowLoginModal(!showLoginModal);
@@ -35,6 +35,45 @@ function App() {
     setIsLoggedIn(false);
     setCurrentUser(null);
   };
+
+  const updateInformation = async (form, actions) => {
+    await axios
+      .put("http://localhost:5000" + "/owner/edit", form, {
+        headers: { authorization: Cookie.get("iQueue") },
+      })
+      .then((res) => {
+        Cookie.set("iQueue", res.data, { path: "/" });
+        setCurrentUser(jwt_decode(res.data));
+      })
+      .catch((err) => {
+        if (err.response.data.includes("exists")) {
+          actions.setFieldError(
+            "email",
+            "There is already an account registered with this email address"
+          );
+        }
+      });
+  };
+
+  const changePassword = async (form, actions) => {
+    try {
+      const res = await axios.put(
+        "http://localhost:5000" + "/owner/password",form,{headers: { authorization: Cookie.get("iQueue") }}
+      );
+      Cookie.set("iQueue", res.data, { path: "/" });
+      
+      return "success";
+    } catch (err) {
+      if (err.response.data.includes("incorrect")) {
+        actions.setFieldError("oldPassword", "Incorrect password");
+      }
+    }
+  };
+
+  const handleUserInfoChange = (userInfo) => {
+    setCurrentUser(userInfo);
+  }
+
   return (
     <UserContext.Provider value={currentUser}>
       <Router>
@@ -51,7 +90,12 @@ function App() {
             <TicketPage />
           </Route>
           <Route path="/account">
-            <Account />
+            <Account
+              handleChangeInfo={(values, actions) => {
+                updateInformation(values, actions);
+              }}
+              onUserInfoChange={(user) => {handleUserInfoChange(user)}}
+            />
           </Route>
           <Route path="/create">
             <CreateLine />
