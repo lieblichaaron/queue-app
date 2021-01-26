@@ -18,6 +18,7 @@ import axios from "axios";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [hasAccount, setHasAccount] = useState(true);
   const [currentUser, setCurrentUser] = useState(Cookie.get("iQueue"));
 
   useEffect(() => {
@@ -28,7 +29,17 @@ function App() {
   }, [showLoginModal]);
 
   const manageLoginModal = () => {
+    setHasAccount(true);
     setShowLoginModal(!showLoginModal);
+  };
+
+  const manageSignUpModal = () => {
+    setHasAccount(false);
+    setShowLoginModal(!showLoginModal);
+  };
+
+  const changeModalType = () => {
+    setHasAccount(!hasAccount);
   };
 
   const handleLogout = () => {
@@ -58,10 +69,12 @@ function App() {
   const changePassword = async (form, actions) => {
     try {
       const res = await axios.put(
-        "http://localhost:5000" + "/owner/password",form,{headers: { authorization: Cookie.get("iQueue") }}
+        "http://localhost:5000" + "/owner/password",
+        form,
+        { headers: { authorization: Cookie.get("iQueue") } }
       );
       Cookie.set("iQueue", res.data, { path: "/" });
-      
+
       return "success";
     } catch (err) {
       if (err.response.data.includes("incorrect")) {
@@ -72,7 +85,7 @@ function App() {
 
   const handleUserInfoChange = (userInfo) => {
     setCurrentUser(userInfo);
-  }
+  };
 
   return (
     <UserContext.Provider value={currentUser}>
@@ -94,7 +107,9 @@ function App() {
               handleChangeInfo={(values, actions) => {
                 updateInformation(values, actions);
               }}
-              onUserInfoChange={(user) => {handleUserInfoChange(user)}}
+              onUserInfoChange={(user) => {
+                handleUserInfoChange(user);
+              }}
             />
           </Route>
           <Route path="/create">
@@ -104,10 +119,12 @@ function App() {
             <Line />
           </Route>
           <Route path="/">
-            <About handleSignIn={() => manageLoginModal()} />
+            <About handleSignUp={() => manageSignUpModal()} />
             <LoginModal
               showModal={showLoginModal}
               closeModal={() => manageLoginModal()}
+              hasAccount={hasAccount}
+              changeModalType={() => changeModalType()}
             />
           </Route>
         </Switch>

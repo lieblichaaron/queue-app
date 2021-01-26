@@ -1,7 +1,6 @@
 import React from "react";
 import { Form, Button } from "react-bootstrap";
 import Modal from "react-modal";
-
 import axios from "axios";
 import Cookie from "js-cookie";
 
@@ -13,20 +12,14 @@ class LoginModal extends React.Component {
       email: "",
       password: "",
       passwordConfirm: "",
-      hasAccount: false,
     };
     Modal.setAppElement("#root");
   }
 
-  changeModalType(event) {
-    event.preventDefault();
-    this.setState({ hasAccount: !this.state.hasAccount });
-  }
-
   handleFormSubmit(event) {
-    const { hasAccount, displayName, email, password } = this.state;
+    const { displayName, email, password } = this.state;
     event.preventDefault();
-    if (!hasAccount) {
+    if (!this.props.hasAccount) {
       const ownerObject = {
         displayName: displayName,
         email: email,
@@ -42,14 +35,14 @@ class LoginModal extends React.Component {
           alert(
             `Account creation successful. \nWelcome to iQueue ${res.data.displayName}!`
           );
-          console.log(res.data)
+          console.log(res.data);
           Cookie.set("iQueue", res.data.authToken, { path: "/" });
           window.location.assign(`${window.location.origin}/dashboard`);
         })
         .catch((err) => {
           alert(err.response.data.error);
         });
-    } else if (hasAccount) {
+    } else if (this.props.hasAccount) {
       const ownerObject = {
         email: email,
         password: password,
@@ -84,25 +77,19 @@ class LoginModal extends React.Component {
   }
 
   render() {
-    const {
-      displayName,
-      email,
-      password,
-      passwordConfirm,
-      hasAccount,
-    } = this.state;
+    const { displayName, email, password, passwordConfirm } = this.state;
     const modalStyles = {
       content: {
         top: "8%",
         left: "10%",
         right: "10%",
-        bottom: this.state.hasAccount ? "31%" : "5%",
+        bottom: this.props.hasAccount ? "31%" : "5%",
       },
       overlay: { zIndex: 1000 },
     };
 
     let submitButton;
-    if (hasAccount) {
+    if (this.props.hasAccount) {
       submitButton = (
         <Button
           variant="primary"
@@ -110,11 +97,11 @@ class LoginModal extends React.Component {
           className="mt-4 float-right"
           disabled={!email || !password}
         >
-          {hasAccount ? "Sign In" : "Sign up"}
+          {this.props.hasAccount ? "Sign In" : "Sign up"}
         </Button>
       );
     }
-    if (!hasAccount) {
+    if (!this.props.hasAccount) {
       submitButton = (
         <Button
           variant="primary"
@@ -128,7 +115,7 @@ class LoginModal extends React.Component {
             password !== passwordConfirm
           }
         >
-          {hasAccount ? "Sign In" : "Sign up"}
+          {this.props.hasAccount ? "Sign In" : "Sign up"}
         </Button>
       );
     }
@@ -143,9 +130,11 @@ class LoginModal extends React.Component {
           ariaHideApp={true}
           contentLabel="SignInModal"
         >
-          <h2 className="mb-5">{hasAccount ? "Log in" : "Create Account"}</h2>
+          <h2 className="mb-5">
+            {this.props.hasAccount ? "Log in" : "Create Account"}
+          </h2>
           <Form onSubmit={(event) => this.handleFormSubmit(event)}>
-            {!hasAccount && (
+            {!this.props.hasAccount && (
               <Form.Group>
                 <Form.Label> Display Name</Form.Label>
                 <Form.Control
@@ -187,7 +176,7 @@ class LoginModal extends React.Component {
               />
             </Form.Group>
 
-            {!hasAccount && (
+            {!this.props.hasAccount && (
               <Form.Group>
                 <Form.Label> Confirm Password</Form.Label>
                 <Form.Control
@@ -218,9 +207,9 @@ class LoginModal extends React.Component {
             <Form.Group controlId="formBasicCheckbox">
               <div
                 className="text-primary"
-                onClick={(event) => this.changeModalType(event)}
+                onClick={() => this.props.changeModalType()}
               >
-                {hasAccount ? "Sign up instead" : "Login instead"}
+                {this.props.hasAccount ? "Sign up instead" : "Login instead"}
               </div>
             </Form.Group>
             {submitButton}
