@@ -6,7 +6,13 @@ const LeaveLineModal = (props) => {
   };
 
   return (
-    <Modal show={props.show} onHide={props.onHide} size="lg" className="pt-5">
+    <Modal
+      show={props.show}
+      onHide={props.onHide}
+      size="lg"
+      className="pt-5"
+      animation={false}
+    >
       <Modal.Header closeButton>
         <Modal.Title>Leaving Line</Modal.Title>
       </Modal.Header>
