@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
+import UserContext from "../../contexts/UserContext";
 import { Form, Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import Autocomplete from "react-google-autocomplete";
@@ -9,6 +10,7 @@ import { addNewLine } from "../../serverFuncs";
 const saveSvgAsPng = require("save-svg-as-png");
 
 const CreateLine = () => {
+  const currentUser = useContext(UserContext);
   const history = useHistory();
   const qrRef = useRef();
   const [serviceTimeOptions, setServiceTimeOptions] = useState([
@@ -36,7 +38,7 @@ const CreateLine = () => {
   const createQueue = async (e) => {
     e.preventDefault();
     const lineObj = {
-      ownerId: /*owner id from state*/ 123456789,
+      ownerId: currentUser.id,
       isActive: false,
       storeName: storeName,
       estServiceTime: serviceTime,

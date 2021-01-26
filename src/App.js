@@ -18,12 +18,10 @@ function App() {
 
   //temp user state until we link to backend
   const [currentUser, setCurrentUser] = useState({
-    id: '600ecbad5d601d64b43cac9c',
-    displayName: 'Jake',
-    email: 'jakenudels@gmail.com',
-    lineIds: [
-      "600ed2a0c82668f8cafdc9ac",
-  ]
+    id: "600ecbad5d601d64b43cac9c",
+    displayName: "Jake",
+    email: "jakenudels@gmail.com",
+    lineIds: ["600ed2a0c82668f8cafdc9ac"],
   });
 
   const manageLoginModal = () => {
