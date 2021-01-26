@@ -27,12 +27,18 @@ const About = (props) => {
       )
       .then(
         (result) => {
+          alert("Thank you for your message. \nWe will be in touch shortly!");
           console.log(result.text);
         },
         (error) => {
           console.log(error.text);
         }
-      );
+      )
+      .then(() => {
+        setName("");
+        setEmail("");
+        setMessage("");
+      });
   };
 
   const handleChange = (event) => {
@@ -87,6 +93,7 @@ const About = (props) => {
               placeholder="Enter your name"
               id="name"
               required
+              value={name}
               onChange={(event) => handleChange(event)}
             />
           </Form.Group>
@@ -96,6 +103,7 @@ const About = (props) => {
               type="email"
               placeholder="Enter your email address"
               id="email"
+              value={email}
               required
               onChange={(event) => handleChange(event)}
             />
@@ -107,6 +115,7 @@ const About = (props) => {
               id="message"
               rows={3}
               required
+              value={message}
               placeholder="What would you like to tell us?"
               onChange={(event) => handleChange(event)}
             />
