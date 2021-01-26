@@ -6,33 +6,39 @@ import { useParams, useHistory } from "react-router-dom";
 import StoreInfo from "../store_info/storeInfo";
 import localforage from "localforage";
 import moment from "moment";
+import LeaveLineModal from "../leave_line_modal/leaveLineModal";
 
 const TicketPage = () => {
   const { lineId } = useParams();
+  const [confirmLeaving, setConfirmLeaving] = useState(false);
   const [line, setLine] = useState();
   const [ticket, setTicket] = useState();
   const [leftLine, setLeftLine] = useState();
+  const [modalShow, setModalShow] = useState(false);
   const history = useHistory();
 
-  const removeFromLine = async () => {
-    const response = await fetch(
-      `http://localhost:5000/line/remove-shopper/${lineId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(ticket),
-      }
-    );
-    const data = await response.json();
-    await localforage.removeItem("shopper");
-    setTicket(null);
-    setLeftLine(data);
-    setTimeout(() => {
-      history.push("/about");
-    }, 1000);
-  };
+  if (confirmLeaving) {
+    const removeFromLine = async () => {
+      const response = await fetch(
+        `http://localhost:5000/line/remove-shopper/${lineId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(ticket),
+        }
+      );
+      const data = await response.json();
+      await localforage.removeItem("shopper");
+      setTicket(null);
+      setLeftLine(data);
+      setTimeout(() => {
+        history.push("/about");
+      }, 1000);
+    };
+    removeFromLine();
+  }
   useEffect(async () => {
     const shopper = await localforage.getItem("shopper");
     if (shopper) {
@@ -65,6 +71,11 @@ const TicketPage = () => {
   }, []);
   return (
     <div className="text-center">
+      <LeaveLineModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        confirmLeaving={setConfirmLeaving}
+      />
       {leftLine && (
         <h2 className="p-3 white-text">{leftLine}. Thanks for using IQueue!</h2>
       )}
@@ -88,7 +99,7 @@ const TicketPage = () => {
                 fontSize: "1.5rem",
               }}
               className="w-100"
-              onClick={removeFromLine}
+              onClick={() => setModalShow(true)}
             >
               Leave line
             </Button>
