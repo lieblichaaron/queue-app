@@ -11,7 +11,6 @@ export const leaveLine = async (lineId, ticket) => {
       }
     );
     const data = await response.json();
-    console.log(data);
     return data;
   } catch {
     return "server down";

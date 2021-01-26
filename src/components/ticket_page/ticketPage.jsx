@@ -18,18 +18,20 @@ const TicketPage = () => {
   const [modalShow, setModalShow] = useState(false);
   const history = useHistory();
 
-  if (confirmLeaving) {
-    const removeFromLine = async () => {
-      const data = await leaveLine(lineId, ticket);
-      await localforage.removeItem("shopper");
-      setTicket(null);
-      setLeftLine(data);
-      setTimeout(() => {
-        history.push("/about");
-      }, 2000);
-    };
-    removeFromLine();
-  }
+  useEffect(() => {
+    if (confirmLeaving) {
+      const removeFromLine = async () => {
+        const data = await leaveLine(lineId, ticket);
+        await localforage.removeItem("shopper");
+        setTicket(null);
+        setLeftLine(data);
+        setTimeout(() => {
+          history.push("/about");
+        }, 2000);
+      };
+      removeFromLine();
+    }
+  }, [confirmLeaving]);
   useEffect(async () => {
     const shopper = await localforage.getItem("shopper");
     if (shopper) {
