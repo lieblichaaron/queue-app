@@ -18,7 +18,8 @@ const Ticket = ({ line, ticket }) => {
           {line.line.findIndex(
             (serverTicket) => serverTicket.number === ticket.number
           ) * line.estServiceTime}
-          min
+          min <br />
+          (updates as customers are served)
         </span>
       </div>
     </div>
