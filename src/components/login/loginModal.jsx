@@ -12,14 +12,9 @@ class LoginModal extends React.Component {
       email: "",
       password: "",
       passwordConfirm: "",
-      hasAccount: false,
+      hasAccount: this.props.hasAccount,
     };
     Modal.setAppElement("#root");
-  }
-
-  changeModalType(event) {
-    event.preventDefault();
-    this.setState({ hasAccount: !this.state.hasAccount });
   }
 
   handleFormSubmit(event) {
@@ -37,7 +32,6 @@ class LoginModal extends React.Component {
       alert(
         `Account creation successful. \nWelcome to iQueue ${res.data.displayName}!`
       );
-      // Cookies.set("I-Pets", `${res.data.email}`, { path: "/" });
       window.location.assign(`${window.location.origin}/dashboard`);
     });
   }
@@ -55,19 +49,13 @@ class LoginModal extends React.Component {
   }
 
   render() {
-    const {
-      displayName,
-      email,
-      password,
-      passwordConfirm,
-      hasAccount,
-    } = this.state;
+    const { displayName, email, password, passwordConfirm } = this.state;
     const modalStyles = {
       content: {
         top: "8%",
         left: "10%",
         right: "10%",
-        bottom: this.state.hasAccount ? "31%" : "5%",
+        bottom: this.props.hasAccount ? "31%" : "5%",
       },
       overlay: { zIndex: 1000 },
     };
@@ -81,9 +69,11 @@ class LoginModal extends React.Component {
           ariaHideApp={true}
           contentLabel="SignInModal"
         >
-          <h2 className="mb-5">{hasAccount ? "Log in" : "Create Account"}</h2>
+          <h2 className="mb-5">
+            {this.props.hasAccount ? "Log in" : "Create Account"}
+          </h2>
           <Form onSubmit={(event) => this.handleFormSubmit(event)}>
-            {!hasAccount && (
+            {!this.props.hasAccount && (
               <Form.Group>
                 <Form.Label> Display Name</Form.Label>
                 <Form.Control
@@ -125,7 +115,7 @@ class LoginModal extends React.Component {
               />
             </Form.Group>
 
-            {!hasAccount && (
+            {!this.props.hasAccount && (
               <Form.Group>
                 <Form.Label> Confirm Password</Form.Label>
                 <Form.Control
@@ -156,9 +146,9 @@ class LoginModal extends React.Component {
             <Form.Group controlId="formBasicCheckbox">
               <div
                 className="text-primary"
-                onClick={(event) => this.changeModalType(event)}
+                onClick={() => this.props.changeModalType()}
               >
-                {hasAccount ? "Sign up instead" : "Login instead"}
+                {this.props.hasAccount ? "Sign up instead" : "Login instead"}
               </div>
             </Form.Group>
             <Button
@@ -173,7 +163,7 @@ class LoginModal extends React.Component {
                 password !== passwordConfirm
               }
             >
-              {hasAccount ? "Sign In" : "Sign up"}
+              {this.props.hasAccount ? "Sign In" : "Sign up"}
             </Button>
           </Form>
         </Modal>

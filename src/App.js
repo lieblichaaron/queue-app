@@ -15,19 +15,28 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [hasAccount, setHasAccount] = useState(true);
 
   //temp user state until we link to backend
   const [currentUser, setCurrentUser] = useState({
-    id: '600ecbad5d601d64b43cac9c',
-    displayName: 'Jake',
-    email: 'jakenudels@gmail.com',
-    lineIds: [
-      "600ed2a0c82668f8cafdc9ac",
-  ]
+    id: "600ecbad5d601d64b43cac9c",
+    displayName: "Jake",
+    email: "jakenudels@gmail.com",
+    lineIds: ["600ed2a0c82668f8cafdc9ac"],
   });
 
   const manageLoginModal = () => {
+    setHasAccount(true);
     setShowLoginModal(!showLoginModal);
+  };
+
+  const manageSignUpModal = () => {
+    setHasAccount(false);
+    setShowLoginModal(!showLoginModal);
+  };
+
+  const changeModalType = () => {
+    setHasAccount(!hasAccount);
   };
 
   const handleLogout = () => {
@@ -59,10 +68,12 @@ function App() {
             <Line />
           </Route>
           <Route path="/">
-            <About handleSignIn={() => manageLoginModal()} />
+            <About handleSignUp={() => manageSignUpModal()} />
             <LoginModal
               showModal={showLoginModal}
               closeModal={() => manageLoginModal()}
+              hasAccount={hasAccount}
+              changeModalType={() => changeModalType()}
             />
           </Route>
         </Switch>

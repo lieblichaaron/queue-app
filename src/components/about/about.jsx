@@ -12,7 +12,7 @@ const About = (props) => {
         <Button
           type="button"
           className="btn btn-primary mt-5 py-3 px-5"
-          onClick={(event) => props.handleSignIn(event)}
+          onClick={(event) => props.handleSignUp(event)}
         >
           Get started today
         </Button>
@@ -30,7 +30,7 @@ const About = (props) => {
         <Button
           type="button"
           className="btn btn-secondary mt-4 py-3 px-5"
-          onClick={(event) => props.handleSignIn(event)}
+          onClick={(event) => props.handleSignUp(event)}
         >
           Get started today
         </Button>
