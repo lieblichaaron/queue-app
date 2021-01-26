@@ -3,6 +3,7 @@ import { Form, Button } from "react-bootstrap";
 import Modal from "react-modal";
 
 import axios from "axios";
+import Cookie from "js-cookie";
 
 class LoginModal extends React.Component {
   constructor(props) {
@@ -41,7 +42,7 @@ class LoginModal extends React.Component {
           alert(
             `Account creation successful. \nWelcome to iQueue ${res.data.displayName}!`
           );
-          // Cookies.set("I-Pets", `${res.data.email}`, { path: "/" });
+          Cookie.set("iQueue", `JWT`, { path: "/" });
           window.location.assign(`${window.location.origin}/dashboard`);
         })
         .catch((err) => {
@@ -59,7 +60,7 @@ class LoginModal extends React.Component {
       })
         .then((res) => {
           alert(`Welcome back ${res.data.displayName}!`);
-          // Cookies.set("iQueue", `${res.data.email}`, { path: "/" });
+          Cookie.set("iQueue", `JWT`, { path: "/" });
           window.location.assign(`${window.location.origin}/dashboard`);
         })
         .catch((err) => {
