@@ -14,7 +14,6 @@ class LoginModal extends React.Component {
       password: "",
       passwordConfirm: "",
       hasAccount: false,
-      submitDisabled: true,
     };
     Modal.setAppElement("#root");
   }
@@ -72,14 +71,6 @@ class LoginModal extends React.Component {
   }
 
   handleBodyChange(event) {
-    const {
-      displayName,
-      email,
-      password,
-      passwordConfirm,
-      hasAccount,
-    } = this.state;
-
     event.preventDefault();
     if (event.target.id === "displayName")
       this.setState({ displayName: event.target.value });
@@ -89,20 +80,6 @@ class LoginModal extends React.Component {
       this.setState({ password: event.target.value });
     if (event.target.id === "passwordConfirm")
       this.setState({ passwordConfirm: event.target.value });
-
-    if (!hasAccount) {
-      // horrible submit button validation, maybe not doable because of two modals in one component??
-      if (
-        displayName.length &&
-        email.length &&
-        password.length &&
-        passwordConfirm.length &&
-        password !== passwordConfirm
-      )
-        this.setState({ submitDisabled: false });
-    } else if (hasAccount) {
-      if (email && password) this.setState({ submitDisabled: false });
-    } else this.setState({ submitDisabled: true });
   }
 
   render() {
@@ -112,7 +89,6 @@ class LoginModal extends React.Component {
       password,
       passwordConfirm,
       hasAccount,
-      submitDisabled,
     } = this.state;
     const modalStyles = {
       content: {
@@ -123,6 +99,38 @@ class LoginModal extends React.Component {
       },
       overlay: { zIndex: 1000 },
     };
+
+    let submitButton;
+    if (hasAccount) {
+      submitButton = (
+        <Button
+          variant="primary"
+          type="submit"
+          className="mt-4 float-right"
+          disabled={!email || !password}
+        >
+          {hasAccount ? "Sign In" : "Sign up"}
+        </Button>
+      );
+    }
+    if (!hasAccount) {
+      submitButton = (
+        <Button
+          variant="primary"
+          type="submit"
+          className="mt-4 float-right"
+          disabled={
+            !email ||
+            !password ||
+            !passwordConfirm ||
+            !displayName ||
+            password !== passwordConfirm
+          }
+        >
+          {hasAccount ? "Sign In" : "Sign up"}
+        </Button>
+      );
+    }
 
     return (
       <div className="vh-50">
@@ -214,14 +222,7 @@ class LoginModal extends React.Component {
                 {hasAccount ? "Sign up instead" : "Login instead"}
               </div>
             </Form.Group>
-            <Button
-              variant="primary"
-              type="submit"
-              className="mt-4 float-right"
-              disabled={submitDisabled}
-            >
-              {hasAccount ? "Sign In" : "Sign up"}
-            </Button>
+            {submitButton}
           </Form>
         </Modal>
       </div>
