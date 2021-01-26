@@ -1,15 +1,13 @@
+const baseLineUrl = "http://localhost:5000/line";
 export const leaveLine = async (lineId, ticket) => {
   try {
-    const response = await fetch(
-      `http://localhost:5000/line/remove-shopper/${lineId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(ticket),
-      }
-    );
+    const response = await fetch(`${baseLineUrl}/remove-shopper/${lineId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(ticket),
+    });
     const data = await response.json();
     return data;
   } catch {
@@ -19,7 +17,7 @@ export const leaveLine = async (lineId, ticket) => {
 
 export const getLineById = async (lineId) => {
   try {
-    const response = await fetch(`http://localhost:5000/line/${lineId}`);
+    const response = await fetch(`${baseLineUrl}/${lineId}`);
     const data = await response.json();
     return data;
   } catch {
@@ -29,16 +27,13 @@ export const getLineById = async (lineId) => {
 
 export const addTicketToLine = async (lineId, shopper) => {
   try {
-    const response = await fetch(
-      `http://localhost:5000/line/add-shopper/${lineId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(shopper),
-      }
-    );
+    const response = await fetch(`${baseLineUrl}/add-shopper/${lineId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(shopper),
+    });
     const data = await response.json();
     return data;
   } catch {
@@ -48,7 +43,7 @@ export const addTicketToLine = async (lineId, shopper) => {
 
 export const addNewLine = async (line) => {
   try {
-    const response = await fetch("http://localhost:5000/line", {
+    const response = await fetch(baseLineUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
