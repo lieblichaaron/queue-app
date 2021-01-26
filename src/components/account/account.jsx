@@ -39,6 +39,10 @@ function Account(props) {
       });
   };
 
+  const changePassword = async (form, actions) => {
+    await axios.put("http://localhost:5000" + "/owner/password", form, {headers : {email: user.email}})
+  }
+
   const validationSchema = Yup.object().shape({
     displayName: Yup.string().required("You must have a display name"),
     email: Yup.string()
@@ -50,6 +54,7 @@ function Account(props) {
     <div>
       <PasswordModal
         isOpen={showPasswordModal}
+        user={user}
         onCloseModal={handleCloseModal}
         centered
       />
