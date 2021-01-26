@@ -8,6 +8,7 @@ const Footer = () => {
         className="social-media-icons ml-3"
         src={`${iconPath}Facebook_icon.png`}
         alt="Facebook Icon"
+        style={{ background: "white", borderRadius: "5px" }}
       ></img>
       <img
         className="social-media-icons ml-3"
@@ -18,6 +19,7 @@ const Footer = () => {
         className="social-media-icons ml-3"
         src={`${iconPath}Instagram_icon.png`}
         alt="Instagram Icon"
+        style={{ background: "lightgrey", borderRadius: "6px" }}
       ></img>
     </div>
   );
