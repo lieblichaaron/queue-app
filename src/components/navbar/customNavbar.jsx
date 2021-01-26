@@ -1,12 +1,13 @@
 import { Navbar, Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import styles from "./customNavbar.module.css";
+import logo from "../../easyQ-logo.png";
 const CustomNavbar = (props) => {
   return (
     <Navbar style={{ backgroundColor: "#FCA311" }}>
       <Navbar.Brand>
         {/* change to logo */}
-        <NavLink to="/">Logo</NavLink>
+        <NavLink to="/"><img src={logo} className={styles["logo"]}/></NavLink>
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
