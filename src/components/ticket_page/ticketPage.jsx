@@ -7,6 +7,7 @@ import StoreInfo from "../store_info/storeInfo";
 import localforage from "localforage";
 import moment from "moment";
 import LeaveLineModal from "../leave_line_modal/leaveLineModal";
+import { leaveLine, getLineById, addTicketToLine } from "../../serverFuncs";
 
 const TicketPage = () => {
   const { lineId } = useParams();
@@ -19,54 +20,32 @@ const TicketPage = () => {
 
   if (confirmLeaving) {
     const removeFromLine = async () => {
-      const response = await fetch(
-        `http://localhost:5000/line/remove-shopper/${lineId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(ticket),
-        }
-      );
-      const data = await response.json();
+      const data = await leaveLine(lineId, ticket);
       await localforage.removeItem("shopper");
       setTicket(null);
       setLeftLine(data);
       setTimeout(() => {
         history.push("/about");
-      }, 1000);
+      }, 2000);
     };
     removeFromLine();
   }
   useEffect(async () => {
     const shopper = await localforage.getItem("shopper");
     if (shopper) {
-      const response = await fetch(`http://localhost:5000/line/${lineId}`);
-      const serverLine = await response.json();
+      const serverLine = await getLineById(lineId);
       setLine(serverLine);
       setTicket(shopper);
     } else {
-      const response = await fetch(`http://localhost:5000/line/${lineId}`);
-      const originalLine = await response.json();
-      const shopper = {
+      const originalLine = await getLineById(lineId);
+      const newShopper = {
         number: originalLine.line[originalLine.line.length - 1].number + 1,
         joinTime: moment().format("MMMM Do YYYY, h:mm:ss a"),
       };
-      const response2 = await fetch(
-        `http://localhost:5000/line/add-shopper/${lineId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(shopper),
-        }
-      );
-      const newLine = await response2.json();
+      const newLine = await addTicketToLine(lineId, newShopper);
       setLine(newLine);
-      await localforage.setItem("shopper", shopper);
-      setTicket(shopper);
+      await localforage.setItem("shopper", newShopper);
+      setTicket(newShopper);
     }
   }, []);
   return (
