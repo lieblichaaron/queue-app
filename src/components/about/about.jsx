@@ -1,9 +1,46 @@
+import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import Footer from "../footer/footer";
 import "./about.css";
 import CarouselComponent from "./carousel";
+import emailjs from "emailjs-com";
 
 const About = (props) => {
+  const [name, setName] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [message, setMessage] = useState(null);
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    const body = {
+      name: name,
+      email: email,
+      message: message,
+    };
+
+    emailjs
+      .send(
+        process.env.REACT_APP_EMAILJS_SERVICE_ID,
+        process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+        body,
+        process.env.REACT_APP_EMAILJS_USER_ID
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
+  };
+
+  const handleChange = (event) => {
+    if (event.target.id === "name") setName(event.target.value);
+    if (event.target.id === "email") setEmail(event.target.value);
+    if (event.target.id === "message") setMessage(event.target.value);
+  };
+
   return (
     <div className="text-white">
       <div className="d-flex flex-column align-items-center mt-5">
@@ -39,30 +76,39 @@ const About = (props) => {
         <p className="px-4 mt-1 text-justify">
           Let us know what you think. We are looking forward to your feedback!
         </p>
-        <Form className="form-styles mt-3">
-          <Form.Group controlId="formBasicEmail">
+        <Form
+          className="form-styles mt-3"
+          onSubmit={(event) => handleFormSubmit(event)}
+        >
+          <Form.Group>
             <Form.Control
               size="sm"
               type="text"
               placeholder="Enter your name"
+              id="name"
               required
+              onChange={(event) => handleChange(event)}
             />
           </Form.Group>
-          <Form.Group controlId="formBasicEmail">
+          <Form.Group>
             <Form.Control
               size="sm"
               type="email"
               placeholder="Enter your email address"
+              id="email"
               required
+              onChange={(event) => handleChange(event)}
             />
           </Form.Group>
-          <Form.Group controlId="exampleForm.ControlTextarea1">
+          <Form.Group>
             <Form.Control
               size="sm"
               as="textarea"
+              id="message"
               rows={3}
               required
               placeholder="What would you like to tell us?"
+              onChange={(event) => handleChange(event)}
             />
           </Form.Group>
           <Button variant="primary" type="submit">
