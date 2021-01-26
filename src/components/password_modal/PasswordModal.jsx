@@ -12,6 +12,8 @@ import * as Yup from "yup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import "./PasswordModal.css";
+import Cookie from "js-cookie";
+import jwt_decode from "jwt-decode";
 
 function PasswordModal(props) {
   const { isOpen, onCloseModal } = props;
@@ -26,10 +28,11 @@ function PasswordModal(props) {
   const changePassword = async (form, actions) => {
     await axios
       .put("http://localhost:5000" + "/owner/password", form, {
-        headers: { email: props.user.email },
+        headers: { authorization: Cookie.get("iQueue") },
       })
-      .then(() => {
+      .then((res) => {
         setChangedPassword(true);
+        props.onUserInfoChange(jwt_decode(res.data))
         setTimeout(() => {
           props.onCloseModal();
         }, 3000);

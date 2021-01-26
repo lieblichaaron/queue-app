@@ -9,7 +9,6 @@ import {
   FormLabel,
 } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
-import axios from "axios";
 import PasswordModal from "../password_modal/PasswordModal";
 import * as Yup from "yup";
 import UserContext from "../../contexts/UserContext";
@@ -24,25 +23,6 @@ function Account(props) {
     setShowPasswordModal(false);
   };
 
-  const updateInformation = async (form, actions) => {
-    await axios
-      .put("http://localhost:5000" + "/owner/edit", form, {
-        headers: { email: user.email },
-      })
-      .catch((err) => {
-        if (err.response.data.includes("exists")) {
-          actions.setFieldError(
-            "email",
-            "There is already an account registered with this email address"
-          );
-        }
-      });
-  };
-
-  const changePassword = async (form, actions) => {
-    await axios.put("http://localhost:5000" + "/owner/password", form, {headers : {email: user.email}})
-  }
-
   const validationSchema = Yup.object().shape({
     displayName: Yup.string().required("You must have a display name"),
     email: Yup.string()
@@ -55,6 +35,7 @@ function Account(props) {
       <PasswordModal
         isOpen={showPasswordModal}
         user={user}
+        onUserInfoChange={(user) => {props.onUserInfoChange(user)}}
         onCloseModal={handleCloseModal}
         centered
       />
@@ -67,7 +48,7 @@ function Account(props) {
           email: user.email,
         }}
         enableReinitialize={true}
-        onSubmit={(values, actions) => updateInformation(values, actions)}
+        onSubmit={(values, actions) => props.handleChangeInfo(values, actions)}
         validationSchema={validationSchema}
       >
         {(props) => (
