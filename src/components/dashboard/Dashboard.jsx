@@ -14,6 +14,7 @@ function Dashboard() {
 
   const getLines = async () => {
     const res = await axios.get("http://localhost:5000" + "/line/owned-by/" + user.id)
+    console.log(res.data)
     setLines(res.data)
     setIsLoading(false)
   }
