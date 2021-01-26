@@ -25,6 +25,16 @@ export const getLineById = async (lineId) => {
   }
 };
 
+export const watchLineById = async (lineId) => {
+  try {
+    const response = await fetch(`${baseLineUrl}/watch/${lineId}`);
+    const data = await response.json();
+    return data;
+  } catch {
+    return "server down";
+  }
+};
+
 export const addTicketToLine = async (lineId, shopper) => {
   try {
     const response = await fetch(`${baseLineUrl}/add-shopper/${lineId}`, {

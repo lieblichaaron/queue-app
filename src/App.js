@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import TicketPage from "./components/ticket_page/ticketPage";
 import CreateLine from "./components/create_line/createLine";
@@ -11,18 +11,20 @@ import LoginModal from "./components/login/loginModal";
 import UserContext from "./contexts/UserContext";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Cookie from "js-cookie";
+import jwt_decode from "jwt-decode";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [currentUser, setCurrentUser] = useState(Cookie.get("iQueue"));
 
-  //temp user state until we link to backend
-  const [currentUser, setCurrentUser] = useState({
-    id: "600ecbad5d601d64b43cac9c",
-    displayName: "Jake",
-    email: "jakenudels@gmail.com",
-    lineIds: ["600ed2a0c82668f8cafdc9ac"],
-  });
+  useEffect(() => {
+    const newToken = Cookie.get("iQueue");
+    if (newToken) {
+      setCurrentUser(jwt_decode(newToken));
+    }
+  }, [showLoginModal]);
 
   const manageLoginModal = () => {
     setShowLoginModal(!showLoginModal);

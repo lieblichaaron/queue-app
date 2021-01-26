@@ -15,11 +15,9 @@ const Ticket = ({ line, ticket }) => {
         </span>
         <span>
           <b>Estimated wait time:</b>{" "}
-          {(line.line.findIndex(
+          {line.line.findIndex(
             (serverTicket) => serverTicket.number === ticket.number
-          ) +
-            1) *
-            line.estServiceTime}
+          ) * line.estServiceTime}
           min
         </span>
       </div>

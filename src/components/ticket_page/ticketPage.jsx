@@ -7,7 +7,12 @@ import StoreInfo from "../store_info/storeInfo";
 import localforage from "localforage";
 import moment from "moment";
 import LeaveLineModal from "../leave_line_modal/leaveLineModal";
-import { leaveLine, getLineById, addTicketToLine } from "../../serverFuncs";
+import {
+  leaveLine,
+  getLineById,
+  addTicketToLine,
+  watchLineById,
+} from "../../serverFuncs";
 
 const TicketPage = () => {
   const { lineId } = useParams();
@@ -19,8 +24,15 @@ const TicketPage = () => {
   const history = useHistory();
 
   useEffect(() => {
-    if (confirmLeaving) {
-      const removeFromLine = async () => {
+    const watchLine = async () => {
+      const newLine = await watchLineById(lineId);
+      setLine(newLine);
+    };
+    watchLine();
+  }, [line]);
+  useEffect(() => {
+    const removeFromLine = async () => {
+      if (confirmLeaving) {
         const data = await leaveLine(lineId, ticket);
         await localforage.removeItem("shopper");
         setTicket(null);
@@ -28,27 +40,30 @@ const TicketPage = () => {
         setTimeout(() => {
           history.push("/about");
         }, 2000);
-      };
-      removeFromLine();
-    }
+      }
+    };
+    removeFromLine();
   }, [confirmLeaving]);
-  useEffect(async () => {
-    const shopper = await localforage.getItem("shopper");
-    if (shopper) {
-      const serverLine = await getLineById(lineId);
-      setLine(serverLine);
-      setTicket(shopper);
-    } else {
-      const originalLine = await getLineById(lineId);
-      const newShopper = {
-        number: originalLine.line[originalLine.line.length - 1].number + 1,
-        joinTime: moment().format("MMMM Do YYYY, h:mm:ss a"),
-      };
-      const newLine = await addTicketToLine(lineId, newShopper);
-      setLine(newLine);
-      await localforage.setItem("shopper", newShopper);
-      setTicket(newShopper);
-    }
+  useEffect(() => {
+    const initFunc = async () => {
+      const shopper = await localforage.getItem("shopper");
+      if (shopper) {
+        const serverLine = await getLineById(lineId);
+        setLine(serverLine);
+        setTicket(shopper);
+      } else {
+        const originalLine = await getLineById(lineId);
+        const newShopper = {
+          number: originalLine.line[originalLine.line.length - 1].number + 1,
+          joinTime: moment().format("MMMM Do YYYY, h:mm:ss a"),
+        };
+        const newLine = await addTicketToLine(lineId, newShopper);
+        setLine(newLine);
+        await localforage.setItem("shopper", newShopper);
+        setTicket(newShopper);
+      }
+    };
+    initFunc();
   }, []);
   return (
     <div className="text-center">
