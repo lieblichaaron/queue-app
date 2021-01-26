@@ -42,6 +42,7 @@ class LoginModal extends React.Component {
           alert(
             `Account creation successful. \nWelcome to iQueue ${res.data.displayName}!`
           );
+          console.log(res.data)
           Cookie.set("iQueue", res.data.authToken, { path: "/" });
           window.location.assign(`${window.location.origin}/dashboard`);
         })
