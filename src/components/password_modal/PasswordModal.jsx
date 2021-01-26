@@ -18,6 +18,7 @@ import jwt_decode from "jwt-decode";
 function PasswordModal(props) {
   const { isOpen, onCloseModal } = props;
   const [changedPassword, setChangedPassword] = useState(false);
+  const [loadingSubmit, setLoadingSubmit] = useState(false)
 
   useEffect(() => {
     setTimeout(() => {
@@ -26,13 +27,15 @@ function PasswordModal(props) {
   }, [isOpen]);
 
   const changePassword = async (form, actions) => {
+    setLoadingSubmit(true);
     await axios
       .put("http://localhost:5000" + "/owner/password", form, {
         headers: { authorization: Cookie.get("iQueue") },
       })
       .then((res) => {
         setChangedPassword(true);
-        props.onUserInfoChange(jwt_decode(res.data))
+        Cookie.set("iQueue", res.data, { path: "/" });
+        props.onUserInfoChange(jwt_decode(res.data));
         setTimeout(() => {
           props.onCloseModal();
         }, 3000);
@@ -41,7 +44,10 @@ function PasswordModal(props) {
         if (err.response.data.includes("incorrect")) {
           actions.setFieldError("oldPassword", "Incorrect password");
         }
-      });
+      })
+      .finally(() => {
+        setLoadingSubmit(false);
+      })
   };
 
   const validationSchema = Yup.object().shape({
@@ -53,7 +59,12 @@ function PasswordModal(props) {
   });
 
   return (
-    <Modal show={isOpen} onHide={onCloseModal} centered className={changedPassword && "password-success-modal"}>
+    <Modal
+      show={isOpen}
+      onHide={onCloseModal}
+      centered
+      className={changedPassword && "password-success-modal"}
+    >
       {changedPassword ? (
         <Modal.Body className="password-success-container">
           <FontAwesomeIcon icon={faCheckCircle} />
@@ -82,28 +93,58 @@ function PasswordModal(props) {
                     <FormGroup>
                       <FormLabel htmlFor="oldPassword">Old password</FormLabel>
                       <Field
-                        className="form-input"
+                        className={`form-input ${
+                          props.errors.oldPassword &&
+                          props.touched.oldPassword &&
+                          "invalid-field"
+                        }`}
                         name="oldPassword"
                         type="password"
                       />
+                      {props.errors.oldPassword &&
+                        props.touched.oldPassword && (
+                          <p className="invalid-message red-text">
+                            {props.errors.oldPassword}
+                          </p>
+                        )}
                     </FormGroup>
                     <FormGroup>
                       <FormLabel htmlFor="newPassword">New password</FormLabel>
                       <Field
-                        className="form-input"
+                        className={`form-input ${
+                          props.errors.newPassword &&
+                          props.touched.newPassword &&
+                          "invalid-field"
+                        }`}
                         name="newPassword"
                         type="password"
                       />
+                      {props.errors.newPassword &&
+                        props.touched.newPassword && (
+                          <p className="invalid-message red-text">
+                            {props.errors.newPassword}
+                          </p>
+                        )}
                     </FormGroup>
                     <FormGroup>
                       <FormLabel htmlFor="newPasswordConfirm">
                         Confirm new password
                       </FormLabel>
                       <Field
-                        className="form-input"
+                        className={`form-input ${
+                          props.errors.newPasswordConfirm &&
+                          props.touched.newPasswordConfirm &&
+                          "invalid-field"
+                        }`}
                         name="newPasswordConfirm"
                         type="password"
                       />
+                      {props.errors.newPasswordConfirm &&
+                        props.touched.newPasswordConfirm && (
+                          <p className="invalid-message red-text">
+                            {props.errors.newPasswordConfirm}
+                          </p>
+                        )}
                     </FormGroup>
                   </Container>
                 </Modal.Body>

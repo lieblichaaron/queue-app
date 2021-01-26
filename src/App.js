@@ -47,42 +47,6 @@ function App() {
     setCurrentUser(null);
   };
 
-  const updateInformation = async (form, actions) => {
-    await axios
-      .put("http://localhost:5000" + "/owner/edit", form, {
-        headers: { authorization: Cookie.get("iQueue") },
-      })
-      .then((res) => {
-        Cookie.set("iQueue", res.data, { path: "/" });
-        setCurrentUser(jwt_decode(res.data));
-      })
-      .catch((err) => {
-        if (err.response.data.includes("exists")) {
-          actions.setFieldError(
-            "email",
-            "There is already an account registered with this email address"
-          );
-        }
-      });
-  };
-
-  const changePassword = async (form, actions) => {
-    try {
-      const res = await axios.put(
-        "http://localhost:5000" + "/owner/password",
-        form,
-        { headers: { authorization: Cookie.get("iQueue") } }
-      );
-      Cookie.set("iQueue", res.data, { path: "/" });
-
-      return "success";
-    } catch (err) {
-      if (err.response.data.includes("incorrect")) {
-        actions.setFieldError("oldPassword", "Incorrect password");
-      }
-    }
-  };
-
   const handleUserInfoChange = (userInfo) => {
     setCurrentUser(userInfo);
   };
@@ -104,9 +68,6 @@ function App() {
           </Route>
           <Route path="/account">
             <Account
-              handleChangeInfo={(values, actions) => {
-                updateInformation(values, actions);
-              }}
               onUserInfoChange={(user) => {
                 handleUserInfoChange(user);
               }}
