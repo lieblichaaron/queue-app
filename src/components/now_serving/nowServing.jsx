@@ -3,7 +3,6 @@ const NowServing = ({ textColor, backgroundColor, currentCustomer }) => {
   return (
     <div
       className={styles.container}
-      style={{ color: textColor, backgroundColor: backgroundColor }}
     >
       <h1 className={styles.customer}>
         NOW SERVING <span style={{ fontSize: "5rem" }}>#{currentCustomer}</span>
