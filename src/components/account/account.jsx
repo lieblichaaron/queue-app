@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./account.css";
 import {
   Container,
@@ -11,12 +11,10 @@ import {
 import { Formik, Form, Field } from "formik";
 import PasswordModal from "../password_modal/PasswordModal";
 import * as Yup from "yup";
+import UserContext from "../../contexts/UserContext";
 
 function Account(props) {
-  const user = {
-    displayName: "Jake",
-    email: "jakenudels@gmail.com",
-  };
+  const user = useContext(UserContext);
 
   const [canEdit, setCanEdit] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -36,6 +34,8 @@ function Account(props) {
     <div>
       <PasswordModal
         isOpen={showPasswordModal}
+        user={user}
+        onUserInfoChange={(user) => {props.onUserInfoChange(user)}}
         onCloseModal={handleCloseModal}
         centered
       />
@@ -48,7 +48,7 @@ function Account(props) {
           email: user.email,
         }}
         enableReinitialize={true}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values, actions) => props.handleChangeInfo(values, actions)}
         validationSchema={validationSchema}
       >
         {(props) => (

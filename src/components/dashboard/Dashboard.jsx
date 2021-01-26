@@ -11,9 +11,8 @@ function Dashboard() {
   const [lines, setLines] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const user = useContext(UserContext);
-
   const getLines = async () => {
-    const res = await axios.get("http://localhost:5000" + "/line/owned-by/" + user.id)
+    const res = await axios.get("http://localhost:5000" + "/line/owned-by/" + user._id)
     setLines(res.data)
     setIsLoading(false)
   }

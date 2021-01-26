@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { useState, useRef, useContext } from "react";
+import UserContext from "../../contexts/UserContext";
 import { Form, Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import Autocomplete from "react-google-autocomplete";
 import MyMapComponent from "../map/map";
 import TitleBanner from "../title_banner/titleBanner";
 import QRCode from "qrcode.react";
+import { addNewLine } from "../../serverFuncs";
 const saveSvgAsPng = require("save-svg-as-png");
 
 const CreateLine = () => {
+  const currentUser = useContext(UserContext);
   const history = useHistory();
+  const qrRef = useRef();
   const [serviceTimeOptions, setServiceTimeOptions] = useState([
     ...Array(30).keys(),
   ]);
@@ -34,7 +38,7 @@ const CreateLine = () => {
   const createQueue = async (e) => {
     e.preventDefault();
     const lineObj = {
-      ownerId: /*owner id from state*/ 123456789,
+      ownerId: currentUser.id,
       isActive: false,
       storeName: storeName,
       estServiceTime: serviceTime,
@@ -44,14 +48,7 @@ const CreateLine = () => {
         address: address,
       },
     };
-    const data = await fetch("http://localhost:5000/line", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(lineObj),
-    });
-    setLineId(await data.json());
+    setLineId(await addNewLine(lineObj));
     await saveSvgAsPng.saveSvgAsPng(
       document.getElementById("qr"),
       "line-qr-code.png",
@@ -60,6 +57,7 @@ const CreateLine = () => {
       }
     );
     setButtonDisabled(true);
+    qrRef.current.scrollIntoView({ behavior: "smooth" });
   };
   if (finished) {
     history.push({
@@ -146,7 +144,7 @@ const CreateLine = () => {
           </Button>
         </Form>
         {lineId && (
-          <div className="text-center p-3">
+          <div ref={qrRef} className="text-center p-3">
             <QRCode
               id="qr"
               value={`http://localhost:3000/ticket/${lineId}`}

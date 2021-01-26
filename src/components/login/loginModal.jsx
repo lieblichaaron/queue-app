@@ -1,8 +1,8 @@
 import React from "react";
 import { Form, Button } from "react-bootstrap";
 import Modal from "react-modal";
-
 import axios from "axios";
+import Cookie from "js-cookie";
 
 class LoginModal extends React.Component {
   constructor(props) {
@@ -12,28 +12,56 @@ class LoginModal extends React.Component {
       email: "",
       password: "",
       passwordConfirm: "",
-      hasAccount: this.props.hasAccount,
     };
     Modal.setAppElement("#root");
   }
 
   handleFormSubmit(event) {
+    const { displayName, email, password } = this.state;
     event.preventDefault();
-    const ownerObject = {
-      displayName: this.state.displayName,
-      email: this.state.email,
-      password: this.state.password,
-    };
-    return axios({
-      method: "post",
-      url: "http://localhost:5000/owner",
-      data: ownerObject,
-    }).then((res) => {
-      alert(
-        `Account creation successful. \nWelcome to iQueue ${res.data.displayName}!`
-      );
-      window.location.assign(`${window.location.origin}/dashboard`);
-    });
+    if (!this.props.hasAccount) {
+      const ownerObject = {
+        displayName: displayName,
+        email: email,
+        password: password,
+      };
+      return axios({
+        method: "post",
+        url: "http://localhost:5000/owner",
+        data: ownerObject,
+      })
+        .then((res) => {
+          console.log(res);
+          alert(
+            `Account creation successful. \nWelcome to iQueue ${res.data.displayName}!`
+          );
+          console.log(res.data);
+          Cookie.set("iQueue", res.data.authToken, { path: "/" });
+          window.location.assign(`${window.location.origin}/dashboard`);
+        })
+        .catch((err) => {
+          alert(err.response.data.error);
+        });
+    } else if (this.props.hasAccount) {
+      const ownerObject = {
+        email: email,
+        password: password,
+      };
+      return axios({
+        method: "post",
+        url: "http://localhost:5000/owner/login",
+        data: ownerObject,
+      })
+        .then((res) => {
+          console.log(res);
+          alert(`Welcome back ${res.data.displayName}!`);
+          Cookie.set("iQueue", res.data.authToken, { path: "/" });
+          window.location.assign(`${window.location.origin}/dashboard`);
+        })
+        .catch((err) => {
+          alert(err.response.data.error);
+        });
+    }
   }
 
   handleBodyChange(event) {
@@ -59,6 +87,39 @@ class LoginModal extends React.Component {
       },
       overlay: { zIndex: 1000 },
     };
+
+    let submitButton;
+    if (this.props.hasAccount) {
+      submitButton = (
+        <Button
+          variant="primary"
+          type="submit"
+          className="mt-4 float-right"
+          disabled={!email || !password}
+        >
+          {this.props.hasAccount ? "Sign In" : "Sign up"}
+        </Button>
+      );
+    }
+    if (!this.props.hasAccount) {
+      submitButton = (
+        <Button
+          variant="primary"
+          type="submit"
+          className="mt-4 float-right"
+          disabled={
+            !email ||
+            !password ||
+            !passwordConfirm ||
+            !displayName ||
+            password !== passwordConfirm
+          }
+        >
+          {this.props.hasAccount ? "Sign In" : "Sign up"}
+        </Button>
+      );
+    }
+
     return (
       <div className="vh-50">
         <Modal
@@ -151,20 +212,7 @@ class LoginModal extends React.Component {
                 {this.props.hasAccount ? "Sign up instead" : "Login instead"}
               </div>
             </Form.Group>
-            <Button
-              variant="primary"
-              type="submit"
-              className="mt-4 float-right"
-              disabled={
-                !displayName ||
-                !email ||
-                !password ||
-                !passwordConfirm ||
-                password !== passwordConfirm
-              }
-            >
-              {this.props.hasAccount ? "Sign In" : "Sign up"}
-            </Button>
+            {submitButton}
           </Form>
         </Modal>
       </div>

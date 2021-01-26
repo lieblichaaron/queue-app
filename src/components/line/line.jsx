@@ -28,11 +28,7 @@ const Line = () => {
           <h1 className="text-center pb-3">Current line size: {13} people.</h1>
         </div>
 
-        <NowServing
-          // className="Container1"
-          textColor="#e5e5e5"
-          backgroundColor="#14213d"
-        />
+        <NowServing textColor="#14213d" backgroundColor="#e5e5e5" />
       </Container>
 
       <Container className="Buttons" style={{}}>
@@ -45,7 +41,8 @@ const Line = () => {
             marginTop: 10,
           }}
           className="w-100"
-          type="submit">
+          type="submit"
+        >
           Next Customer
         </Button>
         <Button
@@ -56,7 +53,8 @@ const Line = () => {
             marginTop: 10,
           }}
           className="w-100"
-          type="submit">
+          type="submit"
+        >
           Stop additional queueing
         </Button>
         <Button
@@ -68,7 +66,8 @@ const Line = () => {
             marginBottom: 10,
           }}
           className="w-100"
-          type="submit">
+          type="submit"
+        >
           Delete queue
         </Button>
       </Container>
@@ -141,7 +140,8 @@ const Line = () => {
             marginTop: 10,
           }}
           className="w-100"
-          type="submit">
+          type="submit"
+        >
           Update Information
         </Button>
       </Container>

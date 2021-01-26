@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import TicketPage from "./components/ticket_page/ticketPage";
 import CreateLine from "./components/create_line/createLine";
@@ -11,19 +11,22 @@ import LoginModal from "./components/login/loginModal";
 import UserContext from "./contexts/UserContext";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Cookie from "js-cookie";
+import jwt_decode from "jwt-decode";
+import axios from "axios";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [hasAccount, setHasAccount] = useState(true);
+  const [currentUser, setCurrentUser] = useState(Cookie.get("iQueue"));
 
-  //temp user state until we link to backend
-  const [currentUser, setCurrentUser] = useState({
-    id: "600ecbad5d601d64b43cac9c",
-    displayName: "Jake",
-    email: "jakenudels@gmail.com",
-    lineIds: ["600ed2a0c82668f8cafdc9ac"],
-  });
+  useEffect(() => {
+    const newToken = Cookie.get("iQueue");
+    if (newToken) {
+      setCurrentUser(jwt_decode(newToken));
+    }
+  }, [showLoginModal]);
 
   const manageLoginModal = () => {
     setHasAccount(true);
@@ -43,6 +46,47 @@ function App() {
     setIsLoggedIn(false);
     setCurrentUser(null);
   };
+
+  const updateInformation = async (form, actions) => {
+    await axios
+      .put("http://localhost:5000" + "/owner/edit", form, {
+        headers: { authorization: Cookie.get("iQueue") },
+      })
+      .then((res) => {
+        Cookie.set("iQueue", res.data, { path: "/" });
+        setCurrentUser(jwt_decode(res.data));
+      })
+      .catch((err) => {
+        if (err.response.data.includes("exists")) {
+          actions.setFieldError(
+            "email",
+            "There is already an account registered with this email address"
+          );
+        }
+      });
+  };
+
+  const changePassword = async (form, actions) => {
+    try {
+      const res = await axios.put(
+        "http://localhost:5000" + "/owner/password",
+        form,
+        { headers: { authorization: Cookie.get("iQueue") } }
+      );
+      Cookie.set("iQueue", res.data, { path: "/" });
+
+      return "success";
+    } catch (err) {
+      if (err.response.data.includes("incorrect")) {
+        actions.setFieldError("oldPassword", "Incorrect password");
+      }
+    }
+  };
+
+  const handleUserInfoChange = (userInfo) => {
+    setCurrentUser(userInfo);
+  };
+
   return (
     <UserContext.Provider value={currentUser}>
       <Router>
@@ -59,7 +103,14 @@ function App() {
             <TicketPage />
           </Route>
           <Route path="/account">
-            <Account />
+            <Account
+              handleChangeInfo={(values, actions) => {
+                updateInformation(values, actions);
+              }}
+              onUserInfoChange={(user) => {
+                handleUserInfoChange(user);
+              }}
+            />
           </Route>
           <Route path="/create">
             <CreateLine />
