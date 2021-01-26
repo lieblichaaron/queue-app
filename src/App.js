@@ -46,7 +46,7 @@ function App() {
           <Route path="/dashboard">
             <Dashboard />
           </Route>
-          <Route path="/ticket">
+          <Route path="/ticket/:lineId">
             <TicketPage />
           </Route>
           <Route path="/account">
@@ -55,7 +55,7 @@ function App() {
           <Route path="/create">
             <CreateLine />
           </Route>
-          <Route path="/line">
+          <Route path="/line/:lineId">
             <Line />
           </Route>
           <Route path="/">
