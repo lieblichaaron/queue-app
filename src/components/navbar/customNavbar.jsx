@@ -34,7 +34,7 @@ const CustomNavbar = (props) => {
               to="/"
               onClick={(event) => props.handleSignIn(event)}
             >
-              Sign in
+              Log in
             </NavLink>
           )}
         </Nav>
