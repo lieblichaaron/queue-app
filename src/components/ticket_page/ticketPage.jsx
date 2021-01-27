@@ -16,11 +16,12 @@ import {
 
 const TicketPage = () => {
   const { lineId } = useParams();
-  const [confirmLeaving, setConfirmLeaving] = useState(false);
+  const [confirmLeaving, setConfirmLeaving] = useState();
   const [line, setLine] = useState();
   const [ticket, setTicket] = useState();
   const [leftLine, setLeftLine] = useState();
   const [modalShow, setModalShow] = useState(false);
+  const [replace, setReplace] = useState();
   const history = useHistory();
 
   useEffect(() => {
@@ -43,53 +44,84 @@ const TicketPage = () => {
   }, [line]);
   useEffect(() => {
     const removeFromLine = async () => {
-      if (confirmLeaving) {
-        const data = await leaveLine(lineId, ticket);
+      if (confirmLeaving === true) {
+        const data = await leaveLine(ticket.lineId, ticket);
         await localforage.removeItem("shopper");
         setTicket(null);
-        setLeftLine(data);
+        if (!replace) {
+          setLeftLine(data);
+          setTimeout(() => {
+            history.push("/home");
+          }, 2000);
+        } else {
+          window.location.reload();
+        }
+      }
+      if (confirmLeaving === false) {
+        setLeftLine("Redirection to your original ticket.");
         setTimeout(() => {
-          history.push("/home");
+          history.push(`/ticket/${ticket.lineId}`);
+          window.location.reload();
         }, 2000);
       }
     };
     removeFromLine();
   }, [confirmLeaving]);
+
+  const ticketHolder = async (shopper) => {
+    const serverLine = await getLineById(lineId);
+    setLine(serverLine);
+    setTicket(shopper);
+  };
+  const replaceTicket = (shopper) => {
+    setReplace(true);
+    setTicket(shopper);
+    setModalShow(true);
+  };
+  const createNewTicket = async () => {
+    const originalLine = await getLineById(lineId);
+    const newShopper = {
+      number:
+        originalLine.line && originalLine.line.length > 0
+          ? originalLine.line[originalLine.line.length - 1].number + 1
+          : 1,
+      joinTime: moment().format("MMMM Do YYYY, h:mm:ss a"),
+      lineId: lineId,
+    };
+    const newLine = await addTicketToLine(lineId, newShopper);
+    setLine(newLine);
+    if (typeof newLine === "object") {
+      await localforage.setItem("shopper", newShopper);
+      setTicket(newShopper);
+    }
+  };
+
   useEffect(() => {
-    const initFunc = async () => {
+    const initTicketFunc = async () => {
       const shopper = await localforage.getItem("shopper");
-      if (shopper) {
-        const serverLine = await getLineById(lineId);
-        setLine(serverLine);
-        setTicket(shopper);
+      if (shopper && shopper.lineId === lineId) {
+        ticketHolder(shopper);
+      } else if (shopper) {
+        replaceTicket(shopper);
       } else {
-        const originalLine = await getLineById(lineId);
-        const newShopper = {
-          number:
-            originalLine.line && originalLine.line.length > 0
-              ? originalLine.line[originalLine.line.length - 1].number + 1
-              : 1,
-          joinTime: moment().format("MMMM Do YYYY, h:mm:ss a"),
-        };
-        const newLine = await addTicketToLine(lineId, newShopper);
-        setLine(newLine);
-        await localforage.setItem("shopper", newShopper);
-        setTicket(newShopper);
+        createNewTicket();
       }
     };
-    initFunc();
+    initTicketFunc();
   }, []);
   return (
     <div className="text-center">
       <LeaveLineModal
+        replace={replace}
         show={modalShow}
         onHide={() => setModalShow(false)}
         confirmLeaving={setConfirmLeaving}
       />
       {leftLine && (
-        <h2 className="p-3 white-text">{leftLine}. Thanks for using easyQ!</h2>
+        <h2 className="p-3 white-text">{leftLine} Thanks for using easyQ!</h2>
       )}
-      {ticket && (
+      {typeof line === "string" && <h2 className="p-3 white-text">{line}</h2>}
+      {ticket && typeof line === "object" && (
         <div>
           <TitleBanner title={line.storeName} />
           <div
