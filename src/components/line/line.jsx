@@ -20,6 +20,17 @@ const Line = () => {
   useEffect(() => {
     setLocationPicked(true);
   }, [lng]);
+
+  const buttonStyle = {
+    backgroundColor: "#14213D",
+    color: "white",
+    border: "none",
+    marginTop: 10,
+    height: "50px",
+    width: "80%",
+    borderRadius: "8px",
+    marginBottom: "8px",
+  };
   return (
     <div>
       <TitleBanner title="Store Name" />
@@ -32,148 +43,134 @@ const Line = () => {
           className="my-5 d-flex flex-column justify-content-center align-items-center"
           style={{ backgroundColor: "#fca311", height: "280px" }}
         >
-          <button
-            style={{
-              backgroundColor: "#14213D",
-              color: "white",
-              border: "none",
-              marginTop: 10,
-              height: "50px",
-              width: "80%",
-              borderRadius: "8px",
-              marginBottom: "8px",
-            }}
-          >
-            Next Customer
-          </button>
-          <button
-            style={{
-              backgroundColor: "#14213D",
-              color: "white",
-              border: "none",
-              marginTop: 10,
-              height: "50px",
-              width: "80%",
-              borderRadius: "8px",
-              marginBottom: "8px",
-            }}
-          >
-            Stop additional queueing
-          </button>
-          <button
-            style={{
-              backgroundColor: "#14213D",
-              color: "white",
-              border: "none",
-              marginTop: 10,
-              height: "50px",
-              width: "80%",
-              borderRadius: "8px",
-            }}
-          >
-            Delete queue
-          </button>
+          <button style={buttonStyle}>Next Customer</button>
+          <button style={buttonStyle}>Stop additional queueing</button>
+          <button style={buttonStyle}>Delete queue</button>
         </div>
-        <div className="d-flex align-items-center text-white flex-column px-3">
-          <h4 className="mb-3">Customer Analytics</h4>
-          <div className="d-flex justify-content-center align-items-center">
-            <p>Average Serving Time</p>
-            <p>
-              <Badge
-                className="ml-3"
-                style={{ color: "black", backgroundColor: "#fca318" }}
-                pill
-              >
-                5 Mins
-              </Badge>
-            </p>
-          </div>
-          <div className="d-flex justify-content-center align-items-center">
-            <p>Estimated Time of Queue</p>
-            <p>
-              <Badge
-                className="ml-3"
-                pill
-                style={{ color: "black", backgroundColor: "#fca318" }}
-              >
-                5 Mins
-              </Badge>
-            </p>
-          </div>
-          <div className="d-flex justify-content-center align-items-center">
-            <p>Average Waiting Time</p>
-            <p>
-              <Badge
-                className="ml-3"
-                pill
-                style={{ color: "black", backgroundColor: "#fca318" }}
-              >
-                5 Mins
-              </Badge>
-            </p>
-          </div>
-        </div>
-        {/* onSubmit Update information */}
-        <Form className="mx-3 mb-5">
-          <Form.Group controlId="storeName">
-            <Form.Label>Store name*</Form.Label>
-            <Form.Control
-              required
-              autoComplete="off"
-              type="text"
-              placeholder="Enter store name"
-              // onChange={handleStoreName}
-            />
-          </Form.Group>
-
-          <Form.Group controlId="location">
-            <Form.Label>Store location*</Form.Label>
-
-            <Autocomplete
+        <div className="d-flex text-white flex-column px-3 mb-4">
+          <div
+            className="d-flex justify-content-center align-items-center mb-4"
+            style={{ height: "30px" }}
+          >
+            <img
+              src={`${process.env.PUBLIC_URL}/icons/analytics_icon.png`}
               style={{
-                width: "100%",
-                height: "calc(1.5em + .75rem + 2px)",
-                borderRadius: ".25rem",
-                marginBottom: "1rem",
+                height: "24px",
+                width: "24px",
+                marginRight: "10px",
+                marginBottom: "5px",
               }}
-              onPlaceSelected={(place) => {
-                setMap(place);
-              }}
-              types={["address"]}
-            />
-            <MyMapComponent
-              lat={lat}
-              lng={lng}
-              address={address}
-              isMarkerShown={address}
-              googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyA0Kx9Y9puWzmvyo9yVW_fCZvAiDNnKhlA&v=3.exp&libraries=geometry,drawing,places`}
-              loadingElement={<div style={{ height: `100%` }} />}
-              containerElement={<div style={{ height: `300px` }} />}
-              mapElement={<div style={{ height: `100%` }} />}
-            />
-          </Form.Group>
+            ></img>
+            <h4>Customer Analytics</h4>
+          </div>
+          <div>
+            <div className="d-flex justify-content-center align-items-center">
+              <p>Average Serving Time</p>
+              <p>
+                <Badge
+                  className="ml-3"
+                  style={{ color: "black", backgroundColor: "#fca318" }}
+                  pill
+                >
+                  5 Mins
+                </Badge>
+              </p>
+            </div>
+            <div className="d-flex justify-content-center align-items-center">
+              <p>Estimated Time of Queue</p>
+              <p>
+                <Badge
+                  className="ml-3"
+                  pill
+                  style={{ color: "black", backgroundColor: "#fca318" }}
+                >
+                  5 Mins
+                </Badge>
+              </p>
+            </div>
+            <div className="d-flex justify-content-center align-items-center">
+              <p>Average Waiting Time</p>
+              <p>
+                <Badge
+                  className="ml-3"
+                  pill
+                  style={{ color: "black", backgroundColor: "#fca318" }}
+                >
+                  5 Mins
+                </Badge>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          style={{ height: "2px", backgroundColor: "lightgrey" }}
+          className="mb-4"
+        ></div>
+        <div>
+          <h4 className="mb-3" style={{ textAlign: "center" }}>
+            Store Information
+          </h4>
+          <Form className="mx-3 mb-5">
+            <Form.Group controlId="storeName">
+              <Form.Label>Store name*</Form.Label>
+              <Form.Control
+                required
+                autoComplete="off"
+                type="text"
+                placeholder="Enter store name"
+                // onChange={handleStoreName}
+              />
+            </Form.Group>
 
-          {/* Button to prevent implicit submission of the form  */}
-          <button
-            type="submit"
-            disabled
-            style={{ display: "none" }}
-            aria-hidden="true"
-          ></button>
-          <Button
-            style={{
-              backgroundColor: "#fca311",
-              color: "#14213d",
-              border: "none",
-              height: "2.5rem",
-            }}
-            className="w-100 mb-3"
-            type="submit"
-            // disabled={buttonDisabled}
-          >
-            Update Information
-          </Button>
-        </Form>
+            <Form.Group controlId="location">
+              <Form.Label>Store location*</Form.Label>
+
+              <Autocomplete
+                style={{
+                  width: "100%",
+                  height: "calc(1.5em + .75rem + 2px)",
+                  borderRadius: ".25rem",
+                  marginBottom: "1rem",
+                }}
+                onPlaceSelected={(place) => {
+                  setMap(place);
+                }}
+                types={["address"]}
+              />
+              <MyMapComponent
+                lat={lat}
+                lng={lng}
+                address={address}
+                isMarkerShown={address}
+                googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyA0Kx9Y9puWzmvyo9yVW_fCZvAiDNnKhlA&v=3.exp&libraries=geometry,drawing,places`}
+                loadingElement={<div style={{ height: `100%` }} />}
+                containerElement={<div style={{ height: `300px` }} />}
+                mapElement={<div style={{ height: `100%` }} />}
+              />
+            </Form.Group>
+
+            {/* Button to prevent implicit submission of the form  */}
+            <button
+              type="submit"
+              disabled
+              style={{ display: "none" }}
+              aria-hidden="true"
+            ></button>
+            <Button
+              style={{
+                backgroundColor: "#fca311",
+                color: "#14213d",
+                border: "none",
+                height: "2.5rem",
+              }}
+              className="w-100 mb-3"
+              type="submit"
+              // disabled={buttonDisabled}
+            >
+              Update Information
+            </Button>
+          </Form>
+        </div>
       </div>
     </div>
   );
