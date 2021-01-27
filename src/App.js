@@ -13,18 +13,21 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Cookie from "js-cookie";
 import jwt_decode from "jwt-decode";
-import axios from "axios";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [hasAccount, setHasAccount] = useState(true);
-  const [currentUser, setCurrentUser] = useState(Cookie.get("iQueue"));
+  const [currentUser, setCurrentUser] = useState({
+    _id: "",
+    displayName: "",
+    email: "",
+    password: "",
+  });
 
   useEffect(() => {
-    const newToken = Cookie.get("iQueue");
-    if (newToken) {
-      setCurrentUser(jwt_decode(newToken));
+    const token = Cookie.get("iQueue");
+    if (token) {
+      setCurrentUser(jwt_decode(token));
     }
   }, [showLoginModal]);
 
@@ -42,9 +45,19 @@ function App() {
     setHasAccount(!hasAccount);
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
+  const handleSignIn = (res) => {
+    Cookie.set("iQueue", res.data.authToken, { path: "/" });
+    setCurrentUser(jwt_decode(res.data.authToken))
+    setShowLoginModal(false)
+    alert(`Welcome back ${res.data.displayName}!`);
+    window.location.assign(`${window.location.origin}/dashboard`);
+
+  };
+
+  const handleSignOut = () => {
     setCurrentUser(null);
+    Cookie.remove("iQueue");
+    window.location.assign(window.location.origin);
   };
 
   const handleUserInfoChange = (userInfo) => {
@@ -55,8 +68,11 @@ function App() {
     <UserContext.Provider value={currentUser}>
       <Router>
         <CustomNavbar
-          isLoggedIn={isLoggedIn}
+          isLoggedIn={currentUser ? true : false}
           handleSignIn={() => manageLoginModal()}
+          handleSignOut={() => {
+            handleSignOut();
+          }}
         />
 
         <Switch>
@@ -85,6 +101,9 @@ function App() {
               showModal={showLoginModal}
               closeModal={() => manageLoginModal()}
               hasAccount={hasAccount}
+              handleSignIn={(res) => {
+                handleSignIn(res);
+              }}
               changeModalType={() => changeModalType()}
             />
           </Route>

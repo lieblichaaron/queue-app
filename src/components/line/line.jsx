@@ -10,6 +10,7 @@ const Line = () => {
   const [locationPicked, setLocationPicked] = useState();
   const [lat, setLat] = useState(-34.397);
   const [lng, setLng] = useState(150.644);
+
   const setMap = (place) => {
     setLocationPicked(false);
     setLat(place.geometry.location.lat());
@@ -21,56 +22,63 @@ const Line = () => {
   }, [lng]);
   return (
     <div>
-      <TitleBanner title="Line" />
-      <div className="p-3" style={{ color: "#ffffff" }}>
-        <h2 className="text-center pb-3">
-          Current line size: <br />
-          {13} people
-        </h2>
+      <TitleBanner title="Store Name" />
+      <div className="" style={{ color: "#ffffff" }}>
+        <h5 className="text-center my-5">Current line size: {13} people</h5>
         <div className="d-flex justify-content-center my-3">
           <NowServing textColor="#14213d" backgroundColor="#e5e5e5" />
         </div>
-        <Button
-          style={{
-            backgroundColor: "#14213d",
-            color: "#14213d",
-            border: "none",
-            marginTop: 10,
-          }}
-          className="w-100"
+        <div
+          className="my-5 d-flex flex-column justify-content-center align-items-center"
+          style={{ backgroundColor: "#fca311", height: "280px" }}
         >
-          Next Customer
-        </Button>
-        <Button
-          style={{
-            backgroundColor: "#14213d",
-            color: "#fca311",
-            border: "none",
-            marginTop: 10,
-          }}
-          className="w-100"
-          type="submit"
-        >
-          Stop additional queueing
-        </Button>
-        <Button
-          style={{
-            backgroundColor: "#14213d",
-            color: "#fca311",
-            border: "none",
-            marginTop: 10,
-            marginBottom: 10,
-          }}
-          className="w-100"
-          type="submit"
-        >
-          Delete queue
-        </Button>
-        <div className="d-flex align-items-center text-white flex-column mb-3">
-          <h2 className="my-3">Customer Analytics</h2>
+          <button
+            style={{
+              backgroundColor: "#14213D",
+              color: "white",
+              border: "none",
+              marginTop: 10,
+              height: "50px",
+              width: "80%",
+              borderRadius: "8px",
+              marginBottom: "8px",
+            }}
+          >
+            Next Customer
+          </button>
+          <button
+            style={{
+              backgroundColor: "#14213D",
+              color: "white",
+              border: "none",
+              marginTop: 10,
+              height: "50px",
+              width: "80%",
+              borderRadius: "8px",
+              marginBottom: "8px",
+            }}
+          >
+            Stop additional queueing
+          </button>
+          <button
+            style={{
+              backgroundColor: "#14213D",
+              color: "white",
+              border: "none",
+              marginTop: 10,
+              height: "50px",
+              width: "80%",
+              borderRadius: "8px",
+            }}
+          >
+            Delete queue
+          </button>
+        </div>
+        <div className="d-flex align-items-center text-white flex-column px-3">
+          <h4 className="mb-3">Customer Analytics</h4>
           <div className="d-flex justify-content-center align-items-center">
-            <h5>Average Serving Time</h5>
-            <h3>
+            <p>Average Serving Time</p>
+            <p>
               <Badge
                 className="ml-3"
                 style={{ color: "black", backgroundColor: "#fca318" }}
@@ -78,11 +86,11 @@ const Line = () => {
               >
                 5 Mins
               </Badge>
-            </h3>
+            </p>
           </div>
           <div className="d-flex justify-content-center align-items-center">
-            <h5>Estimated Time of Queue</h5>
-            <h3>
+            <p>Estimated Time of Queue</p>
+            <p>
               <Badge
                 className="ml-3"
                 pill
@@ -90,11 +98,11 @@ const Line = () => {
               >
                 5 Mins
               </Badge>
-            </h3>
+            </p>
           </div>
           <div className="d-flex justify-content-center align-items-center">
-            <h5>Average Waiting Time</h5>
-            <h3>
+            <p>Average Waiting Time</p>
+            <p>
               <Badge
                 className="ml-3"
                 pill
@@ -102,11 +110,11 @@ const Line = () => {
               >
                 5 Mins
               </Badge>
-            </h3>
+            </p>
           </div>
         </div>
         {/* onSubmit Update information */}
-        <Form>
+        <Form className="mx-3 mb-5">
           <Form.Group controlId="storeName">
             <Form.Label>Store name*</Form.Label>
             <Form.Control
@@ -158,7 +166,7 @@ const Line = () => {
               border: "none",
               height: "2.5rem",
             }}
-            className="w-100"
+            className="w-100 mb-3"
             type="submit"
             // disabled={buttonDisabled}
           >

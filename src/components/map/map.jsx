@@ -9,10 +9,7 @@ import {
 
 const MyMapComponent = withScriptjs(
   withGoogleMap((props) => {
-    const [infoOpen, setInfoOpen] = useState(false);
-    useEffect(() => {
-      setInfoOpen(true);
-    }, [props]);
+    const [infoOpen, setInfoOpen] = useState(true);
     return (
       <GoogleMap
         defaultZoom={15}
@@ -28,17 +25,13 @@ const MyMapComponent = withScriptjs(
               lat: props.lat,
               lng: props.lng,
             }}
-          />
-        )}
-        {infoOpen && props.address && (
-          <InfoWindow
-            position={{ lat: props.lat + 0.0018, lng: props.lng }}
-            onCloseClick={() => setInfoOpen(false)}
           >
-            <span style={{ padding: "1rem", margin: 0, color: "black" }}>
-              {props.address}
-            </span>
-          </InfoWindow>
+            {infoOpen && (
+              <InfoWindow onCloseClick={() => setInfoOpen(false)}>
+                <div style={{ margin: 0, color: "black" }}>{props.address}</div>
+              </InfoWindow>
+            )}
+          </Marker>
         )}
       </GoogleMap>
     );

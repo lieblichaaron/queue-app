@@ -25,8 +25,19 @@ const TicketPage = () => {
 
   useEffect(() => {
     const watchLine = async () => {
-      const newLine = await watchLineById(lineId);
-      setLine(newLine);
+      let mounted = true;
+      if (ticket) {
+        const newLine = await watchLineById(lineId);
+        if (mounted) {
+          setLine(newLine);
+          if (newLine.line[0].number === ticket.number) {
+            // notify
+          }
+        }
+      }
+      return function cleanup() {
+        mounted = false;
+      };
     };
     watchLine();
   }, [line]);
@@ -54,7 +65,10 @@ const TicketPage = () => {
       } else {
         const originalLine = await getLineById(lineId);
         const newShopper = {
-          number: originalLine.line[originalLine.line.length - 1].number + 1,
+          number:
+            originalLine.line && originalLine.line.length > 0
+              ? originalLine.line[originalLine.line.length - 1].number + 1
+              : 1,
           joinTime: moment().format("MMMM Do YYYY, h:mm:ss a"),
         };
         const newLine = await addTicketToLine(lineId, newShopper);
