@@ -30,7 +30,8 @@ const CreateLine = () => {
     setAddress(place.formatted_address);
   };
   const handleServiceTime = (e) => {
-    setServiceTime(e.target.value);
+    setServiceTime(parseInt(e.target.value.split(" ")[0]));
+    console.log(currentUser._id);
   };
   const handleStoreName = (e) => {
     setStoreName(e.target.value);
@@ -38,7 +39,7 @@ const CreateLine = () => {
   const createQueue = async (e) => {
     e.preventDefault();
     const lineObj = {
-      ownerId: currentUser.id,
+      ownerId: currentUser._id,
       isActive: false,
       storeName: storeName,
       estServiceTime: serviceTime,
