@@ -73,6 +73,7 @@ function Account(props) {
 
   return (
     <div>
+      {loadingSubmit && <div className="loader" />}
       <PasswordModal
         isOpen={showPasswordModal}
         user={user}

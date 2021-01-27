@@ -26,6 +26,7 @@ function Dashboard() {
 
   return (
     <div>
+      {isLoading && <div className="loader" />}
       <h2 className="w-100 py-3 px-1 text-center text-wrap white-text">
         Welcome back, {user.displayName}!
       </h2>
