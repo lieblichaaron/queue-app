@@ -1,69 +1,25 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { Form, Button, Badge } from "react-bootstrap";
 import Autocomplete from "react-google-autocomplete";
 import TitleBanner from "../title_banner/titleBanner";
 import MyMapComponent from "../map/map";
 import NowServing from "../now_serving/nowServing";
-import axios from "axios";
 
 const Line = () => {
-  const [queue, setQueue] = useState({
-    storeName: "",
-    location: {
-      lat: null,
-      lng: null,
-      address: "",
-    },
-    estServiceTime: 0,
-    line: [],
-  });
+  const [address, setAddress] = useState();
+  const [locationPicked, setLocationPicked] = useState();
+  const [lat, setLat] = useState(-34.397);
+  const [lng, setLng] = useState(150.644);
 
-  const {
-    _id,
-    storeName,
-    isActive,
-    location,
-    estServiceTime,
-    line = [],
-  } = queue;
-  const baseUrl = "http://localhost:5000";
-  const browserLocation = useLocation();
-  const lineId = browserLocation.pathname.split("/")[2];
-  const [avgService, setAvgService] = useState(estServiceTime);
-  const [avgWait, setAvgWait] = useState(0);
-
+  const setMap = (place) => {
+    setLocationPicked(false);
+    setLat(place.geometry.location.lat());
+    setLng(place.geometry.location.lng());
+    setAddress(place.formatted_address);
+  };
   useEffect(() => {
-    axios.get(baseUrl + "/line/" + lineId).then((res) => {
-      setQueue(res.data);
-    });
-  }, []);
-
-  const handleServeNext = async () => {
-    axios.put(baseUrl + "/line/served-one/" + _id).then((res) => {
-      setAvgService(res.data.avgServiceTime);
-      setAvgWait(res.data.avgWaitTime);
-      axios.get(baseUrl + "/line/" + lineId).then((res) => {
-        setQueue(res.data);
-      });
-    });
-  };
-
-  const handlePauseQueue = () => {
-    axios.put(baseUrl + "/line/status/" + _id, { isActive: false }).then(() => {
-      axios.get(baseUrl + "/line/" + lineId).then((res) => {
-        setQueue(res.data);
-      });
-    });
-  };
-
-  const handleResumeQueue = () => {
-    axios.put(baseUrl + "/line/status/" + _id, { isActive: true }).then(() => {
-      axios.get(baseUrl + "/line/" + lineId).then((res) => {
-        setQueue(res.data);
-      });
-    });
-  };
+    setLocationPicked(true);
+  }, [lng]);
 
   const buttonStyle = {
     backgroundColor: "#14213D",
@@ -75,44 +31,22 @@ const Line = () => {
     borderRadius: "8px",
     marginBottom: "8px",
   };
-
   return (
     <div>
-      <TitleBanner title={storeName} />
-      <div style={{ color: "#ffffff" }}>
-        <div className="d-flex justify-content-center my-3 mt-5">
-          <NowServing
-            textColor="#14213d"
-            backgroundColor="#e5e5e5"
-            currentCustomer={line.length > 0 && line[0].number}
-          />
+      <TitleBanner title="Store Name" />
+      <div className="" style={{ color: "#ffffff" }}>
+        <h5 className="text-center my-5">Current line size: {13} people</h5>
+        <div className="d-flex justify-content-center my-3">
+          <NowServing textColor="#14213d" backgroundColor="#e5e5e5" />
         </div>
-        <h5 className="text-center my-5">
-          Currently waiting: {line.length > 0 ? line.length - 1 : 0} people
-        </h5>
         <div
           className="my-5 d-flex flex-column justify-content-center align-items-center"
           style={{ backgroundColor: "#fca311", height: "280px" }}
         >
-          {isActive && (
-            <button onClick={handleServeNext} style={buttonStyle}>
-              Next Customer
-            </button>
-          )}
-
-          {isActive ? (
-            <button onClick={handlePauseQueue} style={buttonStyle}>
-              Stop additional queueing
-            </button>
-          ) : (
-            <button onClick={handleResumeQueue} style={buttonStyle}>
-              Reopen queue
-            </button>
-          )}
-
+          <button style={buttonStyle}>Next Customer</button>
+          <button style={buttonStyle}>Stop additional queueing</button>
           <button style={buttonStyle}>Delete queue</button>
         </div>
-
         <div className="d-flex text-white flex-column px-3 mb-4">
           <div
             className="d-flex justify-content-center align-items-center mb-4"
@@ -138,11 +72,10 @@ const Line = () => {
                   style={{ color: "black", backgroundColor: "#fca318" }}
                   pill
                 >
-                  {avgService}mins
+                  5 Mins
                 </Badge>
               </p>
             </div>
-
             <div className="d-flex justify-content-center align-items-center">
               <p>Estimated Time of Queue</p>
               <p>
@@ -151,11 +84,10 @@ const Line = () => {
                   pill
                   style={{ color: "black", backgroundColor: "#fca318" }}
                 >
-                  {avgService * line.length}mins
+                  5 Mins
                 </Badge>
               </p>
             </div>
-
             <div className="d-flex justify-content-center align-items-center">
               <p>Average Waiting Time</p>
               <p>
@@ -164,7 +96,7 @@ const Line = () => {
                   pill
                   style={{ color: "black", backgroundColor: "#fca318" }}
                 >
-                  {avgWait}mins
+                  5 Mins
                 </Badge>
               </p>
             </div>
@@ -174,10 +106,10 @@ const Line = () => {
           style={{ height: "2px", backgroundColor: "lightgrey" }}
           className="mb-4"
         ></div>
-
-        {/* onSubmit Update information */}
         <div>
-          <h4 className="text-center pb-3">Store Information</h4>
+          <h4 className="mb-3" style={{ textAlign: "center" }}>
+            Store Information
+          </h4>
           <Form className="mx-3 mb-5">
             <Form.Group controlId="storeName">
               <Form.Label>Store name*</Form.Label>
@@ -199,18 +131,17 @@ const Line = () => {
                   height: "calc(1.5em + .75rem + 2px)",
                   borderRadius: ".25rem",
                   marginBottom: "1rem",
-                  paddingLeft: "12px",
                 }}
-                // onPlaceSelected={(place) => {
-                //   setMap(place);
-                // }}
+                onPlaceSelected={(place) => {
+                  setMap(place);
+                }}
                 types={["address"]}
               />
               <MyMapComponent
-                // lat={lat}
-                // lng={lng}
-                // address={address}
-                // isMarkerShown={address}
+                lat={lat}
+                lng={lng}
+                address={address}
+                isMarkerShown={address}
                 googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyA0Kx9Y9puWzmvyo9yVW_fCZvAiDNnKhlA&v=3.exp&libraries=geometry,drawing,places`}
                 loadingElement={<div style={{ height: `100%` }} />}
                 containerElement={<div style={{ height: `300px` }} />}
@@ -219,7 +150,6 @@ const Line = () => {
             </Form.Group>
 
             {/* Button to prevent implicit submission of the form  */}
-
             <button
               type="submit"
               disabled
