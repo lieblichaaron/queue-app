@@ -51,7 +51,7 @@ const About = (props) => {
     <div className="text-white">
       <div className="d-flex flex-column align-items-center mt-5">
         <h1 className="mt-5">iQueue</h1>
-        <h5 className="mt-4 ">Queue management made easy</h5>
+        <h5 className="mt-4 px-4">Queue management made easy</h5>
         <Button
           type="button"
           className="btn btn-primary mt-5 py-3 px-5"
