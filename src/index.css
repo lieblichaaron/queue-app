@@ -61,8 +61,8 @@ body {
   animation: spin 3s infinite linear;
   border: solid 2vmin transparent;
   border-radius: 50%;
-  border-right-color: #FCA311;
-  border-top-color: #FCA311;
+  border-right-color: #fca311;
+  border-top-color: #fca311;
   box-sizing: border-box;
   content: "";
   height: 12vmin;
@@ -76,4 +76,23 @@ body {
   100% {
     transform: rotate(360deg);
   }
+}
+@keyframes pulse_animation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.pulse {
+  background-color: #814500 !important;
+  animation-name: pulse_animation;
+  animation-duration: 3000ms;
+  transform-origin: 70% 70%;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 }

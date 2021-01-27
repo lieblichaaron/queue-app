@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 import { useParams, useHistory } from "react-router-dom";
 import StoreInfo from "../store_info/storeInfo";
 import localforage from "localforage";
+import NextInLineModal from "../next_in_line/nextInLineModal";
 import moment from "moment";
 import LeaveLineModal from "../leave_line_modal/leaveLineModal";
 import {
@@ -20,7 +21,8 @@ const TicketPage = () => {
   const [line, setLine] = useState();
   const [ticket, setTicket] = useState();
   const [leftLine, setLeftLine] = useState();
-  const [modalShow, setModalShow] = useState(false);
+  const [leaveLineModalShow, setLeaveLineModalShow] = useState(false);
+  const [nextInLineModalShow, setNextInLineModalShow] = useState(false);
   const [replace, setReplace] = useState();
   const history = useHistory();
 
@@ -29,10 +31,11 @@ const TicketPage = () => {
       let mounted = true;
       if (ticket) {
         const newLine = await watchLineById(lineId);
-        if (mounted) {
+        if (mounted && typeof newLine === "object") {
           setLine(newLine);
-          if (newLine.line[0].number === ticket.number) {
-            // notify
+          if (newLine.line[0].number >= ticket.number - 2) {
+            document.getElementById("nowServing").classList.add("pulse");
+            setNextInLineModalShow(true);
           }
         }
       }
@@ -41,7 +44,7 @@ const TicketPage = () => {
       };
     };
     watchLine();
-  }, [line]);
+  }, [line, ticket]);
   useEffect(() => {
     const removeFromLine = async () => {
       if (confirmLeaving === true) {
@@ -72,11 +75,15 @@ const TicketPage = () => {
     const serverLine = await getLineById(lineId);
     setLine(serverLine);
     setTicket(shopper);
+    if (serverLine.line[0].number >= shopper.number - 2) {
+      document.getElementById("nowServing").classList.add("pulse");
+      setNextInLineModalShow(true);
+    }
   };
   const replaceTicket = (shopper) => {
     setReplace(true);
     setTicket(shopper);
-    setModalShow(true);
+    setLeaveLineModalShow(true);
   };
   const createNewTicket = async () => {
     const originalLine = await getLineById(lineId);
@@ -113,9 +120,13 @@ const TicketPage = () => {
     <div className="text-center">
       <LeaveLineModal
         replace={replace}
-        show={modalShow}
-        onHide={() => setModalShow(false)}
+        show={leaveLineModalShow}
+        onHide={() => setLeaveLineModalShow(false)}
         confirmLeaving={setConfirmLeaving}
+      />
+      <NextInLineModal
+        show={nextInLineModalShow}
+        onHide={() => setNextInLineModalShow(false)}
       />
       {leftLine && (
         <h2 className="p-3 white-text">{leftLine} Thanks for using easyQ!</h2>
@@ -141,7 +152,7 @@ const TicketPage = () => {
                 fontSize: "1.5rem",
               }}
               className="w-100"
-              onClick={() => setModalShow(true)}
+              onClick={() => setLeaveLineModalShow(true)}
             >
               Leave line
             </Button>
