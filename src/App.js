@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import TicketPage from "./components/ticket_page/ticketPage";
 import CreateLine from "./components/create_line/createLine";
 import Line from "./components/line/line";
-import About from "./components/about/about";
+import Home from "./components/home/home";
 import Dashboard from "./components/dashboard/Dashboard";
 import Account from "./components/account/account";
 import CustomNavbar from "./components/navbar/customNavbar";
@@ -17,7 +17,8 @@ import jwt_decode from "jwt-decode";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [currentUser, setCurrentUser] = useState(Cookie.get("iQueue"));
+  const [hasAccount, setHasAccount] = useState(true);
+  const [currentUser, setCurrentUser] = useState(jwt_decode(Cookie.get("iQueue")));
 
   useEffect(() => {
     const newToken = Cookie.get("iQueue");
@@ -27,13 +28,28 @@ function App() {
   }, [showLoginModal]);
 
   const manageLoginModal = () => {
+    setHasAccount(true);
     setShowLoginModal(!showLoginModal);
+  };
+
+  const manageSignUpModal = () => {
+    setHasAccount(false);
+    setShowLoginModal(!showLoginModal);
+  };
+
+  const changeModalType = () => {
+    setHasAccount(!hasAccount);
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     setCurrentUser(null);
   };
+
+  const handleUserInfoChange = (userInfo) => {
+    setCurrentUser(userInfo);
+  };
+
   return (
     <UserContext.Provider value={currentUser}>
       <Router>
@@ -50,7 +66,11 @@ function App() {
             <TicketPage />
           </Route>
           <Route path="/account">
-            <Account />
+            <Account
+              onUserInfoChange={(user) => {
+                handleUserInfoChange(user);
+              }}
+            />
           </Route>
           <Route path="/create">
             <CreateLine />
@@ -59,10 +79,12 @@ function App() {
             <Line />
           </Route>
           <Route path="/">
-            <About handleSignIn={() => manageLoginModal()} />
+            <Home handleSignUp={() => manageSignUpModal()} />
             <LoginModal
               showModal={showLoginModal}
               closeModal={() => manageLoginModal()}
+              hasAccount={hasAccount}
+              changeModalType={() => changeModalType()}
             />
           </Route>
         </Switch>

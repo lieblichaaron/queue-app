@@ -7,19 +7,22 @@ import LineList from "../line_list/LineList";
 import "./Dashboard.css";
 
 function Dashboard() {
-
-  const [lines, setLines] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [lines, setLines] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const user = useContext(UserContext);
   const getLines = async () => {
-    const res = await axios.get("http://localhost:5000" + "/line/owned-by/" + user._id)
-    setLines(res.data)
-    setIsLoading(false)
-  }
+    try {
+      const res = await axios.get(
+        "http://localhost:5000" + "/owner/" + user._id + "/lines"
+      );
+      setLines(res.data);
+    } catch (err) {}
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     getLines();
-  }, [])
+  }, []);
 
   return (
     <div>

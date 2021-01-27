@@ -9,25 +9,47 @@ import {
   FormLabel,
 } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
-import axios from "axios";
 import PasswordModal from "../password_modal/PasswordModal";
 import * as Yup from "yup";
 import UserContext from "../../contexts/UserContext";
+import Cookie from "js-cookie";
+import jwt_decode from "jwt-decode";
+import axios from "axios";
 
 function Account(props) {
   const user = useContext(UserContext);
 
   const [canEdit, setCanEdit] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showPasswordSuccess, setShowPasswordSuccess] = useState(false);
 
   const handleCloseModal = () => {
     setShowPasswordModal(false);
   };
 
+  const handlePasswordSuccess = () => {
+    setShowPasswordSuccess(true);
+    setTimeout(() => {
+      setShowPasswordSuccess(false);
+    }, 3000);
+  };
+
   const updateInformation = async (form, actions) => {
+    setLoadingSubmit(true);
     await axios
       .put("http://localhost:5000" + "/owner/edit", form, {
-        headers: { email: user.email },
+        headers: { authorization: Cookie.get("iQueue") },
+      })
+      .then((res) => {
+        Cookie.set("iQueue", res.data, { path: "/" });
+        props.onUserInfoChange(jwt_decode(res.data));
+        setCanEdit(false);
+        setShowSuccess(true);
+        setTimeout(() => {
+          setShowSuccess(false);
+        }, 3000);
       })
       .catch((err) => {
         if (err.response.data.includes("exists")) {
@@ -36,12 +58,11 @@ function Account(props) {
             "There is already an account registered with this email address"
           );
         }
+      })
+      .finally(() => {
+        setLoadingSubmit(false);
       });
   };
-
-  const changePassword = async (form, actions) => {
-    await axios.put("http://localhost:5000" + "/owner/password", form, {headers : {email: user.email}})
-  }
 
   const validationSchema = Yup.object().shape({
     displayName: Yup.string().required("You must have a display name"),
@@ -55,7 +76,13 @@ function Account(props) {
       <PasswordModal
         isOpen={showPasswordModal}
         user={user}
+        onUserInfoChange={(user) => {
+          props.onUserInfoChange(user);
+        }}
         onCloseModal={handleCloseModal}
+        onPasswordSuccess={() => {
+          handlePasswordSuccess();
+        }}
         centered
       />
       <h2 className="w-100 py-3 px-1 text-center text-wrap white-text">
@@ -81,10 +108,17 @@ function Account(props) {
                   Display name
                 </FormLabel>
                 <Field
-                  className={`form-input ${canEdit || "no-edit-field"}`}
+                  className={`form-input ${
+                    canEdit
+                      ? `${props.errors.displayName && "invalid-field"}`
+                      : "no-edit-field"
+                  }`}
                   name="displayName"
                   disabled={!canEdit}
                 />
+                {props.errors.displayName && (
+                  <p className="invalid-message">{props.errors.displayName}</p>
+                )}
               </FormGroup>
               <FormGroup>
                 <FormLabel
@@ -94,12 +128,30 @@ function Account(props) {
                   Email address
                 </FormLabel>
                 <Field
-                  className={`form-input ${canEdit || "no-edit-field"}`}
+                  className={`form-input ${
+                    canEdit
+                      ? `${props.errors.email && "invalid-field"}`
+                      : "no-edit-field"
+                  }`}
                   name="email"
                   type="email"
                   disabled={!canEdit}
                 />
+                {props.errors.email && (
+                  <p className="invalid-message">{props.errors.email}</p>
+                )}
               </FormGroup>
+              {showSuccess && (
+                <p className="w-100 px-1 text-center text-wrap success-message green-text">
+                  Successfully changed settings
+                </p>
+              )}
+              {showPasswordSuccess && (
+                <p className="w-100 px-1 text-center text-wrap success-message green-text">
+                  Successfully changed password
+                </p>
+              )}
+
               <Row className="d-flex justify-content-around mt-3">
                 {canEdit ? (
                   <>

@@ -14,3 +14,19 @@
 .modal-content * {
   color: black;
 }
+
+.invalid-field {
+  box-sizing: border-box;
+  background-color: rgb(255, 220, 220);
+}
+
+.invalid-message {
+  font-weight: bold;
+  font-size: 0.8rem;
+  color: rgb(255, 215, 215);
+}
+
+.success-message {
+  background: white;
+  font-weight: bold;
+}
