@@ -97,7 +97,7 @@ class LoginModal extends React.Component {
           className="mt-4 float-right"
           disabled={!email || !password}
         >
-          {this.props.hasAccount ? "Sign In" : "Sign up"}
+          {this.props.hasAccount ? "Log In" : "Sign up"}
         </Button>
       );
     }
@@ -115,7 +115,7 @@ class LoginModal extends React.Component {
             password !== passwordConfirm
           }
         >
-          {this.props.hasAccount ? "Sign In" : "Sign up"}
+          {this.props.hasAccount ? "Log In" : "Sign up"}
         </Button>
       );
     }
@@ -209,7 +209,7 @@ class LoginModal extends React.Component {
                 className="text-primary"
                 onClick={() => this.props.changeModalType()}
               >
-                {this.props.hasAccount ? "Sign up instead" : "Login instead"}
+                {this.props.hasAccount ? "Sign up instead" : "Log in instead"}
               </div>
             </Form.Group>
             {submitButton}
