@@ -31,7 +31,6 @@ const CreateLine = () => {
   };
   const handleServiceTime = (e) => {
     setServiceTime(parseInt(e.target.value.split(" ")[0]));
-    console.log(currentUser._id);
   };
   const handleStoreName = (e) => {
     setStoreName(e.target.value);

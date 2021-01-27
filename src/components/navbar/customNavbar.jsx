@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Navbar, Nav, Button, Modal } from "react-bootstrap";
+import { Navbar, Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import styles from "./customNavbar.module.css";
 import logo from "../../easyQ-logo.png";
+import SignOutModal from "../signout_modal/signOutModal";
 const CustomNavbar = (props) => {
   const [showSignOutConfirmModal, setShowSignOutConfirmModal] = useState(false);
 
@@ -27,30 +28,11 @@ const CustomNavbar = (props) => {
               Dashboard
             </NavLink>
           )}
-          <Modal
-            show={showSignOutConfirmModal}
-            onHide={() => {
-              setShowSignOutConfirmModal(false);
-            }}
-          >
-            <Modal.Body>Are you sure you want to log out?</Modal.Body>
-            <Modal.Footer>
-              <Button
-                onClick={() => {
-                  props.handleSignOut();
-                }}
-              >
-                Log Out
-              </Button>
-              <Button
-                onClick={() => {
-                  setShowSignOutConfirmModal(false);
-                }}
-              >
-                Cancel
-              </Button>
-            </Modal.Footer>
-          </Modal>
+          <SignOutModal
+            showSignOutConfirmModal={showSignOutConfirmModal}
+            handleSignOut={props.handleSignOut}
+            setShowSignOutConfirmModal={setShowSignOutConfirmModal}
+          />
           {props.isLoggedIn && (
             <div
               className={styles["nav-link"]}

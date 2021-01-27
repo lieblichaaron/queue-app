@@ -13,6 +13,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Cookie from "js-cookie";
 import jwt_decode from "jwt-decode";
+import PrivateRoute from "./components/private_route/privateRoute";
 
 function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -26,7 +27,7 @@ function App() {
   });
 
   useEffect(() => {
-    const token = Cookie.get("iQueue");
+    const token = Cookie.get("easyQ");
     if (token) {
       setCurrentUser(jwt_decode(token));
       setIsLoggedIn(true);
@@ -48,19 +49,17 @@ function App() {
   };
 
   const handleSignIn = (res) => {
-    Cookie.set("iQueue", res.data.authToken, { path: "/" });
+    Cookie.set("easyQ", res.data.authToken, { path: "/" });
     setCurrentUser(jwt_decode(res.data.authToken));
     setShowLoginModal(false);
     setIsLoggedIn(true);
-    alert(`Welcome back ${res.data.displayName}!`);
     window.location.assign(`${window.location.origin}/dashboard`);
-
   };
 
   const handleSignOut = () => {
     setCurrentUser(null);
-    setIsLoggedIn()
-    Cookie.remove("iQueue");
+    setIsLoggedIn();
+    Cookie.remove("easyQ");
     window.location.assign(window.location.origin);
   };
 
@@ -80,25 +79,25 @@ function App() {
         />
 
         <Switch>
-          <Route path="/dashboard">
+          <PrivateRoute path="/dashboard">
             <Dashboard />
-          </Route>
+          </PrivateRoute>
           <Route path="/ticket/:lineId">
             <TicketPage />
           </Route>
-          <Route path="/account">
+          <PrivateRoute path="/account">
             <Account
               onUserInfoChange={(user) => {
                 handleUserInfoChange(user);
               }}
             />
-          </Route>
-          <Route path="/create">
+          </PrivateRoute>
+          <PrivateRoute path="/create">
             <CreateLine />
-          </Route>
-          <Route path="/line/:lineId">
+          </PrivateRoute>
+          <PrivateRoute path="/line/:lineId">
             <Line />
-          </Route>
+          </PrivateRoute>
           <Route path="/">
             <Home handleSignUp={() => manageSignUpModal()} />
             <LoginModal
