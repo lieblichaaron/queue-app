@@ -134,6 +134,7 @@ const Line = () => {
                 width: "100%",
                 height: "calc(1.5em + .75rem + 2px)",
                 borderRadius: ".25rem",
+                marginBottom: "1rem",
               }}
               onPlaceSelected={(place) => {
                 setMap(place);
