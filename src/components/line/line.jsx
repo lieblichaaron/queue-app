@@ -130,7 +130,7 @@ const Line = () => {
             <h4>Customer Analytics</h4>
           </div>
           <div>
-            <div className="d-flex justify-content-center align-items-center">
+            <div className="d-flex justify-content-between align-items-center mx-5">
               <p>Average Serving Time</p>
               <p>
                 <Badge
@@ -143,7 +143,7 @@ const Line = () => {
               </p>
             </div>
 
-            <div className="d-flex justify-content-center align-items-center">
+            <div className="d-flex justify-content-between align-items-center mx-5">
               <p>Estimated Time of Queue</p>
               <p>
                 <Badge
@@ -156,7 +156,7 @@ const Line = () => {
               </p>
             </div>
 
-            <div className="d-flex justify-content-center align-items-center">
+            <div className="d-flex justify-content-between align-items-center mx-5">
               <p>Average Waiting Time</p>
               <p>
                 <Badge
@@ -171,7 +171,7 @@ const Line = () => {
           </div>
         </div>
         <div
-          style={{ height: "2px", backgroundColor: "lightgrey" }}
+          style={{ height: "2px", backgroundColor: "white" }}
           className="mb-4"
         ></div>
 
