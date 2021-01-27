@@ -39,6 +39,14 @@ const Line = () => {
     });
   }, []);
 
+  useEffect(() => {
+    setInterval(() => {
+      axios.get(baseUrl + "/line/" + lineId).then((res) => {
+        setQueue(res.data);
+      });
+    }, 15000);
+  });
+
   const handleServeNext = async () => {
     axios.put(baseUrl + "/line/served-one/" + _id).then((res) => {
       setAvgService(res.data.avgServiceTime);
@@ -50,20 +58,20 @@ const Line = () => {
   };
 
   const handlePauseQueue = () => {
-    axios.put(baseUrl + "/line/status/" + _id, {isActive:false})
-    .then(()=> {
+    axios.put(baseUrl + "/line/status/" + _id, { isActive: false }).then(() => {
       axios.get(baseUrl + "/line/" + lineId).then((res) => {
-        setQueue(res.data)})
-      })
-  }
+        setQueue(res.data);
+      });
+    });
+  };
 
   const handleResumeQueue = () => {
-    axios.put(baseUrl + "/line/status/" + _id, {isActive:true})
-    .then(()=> {
+    axios.put(baseUrl + "/line/status/" + _id, { isActive: true }).then(() => {
       axios.get(baseUrl + "/line/" + lineId).then((res) => {
-        setQueue(res.data)})
-      })
-  }
+        setQueue(res.data);
+      });
+    });
+  };
 
   return (
     <div>
@@ -77,7 +85,7 @@ const Line = () => {
           />
         </div>
         <h5 className="text-center my-5">
-          Currently waiting: {line.length - 1} people
+          Currently waiting: {line.length > 0 ? line.length - 1 : 0} people
         </h5>
         <div
           className="my-5 d-flex flex-column justify-content-center align-items-center"
