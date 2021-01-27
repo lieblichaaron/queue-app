@@ -13,7 +13,7 @@ const CustomNavbar = (props) => {
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ml-auto">
           {/* display when signed in */}
-          {true && (
+          {props.isLoggedIn && (
             <NavLink className={styles["nav-link"]} to="/dashboard">
               Dashboard
             </NavLink>
