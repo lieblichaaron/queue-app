@@ -23,9 +23,17 @@ function Account(props) {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showPasswordSuccess, setShowPasswordSuccess] = useState(false);
 
   const handleCloseModal = () => {
     setShowPasswordModal(false);
+  };
+
+  const handlePasswordSuccess = () => {
+    setShowPasswordSuccess(true);
+    setTimeout(() => {
+      setShowPasswordSuccess(false);
+    }, 3000);
   };
 
   const updateInformation = async (form, actions) => {
@@ -72,6 +80,9 @@ function Account(props) {
           props.onUserInfoChange(user);
         }}
         onCloseModal={handleCloseModal}
+        onPasswordSuccess={() => {
+          handlePasswordSuccess();
+        }}
         centered
       />
       <h2 className="w-100 py-3 px-1 text-center text-wrap white-text">
@@ -133,6 +144,11 @@ function Account(props) {
               {showSuccess && (
                 <p className="w-100 px-1 text-center text-wrap success-message green-text">
                   Successfully changed settings
+                </p>
+              )}
+              {showPasswordSuccess && (
+                <p className="w-100 px-1 text-center text-wrap success-message green-text">
+                  Successfully changed password
                 </p>
               )}
 
