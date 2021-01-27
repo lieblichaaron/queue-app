@@ -33,7 +33,7 @@ class LoginModal extends React.Component {
         .then((res) => {
           console.log(res);
           alert(
-            `Account creation successful. \nWelcome to iQueue ${res.data.displayName}!`
+            `Account creation successful. \nWelcome to easyQ ${res.data.displayName}!`
           );
           console.log(res.data);
           Cookie.set("iQueue", res.data.authToken, { path: "/" });
@@ -53,10 +53,7 @@ class LoginModal extends React.Component {
         data: ownerObject,
       })
         .then((res) => {
-          console.log(res);
-          alert(`Welcome back ${res.data.displayName}!`);
-          Cookie.set("iQueue", res.data.authToken, { path: "/" });
-          window.location.assign(`${window.location.origin}/dashboard`);
+          this.props.handleSignIn(res)
         })
         .catch((err) => {
           alert(err.response.data.error);

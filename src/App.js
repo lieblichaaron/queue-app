@@ -15,15 +15,21 @@ import Cookie from "js-cookie";
 import jwt_decode from "jwt-decode";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [hasAccount, setHasAccount] = useState(true);
-  const [currentUser, setCurrentUser] = useState(jwt_decode(Cookie.get("iQueue")));
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState({
+    _id: "",
+    displayName: "",
+    email: "",
+    password: "",
+  });
 
   useEffect(() => {
-    const newToken = Cookie.get("iQueue");
-    if (newToken) {
-      setCurrentUser(jwt_decode(newToken));
+    const token = Cookie.get("iQueue");
+    if (token) {
+      setCurrentUser(jwt_decode(token));
+      setIsLoggedIn(true);
     }
   }, [showLoginModal]);
 
@@ -41,9 +47,21 @@ function App() {
     setHasAccount(!hasAccount);
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
+  const handleSignIn = (res) => {
+    Cookie.set("iQueue", res.data.authToken, { path: "/" });
+    setCurrentUser(jwt_decode(res.data.authToken));
+    setShowLoginModal(false);
+    setIsLoggedIn(true);
+    alert(`Welcome back ${res.data.displayName}!`);
+    window.location.assign(`${window.location.origin}/dashboard`);
+
+  };
+
+  const handleSignOut = () => {
     setCurrentUser(null);
+    setIsLoggedIn()
+    Cookie.remove("iQueue");
+    window.location.assign(window.location.origin);
   };
 
   const handleUserInfoChange = (userInfo) => {
@@ -56,6 +74,9 @@ function App() {
         <CustomNavbar
           isLoggedIn={isLoggedIn}
           handleSignIn={() => manageLoginModal()}
+          handleSignOut={() => {
+            handleSignOut();
+          }}
         />
 
         <Switch>
@@ -84,6 +105,9 @@ function App() {
               showModal={showLoginModal}
               closeModal={() => manageLoginModal()}
               hasAccount={hasAccount}
+              handleSignIn={(res) => {
+                handleSignIn(res);
+              }}
               changeModalType={() => changeModalType()}
             />
           </Route>

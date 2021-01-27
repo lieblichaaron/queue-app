@@ -16,6 +16,10 @@
   border-color: #14213d !important;
 }
 
+.main-logo {
+  height: 7rem;
+}
+
 .what-we-do {
   background-color: #fca311 !important;
   height: 24rem;

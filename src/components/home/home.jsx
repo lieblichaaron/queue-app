@@ -4,6 +4,7 @@ import Footer from "../footer/footer";
 import "./home.css";
 import CarouselComponent from "./carousel";
 import emailjs from "emailjs-com";
+import logo from "../../easyQ-logo.png";
 
 const Home = (props) => {
   const [name, setName] = useState(null);
@@ -50,11 +51,11 @@ const Home = (props) => {
   return (
     <div className="text-white">
       <div className="d-flex flex-column align-items-center mt-5">
-        <h1 className="mt-5">iQueue</h1>
+        <img className="main-logo mt-5" src={logo} alt="easyQ logo" />
         <h5 className="mt-4 px-4">Queue management made easy</h5>
         <Button
           type="button"
-          className="btn btn-primary mt-5 py-3 px-5"
+          className="btn btn-primary my-5 py-3 px-5"
           onClick={(event) => props.handleSignUp(event)}
         >
           Get started today
