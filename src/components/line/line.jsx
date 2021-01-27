@@ -197,6 +197,8 @@ const Line = () => {
           </div>
         </div>
         {/* onSubmit Update information */}
+        <div style={{ border: "1px solid white", margin: "2rem 0" }}></div>
+        <h4 className="text-center pb-3">Store Information</h4>
         {/* <Form className="mx-3 mb-5">
           <Form.Group controlId="storeName">
             <Form.Label>Store name*</Form.Label>

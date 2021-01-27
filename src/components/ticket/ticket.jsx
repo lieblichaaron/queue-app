@@ -1,6 +1,7 @@
 import NowServing from "../now_serving/nowServing";
 import styles from "./ticket.module.css";
 const Ticket = ({ line, ticket }) => {
+  const time = new Date(ticket.joinTime).toString().split(" ")[4];
   return (
     <div className={`${styles["ticket-container"]} text-center`}>
       <h3 className="text-center">Ticket #{ticket.number}</h3>
@@ -11,7 +12,7 @@ const Ticket = ({ line, ticket }) => {
       />
       <div className="p-3">
         <span>
-          <b>Join time:</b> {ticket.joinTime} <br />
+          <b>Join time:</b> {time} <br />
         </span>
         <span>
           <b>Estimated wait time:</b>{" "}
