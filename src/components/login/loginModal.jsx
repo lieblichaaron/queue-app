@@ -79,7 +79,6 @@ class LoginModal extends React.Component {
   render() {
     const clientWidth = document.body.clientWidth;
     const clientHeight = document.body.clientHeight;
-    console.log(clientWidth, clientHeight);
     const { displayName, email, password, passwordConfirm } = this.state;
     const modalStyles = {
       content: {
