@@ -13,13 +13,12 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Cookie from "js-cookie";
 import jwt_decode from "jwt-decode";
-import axios from "axios";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [hasAccount, setHasAccount] = useState(true);
-  const [currentUser, setCurrentUser] = useState(Cookie.get("iQueue"));
+  const [currentUser, setCurrentUser] = useState(jwt_decode(Cookie.get("iQueue")));
 
   useEffect(() => {
     const newToken = Cookie.get("iQueue");
