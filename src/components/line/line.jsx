@@ -69,9 +69,6 @@ const Line = () => {
     <div>
       <TitleBanner title={storeName} />
       <div className="" style={{ color: "#ffffff" }}>
-        <h5 className="text-center my-5">
-          Current line size: {line.length} people
-        </h5>
         <div className="d-flex justify-content-center my-3">
           <NowServing
             textColor="#14213d"
@@ -79,6 +76,9 @@ const Line = () => {
             currentCustomer={line.length > 0 && line[0].number}
           />
         </div>
+        <h5 className="text-center my-5">
+          Currently waiting: {line.length - 1} people
+        </h5>
         <div
           className="my-5 d-flex flex-column justify-content-center align-items-center"
           style={{ backgroundColor: "#fca311", height: "280px" }}
