@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import Footer from "../footer/footer";
-import "./about.css";
+import "./home.css";
 import CarouselComponent from "./carousel";
 import emailjs from "emailjs-com";
 
-const About = (props) => {
+const Home = (props) => {
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
   const [message, setMessage] = useState(null);
@@ -130,4 +130,4 @@ const About = (props) => {
   );
 };
 
-export default About;
+export default Home;

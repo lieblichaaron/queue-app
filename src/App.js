@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import TicketPage from "./components/ticket_page/ticketPage";
 import CreateLine from "./components/create_line/createLine";
 import Line from "./components/line/line";
-import About from "./components/about/about";
+import Home from "./components/home/home";
 import Dashboard from "./components/dashboard/Dashboard";
 import Account from "./components/account/account";
 import CustomNavbar from "./components/navbar/customNavbar";
@@ -80,7 +80,7 @@ function App() {
             <Line />
           </Route>
           <Route path="/">
-            <About handleSignUp={() => manageSignUpModal()} />
+            <Home handleSignUp={() => manageSignUpModal()} />
             <LoginModal
               showModal={showLoginModal}
               closeModal={() => manageLoginModal()}

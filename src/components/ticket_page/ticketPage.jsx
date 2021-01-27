@@ -38,7 +38,7 @@ const TicketPage = () => {
         setTicket(null);
         setLeftLine(data);
         setTimeout(() => {
-          history.push("/about");
+          history.push("/home");
         }, 2000);
       }
     };
