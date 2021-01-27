@@ -33,7 +33,7 @@ class LoginModal extends React.Component {
         .then((res) => {
           console.log(res);
           alert(
-            `Account creation successful. \nWelcome to iQueue ${res.data.displayName}!`
+            `Account creation successful. \nWelcome to easyQ ${res.data.displayName}!`
           );
           console.log(res.data);
           Cookie.set("iQueue", res.data.authToken, { path: "/" });

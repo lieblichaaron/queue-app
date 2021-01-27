@@ -87,7 +87,7 @@ const TicketPage = () => {
         confirmLeaving={setConfirmLeaving}
       />
       {leftLine && (
-        <h2 className="p-3 white-text">{leftLine}. Thanks for using IQueue!</h2>
+        <h2 className="p-3 white-text">{leftLine}. Thanks for using easyQ!</h2>
       )}
       {ticket && (
         <div>
