@@ -77,13 +77,16 @@ class LoginModal extends React.Component {
   }
 
   render() {
+    const clientWidth = document.body.clientWidth;
+    const clientHeight = document.body.clientHeight;
+    console.log(clientWidth, clientHeight);
     const { displayName, email, password, passwordConfirm } = this.state;
     const modalStyles = {
       content: {
-        top: "8%",
-        left: "10%",
-        right: "10%",
-        bottom: this.props.hasAccount ? "31%" : "5%",
+        top: clientHeight * 0.03,
+        left: clientWidth > 280 ? clientWidth * 0.1 : clientWidth * 0.01,
+        right: clientWidth > 280 ? clientWidth * 0.1 : clientWidth * 0.01,
+        bottom: this.props.hasAccount ? clientHeight - 480 : clientHeight - 680,
       },
       overlay: { zIndex: 1000 },
     };
@@ -130,9 +133,9 @@ class LoginModal extends React.Component {
           ariaHideApp={true}
           contentLabel="SignInModal"
         >
-          <h2 className="mb-5">
+          <h3 className="mb-5">
             {this.props.hasAccount ? "Log in" : "Create Account"}
-          </h2>
+          </h3>
           <Form onSubmit={(event) => this.handleFormSubmit(event)}>
             {!this.props.hasAccount && (
               <Form.Group>
