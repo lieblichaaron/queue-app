@@ -35,6 +35,7 @@ const Line = () => {
 
   useEffect(() => {
     axios.get(baseUrl + "/line/" + lineId).then((res) => {
+      console.log(res.data);
       setQueue(res.data);
     });
   }, []);
@@ -186,6 +187,7 @@ const Line = () => {
                 autoComplete="off"
                 type="text"
                 placeholder="Enter store name"
+                value={storeName}
                 // onChange={handleStoreName}
               />
             </Form.Group>
@@ -205,12 +207,13 @@ const Line = () => {
                 //   setMap(place);
                 // }}
                 types={["address"]}
+                value={location.address}
               />
               <MyMapComponent
-                // lat={lat}
-                // lng={lng}
-                // address={address}
-                // isMarkerShown={address}
+                lat={location.lat}
+                lng={location.lng}
+                address={location.address}
+                isMarkerShown={location.address}
                 googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyA0Kx9Y9puWzmvyo9yVW_fCZvAiDNnKhlA&v=3.exp&libraries=geometry,drawing,places`}
                 loadingElement={<div style={{ height: `100%` }} />}
                 containerElement={<div style={{ height: `300px` }} />}
