@@ -1,65 +1,140 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Form, Button, Badge } from "react-bootstrap";
 import Autocomplete from "react-google-autocomplete";
 import TitleBanner from "../title_banner/titleBanner";
 import MyMapComponent from "../map/map";
 import NowServing from "../now_serving/nowServing";
+import axios from "axios";
 
 const Line = () => {
-  const [address, setAddress] = useState();
-  const [locationPicked, setLocationPicked] = useState();
-  const [lat, setLat] = useState(-34.397);
-  const [lng, setLng] = useState(150.644);
+  const [queue, setQueue] = useState({
+    storeName: "",
+    location: {
+      lat: null,
+      lng: null,
+      address: "",
+    },
+    estServiceTime: 0,
+    line: [],
+  });
 
-  const setMap = (place) => {
-    setLocationPicked(false);
-    setLat(place.geometry.location.lat());
-    setLng(place.geometry.location.lng());
-    setAddress(place.formatted_address);
-  };
+  const {
+    _id,
+    storeName,
+    isActive,
+    location,
+    estServiceTime,
+    line = [],
+  } = queue;
+  const baseUrl = "http://localhost:5000";
+  const browserLocation = useLocation();
+  const lineId = browserLocation.pathname.split("/")[2];
+  const [avgService, setAvgService] = useState(estServiceTime);
+  const [avgWait, setAvgWait] = useState(0);
+
   useEffect(() => {
-    setLocationPicked(true);
-  }, [lng]);
+    axios.get(baseUrl + "/line/" + lineId).then((res) => {
+      setQueue(res.data);
+    });
+  }, []);
+
+  const handleServeNext = async () => {
+    axios.put(baseUrl + "/line/served-one/" + _id).then((res) => {
+      setAvgService(res.data.avgServiceTime);
+      setAvgWait(res.data.avgWaitTime);
+      axios.get(baseUrl + "/line/" + lineId).then((res) => {
+        setQueue(res.data);
+      });
+    });
+  };
+
+  const handlePauseQueue = () => {
+    axios.put(baseUrl + "/line/status/" + _id, {isActive:false})
+    .then(()=> {
+      axios.get(baseUrl + "/line/" + lineId).then((res) => {
+        setQueue(res.data)})
+      })
+  }
+
+  const handleResumeQueue = () => {
+    axios.put(baseUrl + "/line/status/" + _id, {isActive:true})
+    .then(()=> {
+      axios.get(baseUrl + "/line/" + lineId).then((res) => {
+        setQueue(res.data)})
+      })
+  }
+
   return (
     <div>
-      <TitleBanner title="Store Name" />
+      <TitleBanner title={storeName} />
       <div className="" style={{ color: "#ffffff" }}>
-        <h5 className="text-center my-5">Current line size: {13} people</h5>
+        <h5 className="text-center my-5">
+          Current line size: {line.length} people
+        </h5>
         <div className="d-flex justify-content-center my-3">
-          <NowServing textColor="#14213d" backgroundColor="#e5e5e5" />
+          <NowServing
+            textColor="#14213d"
+            backgroundColor="#e5e5e5"
+            currentCustomer={line.length > 0 && line[0].number}
+          />
         </div>
         <div
           className="my-5 d-flex flex-column justify-content-center align-items-center"
           style={{ backgroundColor: "#fca311", height: "280px" }}
         >
-          <button
-            style={{
-              backgroundColor: "#14213D",
-              color: "white",
-              border: "none",
-              marginTop: 10,
-              height: "50px",
-              width: "80%",
-              borderRadius: "8px",
-              marginBottom: "8px",
-            }}
-          >
-            Next Customer
-          </button>
-          <button
-            style={{
-              backgroundColor: "#14213D",
-              color: "white",
-              border: "none",
-              marginTop: 10,
-              height: "50px",
-              width: "80%",
-              borderRadius: "8px",
-              marginBottom: "8px",
-            }}
-          >
-            Stop additional queueing
-          </button>
+          {isActive && (
+            <button
+              onClick={handleServeNext}
+              style={{
+                backgroundColor: "#14213D",
+                color: "white",
+                border: "none",
+                marginTop: 10,
+                height: "50px",
+                width: "80%",
+                borderRadius: "8px",
+                marginBottom: "8px",
+              }}
+            >
+              Next Customer
+            </button>
+          )}
+
+          {isActive ? (
+            <button
+              onClick={handlePauseQueue}
+              style={{
+                backgroundColor: "#14213D",
+                color: "white",
+                border: "none",
+                marginTop: 10,
+                height: "50px",
+                width: "80%",
+                borderRadius: "8px",
+                marginBottom: "8px",
+              }}
+            >
+              Stop additional queueing
+            </button>
+          ) : (
+            <button
+              onClick={handleResumeQueue}
+              style={{
+                backgroundColor: "#14213D",
+                color: "white",
+                border: "none",
+                marginTop: 10,
+                height: "50px",
+                width: "80%",
+                borderRadius: "8px",
+                marginBottom: "8px",
+              }}
+            >
+              Reopen queue
+            </button>
+          )}
+
           <button
             style={{
               backgroundColor: "#14213D",
@@ -84,7 +159,7 @@ const Line = () => {
                 style={{ color: "black", backgroundColor: "#fca318" }}
                 pill
               >
-                5 Mins
+                {avgService}mins
               </Badge>
             </p>
           </div>
@@ -96,7 +171,7 @@ const Line = () => {
                 pill
                 style={{ color: "black", backgroundColor: "#fca318" }}
               >
-                5 Mins
+                {avgService * line.length}mins
               </Badge>
             </p>
           </div>
@@ -108,13 +183,13 @@ const Line = () => {
                 pill
                 style={{ color: "black", backgroundColor: "#fca318" }}
               >
-                5 Mins
+                {avgWait}mins
               </Badge>
             </p>
           </div>
         </div>
         {/* onSubmit Update information */}
-        <Form className="mx-3 mb-5">
+        {/* <Form className="mx-3 mb-5">
           <Form.Group controlId="storeName">
             <Form.Label>Store name*</Form.Label>
             <Form.Control
@@ -151,10 +226,11 @@ const Line = () => {
               containerElement={<div style={{ height: `300px` }} />}
               mapElement={<div style={{ height: `100%` }} />}
             />
-          </Form.Group>
+          </Form.Group> */}
 
-          {/* Button to prevent implicit submission of the form  */}
-          <button
+        {/* Button to prevent implicit submission of the form  */}
+
+        {/* <button
             type="submit"
             disabled
             style={{ display: "none" }}
@@ -173,7 +249,7 @@ const Line = () => {
           >
             Update Information
           </Button>
-        </Form>
+        </Form> */}
       </div>
     </div>
   );
