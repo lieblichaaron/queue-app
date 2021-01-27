@@ -66,7 +66,7 @@ const Line = () => {
         >
           Delete queue
         </Button>
-        <div className="d-flex align-items-center text-white flex-column">
+        <div className="d-flex align-items-center text-white flex-column mb-3">
           <h2 className="my-3">Customer Analytics</h2>
           <div className="d-flex justify-content-center align-items-center">
             <h5>Average Serving Time</h5>
