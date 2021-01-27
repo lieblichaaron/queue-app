@@ -73,8 +73,10 @@ const TicketPage = () => {
         };
         const newLine = await addTicketToLine(lineId, newShopper);
         setLine(newLine);
-        await localforage.setItem("shopper", newShopper);
-        setTicket(newShopper);
+        if (typeof newLine === "object") {
+          await localforage.setItem("shopper", newShopper);
+          setTicket(newShopper);
+        }
       }
     };
     initFunc();
@@ -87,9 +89,10 @@ const TicketPage = () => {
         confirmLeaving={setConfirmLeaving}
       />
       {leftLine && (
-        <h2 className="p-3 white-text">{leftLine}. Thanks for using IQueue!</h2>
+        <h2 className="p-3 white-text">{leftLine} Thanks for using easyQ!</h2>
       )}
-      {ticket && (
+      {typeof line === "string" && <h2 className="p-3 white-text">{line}</h2>}
+      {ticket && typeof line === "object" && (
         <div>
           <TitleBanner title={line.storeName} />
           <div
