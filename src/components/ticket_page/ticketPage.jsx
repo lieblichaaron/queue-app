@@ -86,20 +86,12 @@ const TicketPage = () => {
     setLeaveLineModalShow(true);
   };
   const createNewTicket = async () => {
-    const originalLine = await getLineById(lineId);
-    const newShopper = {
-      number:
-        originalLine.line && originalLine.line.length > 0
-          ? originalLine.line[originalLine.line.length - 1].number + 1
-          : 1,
-      joinTime: moment().format("MMMM Do YYYY, h:mm:ss a"),
-      lineId: lineId,
-    };
-    const newLine = await addTicketToLine(lineId, newShopper);
+    const newLine = await addTicketToLine(lineId);
     setLine(newLine);
     if (typeof newLine === "object") {
-      await localforage.setItem("shopper", newShopper);
-      setTicket(newShopper);
+      const shopper = newLine.line[newLine.line.length - 1];
+      await localforage.setItem("shopper", shopper);
+      setTicket(shopper);
     }
   };
 
