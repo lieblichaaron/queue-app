@@ -51,6 +51,7 @@ function PasswordModal(props) {
 
   return (
     <Modal show={isOpen} onHide={onCloseModal} centered>
+      {loadingSubmit && <div className="loader" />}
       <Modal.Header closeButton>
         <Modal.Title>Change Password</Modal.Title>
       </Modal.Header>
