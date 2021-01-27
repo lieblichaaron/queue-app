@@ -17,6 +17,7 @@ import jwt_decode from "jwt-decode";
 function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [hasAccount, setHasAccount] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({
     _id: "",
     displayName: "",
@@ -28,6 +29,7 @@ function App() {
     const token = Cookie.get("iQueue");
     if (token) {
       setCurrentUser(jwt_decode(token));
+      setIsLoggedIn(true);
     }
   }, [showLoginModal]);
 
@@ -47,8 +49,9 @@ function App() {
 
   const handleSignIn = (res) => {
     Cookie.set("iQueue", res.data.authToken, { path: "/" });
-    setCurrentUser(jwt_decode(res.data.authToken))
-    setShowLoginModal(false)
+    setCurrentUser(jwt_decode(res.data.authToken));
+    setShowLoginModal(false);
+    setIsLoggedIn(true);
     alert(`Welcome back ${res.data.displayName}!`);
     window.location.assign(`${window.location.origin}/dashboard`);
 
@@ -56,6 +59,7 @@ function App() {
 
   const handleSignOut = () => {
     setCurrentUser(null);
+    setIsLoggedIn()
     Cookie.remove("iQueue");
     window.location.assign(window.location.origin);
   };
@@ -68,7 +72,7 @@ function App() {
     <UserContext.Provider value={currentUser}>
       <Router>
         <CustomNavbar
-          isLoggedIn={currentUser ? true : false}
+          isLoggedIn={isLoggedIn}
           handleSignIn={() => manageLoginModal()}
           handleSignOut={() => {
             handleSignOut();
