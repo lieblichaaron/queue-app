@@ -5,7 +5,9 @@ const LeaveLineModal = (props) => {
     props.onHide();
   };
   const stayInLine = () => {
-    props.confirmLeaving(false);
+    if (props.replace) {
+      props.confirmLeaving(false);
+    }
     props.onHide();
   };
 
