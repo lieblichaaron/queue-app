@@ -6,19 +6,17 @@ const CustomNavbar = (props) => {
   return (
     <Navbar style={{ backgroundColor: "#FCA311" }}>
       <Navbar.Brand>
-        {/* change to logo */}
-        <NavLink to="/"><img src={logo} className={styles["logo"]}/></NavLink>
+        <NavLink to="/"><img src={logo} alt="easyQ logo" className={styles["logo"]}/></NavLink>
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="ml-auto">
-          {/* display when signed in */}
+      <Navbar.Collapse id="basic-navbar-nav" className="h-100">
+        <Nav className="ml-auto d-flex align-items-center text-nowrap" style={{height: "100%"}}>
           {props.isLoggedIn && (
-            <NavLink className={styles["nav-link"]} to="/dashboard">
+            <NavLink className={`${styles["nav-link"]} ${styles["dash-link"]}`} to="/dashboard">
               Dashboard
             </NavLink>
           )}
-          {/* display when signed in && confirm modal on click */}
+          {/* confirm modal on click */}
           {props.isLoggedIn && (
             <div
               className={styles["nav-link"]}
@@ -27,7 +25,6 @@ const CustomNavbar = (props) => {
               Sign out
             </div>
           )}
-          {/* display when signed out */}
           {!props.isLoggedIn && (
             <NavLink
               className={styles["nav-link"]}
