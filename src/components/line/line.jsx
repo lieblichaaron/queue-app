@@ -32,7 +32,6 @@ const Line = () => {
           className="my-5 d-flex flex-column justify-content-center align-items-center"
           style={{ backgroundColor: "#fca311", height: "280px" }}
         >
-          {/* blue = #14213D, yellow= #fca311 */}
           <button
             style={{
               backgroundColor: "#14213D",
@@ -135,6 +134,7 @@ const Line = () => {
                 width: "100%",
                 height: "calc(1.5em + .75rem + 2px)",
                 borderRadius: ".25rem",
+                marginBottom: "1rem",
               }}
               onPlaceSelected={(place) => {
                 setMap(place);
@@ -167,7 +167,7 @@ const Line = () => {
               border: "none",
               height: "2.5rem",
             }}
-            className="w-100"
+            className="w-100 mb-3"
             type="submit"
             // disabled={buttonDisabled}
           >
