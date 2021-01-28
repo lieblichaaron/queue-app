@@ -130,7 +130,7 @@ const Line = () => {
             <h4>Customer Analytics</h4>
           </div>
           <div>
-            <div className="d-flex justify-content-between align-items-center mx-5">
+            <div className="d-flex justify-content-between align-items-center mx-4">
               <p>Average Serving Time</p>
               <p>
                 <Badge
@@ -138,12 +138,12 @@ const Line = () => {
                   style={{ color: "black", backgroundColor: "#fca318" }}
                   pill
                 >
-                  {avgService}mins
+                  {`${avgService} mins`}
                 </Badge>
               </p>
             </div>
 
-            <div className="d-flex justify-content-between align-items-center mx-5">
+            <div className="d-flex justify-content-between align-items-center mx-4">
               <p>Estimated Time of Queue</p>
               <p>
                 <Badge
@@ -151,12 +151,12 @@ const Line = () => {
                   pill
                   style={{ color: "black", backgroundColor: "#fca318" }}
                 >
-                  {avgService * line.length}mins
+                  {`${avgService * line.length} mins`}
                 </Badge>
               </p>
             </div>
 
-            <div className="d-flex justify-content-between align-items-center mx-5">
+            <div className="d-flex justify-content-between align-items-center mx-4">
               <p>Average Waiting Time</p>
               <p>
                 <Badge
@@ -164,7 +164,7 @@ const Line = () => {
                   pill
                   style={{ color: "black", backgroundColor: "#fca318" }}
                 >
-                  {avgWait}mins
+                  {`${avgWait} mins`}
                 </Badge>
               </p>
             </div>
