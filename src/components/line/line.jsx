@@ -35,10 +35,9 @@ const Line = () => {
 
   useEffect(() => {
     axios.get(baseUrl + "/line/" + lineId).then((res) => {
-      console.log(res.data);
       setQueue(res.data);
     });
-  }, []);
+  }, [queue]);
 
   const handleServeNext = async () => {
     axios.put(baseUrl + "/line/served-one/" + _id).then((res) => {
