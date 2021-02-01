@@ -6,7 +6,6 @@ import { useParams, useHistory } from "react-router-dom";
 import StoreInfo from "../store_info/storeInfo";
 import localforage from "localforage";
 import NextInLineModal from "../next_in_line/nextInLineModal";
-import moment from "moment";
 import LeaveLineModal from "../leave_line_modal/leaveLineModal";
 import {
   leaveLine,
@@ -45,30 +44,32 @@ const TicketPage = () => {
     };
     watchLine();
   }, [line, ticket]);
+
+  const removeFromLine = async () => {
+    const data = await leaveLine(ticket.lineId, ticket);
+    await localforage.removeItem("shopper");
+    setTicket(null);
+    if (!replace) {
+      setLeftLine(data);
+      setTimeout(() => {
+        history.push("/home");
+      }, 2000);
+    } else {
+      window.location.reload();
+    }
+  };
+
   useEffect(() => {
-    const removeFromLine = async () => {
-      if (confirmLeaving === true) {
-        const data = await leaveLine(ticket.lineId, ticket);
-        await localforage.removeItem("shopper");
-        setTicket(null);
-        if (!replace) {
-          setLeftLine(data);
-          setTimeout(() => {
-            history.push("/home");
-          }, 2000);
-        } else {
-          window.location.reload();
-        }
-      }
-      if (confirmLeaving === false) {
-        setLeftLine("Redirection to your original ticket.");
-        setTimeout(() => {
-          history.push(`/ticket/${ticket.lineId}`);
-          window.location.reload();
-        }, 2000);
-      }
-    };
-    removeFromLine();
+    if (confirmLeaving === true) {
+      removeFromLine();
+    }
+    if (confirmLeaving === false) {
+      setLeftLine("Redirection to your original ticket.");
+      setTimeout(() => {
+        history.push(`/ticket/${ticket.lineId}`);
+        window.location.reload();
+      }, 2000);
+    }
   }, [confirmLeaving]);
 
   const ticketHolder = async (shopper) => {
@@ -80,11 +81,18 @@ const TicketPage = () => {
       setNextInLineModalShow(true);
     }
   };
-  const replaceTicket = (shopper) => {
-    setReplace(true);
-    setTicket(shopper);
-    setLeaveLineModalShow(true);
+
+  const replaceTicket = async (shopper) => {
+    const serverLine = await getLineById(lineId);
+    if (!serverLine.isActive) {
+      inactiveLine(shopper);
+    } else {
+      setReplace(true);
+      setTicket(shopper);
+      setLeaveLineModalShow(true);
+    }
   };
+
   const createNewTicket = async () => {
     const newLine = await addTicketToLine(lineId);
     setLine(newLine);
@@ -95,21 +103,35 @@ const TicketPage = () => {
     }
   };
 
+  const inactiveLine = (shopper) => {
+    setLine(
+      "The line is currently closed, redirecting to your original ticket..."
+    );
+    setTimeout(() => {
+      history.push(`/ticket/${shopper.lineId}`);
+      window.location.reload();
+    }, 3000);
+  };
+
+  const initTicketFunc = async () => {
+    const shopper = await localforage.getItem("shopper");
+    if (shopper && shopper.lineId === lineId) {
+      await ticketHolder(shopper);
+    } else if (shopper) {
+      await replaceTicket(shopper);
+    } else {
+      await createNewTicket();
+    }
+    document.getElementById("ticketPage").classList.remove("loader");
+  };
+
   useEffect(() => {
-    const initTicketFunc = async () => {
-      const shopper = await localforage.getItem("shopper");
-      if (shopper && shopper.lineId === lineId) {
-        ticketHolder(shopper);
-      } else if (shopper) {
-        replaceTicket(shopper);
-      } else {
-        createNewTicket();
-      }
-    };
+    document.getElementById("ticketPage").classList.add("loader");
     initTicketFunc();
   }, []);
+
   return (
-    <div className="text-center">
+    <div id="ticketPage" className="text-center">
       <LeaveLineModal
         replace={replace}
         show={leaveLineModalShow}
