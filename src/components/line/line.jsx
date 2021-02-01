@@ -185,7 +185,7 @@ const Line = () => {
                 </Form.Group>
 
                 <Form.Group controlId="queue.location">
-                  <Form.Label>Store queue.location*</Form.Label>
+                  <Form.Label>Store location*</Form.Label>
 
                   <Autocomplete
                     style={{
@@ -201,16 +201,14 @@ const Line = () => {
                     types={["address"]}
                     value={queue.location.address}
                   />
-                  <MyMapComponent
-                    lat={queue.location.lat}
-                    lng={queue.location.lng}
-                    address={queue.location.address}
-                    isMarkerShown={true}
-                    googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyA0Kx9Y9puWzmvyo9yVW_fCZvAiDNnKhlA&v=3.exp&libraries=geometry,drawing,places`}
-                    loadingElement={<div style={{ height: `100%` }} />}
-                    containerElement={<div style={{ height: `300px` }} />}
-                    mapElement={<div style={{ height: `100%` }} />}
-                  />
+                  <div style={{ height: "300px" }}>
+                    <MyMapComponent
+                      lat={queue.location.lat}
+                      lng={queue.location.lng}
+                      address={queue.location.address}
+                      isMarkerShown={true}
+                    />
+                  </div>
                 </Form.Group>
 
                 {/* Button to prevent implicit submission of the form  */}
