@@ -20,6 +20,7 @@ const CreateLine = () => {
   const [storeName, setStoreName] = useState();
   const [lineId, setLineId] = useState();
   const [serviceTime, setServiceTime] = useState();
+  const [isMarkerShown, setIsMarkerShown] = useState(false);
   const [address, setAddress] = useState(null);
   const [lat, setLat] = useState(32.070343);
   const [lng, setLng] = useState(34.774254);
@@ -28,6 +29,7 @@ const CreateLine = () => {
     setLat(place.geometry.location.lat());
     setLng(place.geometry.location.lng());
     setAddress(place.formatted_address);
+    setIsMarkerShown(true);
   };
   const handleServiceTime = (e) => {
     setServiceTime(parseInt(e.target.value.split(" ")[0]));
@@ -102,16 +104,14 @@ const CreateLine = () => {
               }}
               types={["address"]}
             />
-            <MyMapComponent
-              lat={lat}
-              lng={lng}
-              address={address}
-              isMarkerShown={address}
-              googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyA0Kx9Y9puWzmvyo9yVW_fCZvAiDNnKhlA&v=3.exp&libraries=geometry,drawing,places`}
-              loadingElement={<div style={{ height: `100%` }} />}
-              containerElement={<div style={{ height: `300px` }} />}
-              mapElement={<div style={{ height: `100%` }} />}
-            />
+            <div style={{ height: "300px" }}>
+              <MyMapComponent
+                lat={lat}
+                lng={lng}
+                address={address}
+                isMarkerShown={isMarkerShown}
+              />
+            </div>
           </Form.Group>
 
           <Form.Group controlId="serviceTime">
