@@ -12,7 +12,7 @@ const NextInLineModal = (props) => {
         <Modal.Title>Almost your turn</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>Two more numbers until your ticket! please return to the line.</p>
+        <p>Your ticket it number is comming up! please return to the line.</p>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={props.onHide}>
