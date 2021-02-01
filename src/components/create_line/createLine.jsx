@@ -49,6 +49,9 @@ const CreateLine = () => {
       },
     };
     setLineId(await addNewLine(lineObj));
+    generateQr();
+  };
+  const generateQr = async () => {
     await saveSvgAsPng.saveSvgAsPng(
       document.getElementById("qr"),
       "line-qr-code.png",
