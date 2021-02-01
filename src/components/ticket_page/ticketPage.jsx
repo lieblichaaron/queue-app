@@ -82,10 +82,15 @@ const TicketPage = () => {
     }
   };
 
-  const replaceTicket = (shopper) => {
-    setReplace(true);
-    setTicket(shopper);
-    setLeaveLineModalShow(true);
+  const replaceTicket = async (shopper) => {
+    const serverLine = await getLineById(lineId);
+    if (!serverLine.isActive) {
+      inactiveLine(shopper);
+    } else {
+      setReplace(true);
+      setTicket(shopper);
+      setLeaveLineModalShow(true);
+    }
   };
 
   const createNewTicket = async () => {
@@ -100,42 +105,33 @@ const TicketPage = () => {
 
   const inactiveLine = (shopper) => {
     setLine(
-      `The line is currently closed, ${
-        shopper
-          ? "redirecting to your original ticket..."
-          : "we're sorry for the inconvenience."
-      }`
+      "The line is currently closed, redirecting to your original ticket..."
     );
-    if (shopper) {
-      setTimeout(() => {
-        history.push(`/ticket/${shopper.lineId}`);
-        window.location.reload();
-      }, 2000);
-    }
+    setTimeout(() => {
+      history.push(`/ticket/${shopper.lineId}`);
+      window.location.reload();
+    }, 3000);
   };
 
   const initTicketFunc = async () => {
     const shopper = await localforage.getItem("shopper");
-    const serverLine = await getLineById(lineId);
-    if (shopper.lineId !== lineId || !serverLine.isActive) {
-      inactiveLine(shopper);
+    if (shopper && shopper.lineId === lineId) {
+      await ticketHolder(shopper);
+    } else if (shopper) {
+      await replaceTicket(shopper);
     } else {
-      if (shopper && shopper.lineId === lineId) {
-        ticketHolder(shopper);
-      } else if (shopper) {
-        replaceTicket(shopper);
-      } else {
-        createNewTicket();
-      }
+      await createNewTicket();
     }
+    document.getElementById("ticketPage").classList.remove("loader");
   };
 
   useEffect(() => {
+    document.getElementById("ticketPage").classList.add("loader");
     initTicketFunc();
   }, []);
 
   return (
-    <div className="text-center">
+    <div id="ticketPage" className="text-center">
       <LeaveLineModal
         replace={replace}
         show={leaveLineModalShow}
