@@ -31,7 +31,7 @@ class LoginModal extends React.Component {
         data: ownerObject,
       })
         .then((res) => {
-          Cookie.set("iQueue", res.data.authToken, { path: "/" });
+          Cookie.set("easyQ", res.data.authToken, { path: "/" });
           window.location.assign(`${window.location.origin}/dashboard`);
         })
         .catch((err) => {

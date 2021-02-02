@@ -44,7 +44,7 @@ const Home = (props) => {
 
   const handleChange = (event) => {
     if (event.target.id === "name") setName(event.target.value);
-    if (event.target.id === "email") setEmail(event.target.value);
+    if (event.target.id === "contactEmail") setEmail(event.target.value);
     if (event.target.id === "message") setMessage(event.target.value);
   };
 
@@ -103,7 +103,7 @@ const Home = (props) => {
               size="sm"
               type="email"
               placeholder="Enter your email address"
-              id="email"
+              id="contactEmail"
               value={email}
               required
               onChange={(event) => handleChange(event)}
