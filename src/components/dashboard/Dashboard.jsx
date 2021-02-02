@@ -22,7 +22,7 @@ function Dashboard() {
 
   useEffect(() => {
     getLines();
-  }, []);
+  }, [user]);
 
   return (
     <div>

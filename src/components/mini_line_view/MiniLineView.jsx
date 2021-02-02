@@ -4,7 +4,7 @@ import "./mini_line_view.css";
 import { Link } from "react-router-dom";
 
 function MiniLineView(props) {
-  const { storeName, active, line=[], _id } = props.data;
+  const { storeName, isActive, line=[], _id } = props.data;
 
   return (
     <div className="mini-line-view my-2 p-2">
@@ -12,8 +12,8 @@ function MiniLineView(props) {
         <p className="store-title mb-1">{storeName}</p>
         <p className="mb-1">
           status:{" "}
-          <span className={active ? "green-text" : "red-text"}>
-            {active ? "active" : "inactive"}
+          <span className={isActive ? "green-text" : "red-text"}>
+            {isActive ? "active" : "inactive"}
           </span>
         </p>
         <p className="mb-1">

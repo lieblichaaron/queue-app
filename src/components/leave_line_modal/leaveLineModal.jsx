@@ -4,6 +4,12 @@ const LeaveLineModal = (props) => {
     props.confirmLeaving(true);
     props.onHide();
   };
+  const stayInLine = () => {
+    if (props.replace) {
+      props.confirmLeaving(false);
+    }
+    props.onHide();
+  };
 
   return (
     <Modal
@@ -17,10 +23,19 @@ const LeaveLineModal = (props) => {
         <Modal.Title>Leaving Line</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>Leaving the line means losing your spot. Are you sure?</p>
+        {props.replace && (
+          <p>
+            You're currentline in another line. Getting in a new one means
+            losing your spot in the first. Are you sure you want to replace your
+            ticket?
+          </p>
+        )}
+        {!props.replace && (
+          <p>Leaving the line means losing your spot. Are you sure?</p>
+        )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={props.onHide}>
+        <Button variant="secondary" onClick={stayInLine}>
           No
         </Button>
         <Button variant="primary" onClick={leaveLine}>

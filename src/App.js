@@ -13,10 +13,12 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Cookie from "js-cookie";
 import jwt_decode from "jwt-decode";
+import PrivateRoute from "./components/private_route/privateRoute";
 
 function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [hasAccount, setHasAccount] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({
     _id: "",
     displayName: "",
@@ -25,9 +27,10 @@ function App() {
   });
 
   useEffect(() => {
-    const token = Cookie.get("iQueue");
+    const token = Cookie.get("easyQ");
     if (token) {
       setCurrentUser(jwt_decode(token));
+      setIsLoggedIn(true);
     }
   }, [showLoginModal]);
 
@@ -46,17 +49,17 @@ function App() {
   };
 
   const handleSignIn = (res) => {
-    Cookie.set("iQueue", res.data.authToken, { path: "/" });
-    setCurrentUser(jwt_decode(res.data.authToken))
-    setShowLoginModal(false)
-    alert(`Welcome back ${res.data.displayName}!`);
+    Cookie.set("easyQ", res.data.authToken, { path: "/" });
+    setCurrentUser(jwt_decode(res.data.authToken));
+    setShowLoginModal(false);
+    setIsLoggedIn(true);
     window.location.assign(`${window.location.origin}/dashboard`);
-
   };
 
   const handleSignOut = () => {
     setCurrentUser(null);
-    Cookie.remove("iQueue");
+    setIsLoggedIn();
+    Cookie.remove("easyQ");
     window.location.assign(window.location.origin);
   };
 
@@ -68,7 +71,7 @@ function App() {
     <UserContext.Provider value={currentUser}>
       <Router>
         <CustomNavbar
-          isLoggedIn={currentUser ? true : false}
+          isLoggedIn={isLoggedIn}
           handleSignIn={() => manageLoginModal()}
           handleSignOut={() => {
             handleSignOut();
@@ -76,25 +79,25 @@ function App() {
         />
 
         <Switch>
-          <Route path="/dashboard">
+          <PrivateRoute path="/dashboard">
             <Dashboard />
-          </Route>
+          </PrivateRoute>
           <Route path="/ticket/:lineId">
             <TicketPage />
           </Route>
-          <Route path="/account">
+          <PrivateRoute path="/account">
             <Account
               onUserInfoChange={(user) => {
                 handleUserInfoChange(user);
               }}
             />
-          </Route>
-          <Route path="/create">
+          </PrivateRoute>
+          <PrivateRoute path="/create">
             <CreateLine />
-          </Route>
-          <Route path="/line/:lineId">
+          </PrivateRoute>
+          <PrivateRoute path="/line/:lineId">
             <Line />
-          </Route>
+          </PrivateRoute>
           <Route path="/">
             <Home handleSignUp={() => manageSignUpModal()} />
             <LoginModal
