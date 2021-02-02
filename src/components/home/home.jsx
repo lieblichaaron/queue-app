@@ -7,9 +7,9 @@ import emailjs from "emailjs-com";
 import logo from "../../easyQ-logo.png";
 
 const Home = (props) => {
-  const [name, setName] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [message, setMessage] = useState(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
