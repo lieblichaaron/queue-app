@@ -14,7 +14,7 @@ import * as Yup from "yup";
 import UserContext from "../../contexts/UserContext";
 import Cookie from "js-cookie";
 import jwt_decode from "jwt-decode";
-import axios from "axios";
+import { updateUserInfo } from "../../serverFuncs";
 
 function Account(props) {
   const user = useContext(UserContext);
@@ -38,13 +38,10 @@ function Account(props) {
 
   const updateInformation = async (form, actions) => {
     setLoadingSubmit(true);
-    await axios
-      .put("http://localhost:5000" + "/owner/edit", form, {
-        headers: { authorization: Cookie.get("iQueue") },
-      })
-      .then((res) => {
-        Cookie.set("iQueue", res.data, { path: "/" });
-        props.onUserInfoChange(jwt_decode(res.data));
+    updateUserInfo(form)
+      .then((data) => {
+        Cookie.set("easyQ", data, { path: "/" });
+        props.onUserInfoChange(jwt_decode(data));
         setCanEdit(false);
         setShowSuccess(true);
         setTimeout(() => {
