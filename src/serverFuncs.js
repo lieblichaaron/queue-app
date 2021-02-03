@@ -99,5 +99,23 @@ export const updatePassword = async (form) => {
     return res.data;
   } catch (err) {
     throw err;
-  }
+  };
+};
+
+export const loginOwner = async (ownerObject) => {
+  const res = await axios({
+    method: "post",
+    url: "http://localhost:5000/owner/login",
+    data: ownerObject,
+  });
+  return res;
+};
+
+export const signupOwner = async (ownerObject) => {
+  const res = await axios({
+    method: "post",
+    url: "http://localhost:5000/owner",
+    data: ownerObject,
+  });
+  return res;
 };
