@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import Footer from "../footer/footer";
 import "./home.css";
@@ -11,6 +11,11 @@ const Home = (props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(props.isLoggedIn);
+  }, [props.isLoggedIn]);
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
@@ -49,7 +54,7 @@ const Home = (props) => {
     if (event.target.id === "message") setMessage(event.target.value);
   };
 
-  if (props.isLoggedIn) {
+  if (isLoggedIn) {
     return <Redirect to="/dashboard" />;
   } else
     return (
