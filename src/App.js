@@ -8,6 +8,7 @@ import Dashboard from "./components/dashboard/Dashboard";
 import Account from "./components/account/account";
 import CustomNavbar from "./components/navbar/customNavbar";
 import LoginModal from "./components/login/loginModal";
+import SignupModal from "./components/signup/signupModal";
 import UserContext from "./contexts/UserContext";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -16,7 +17,7 @@ import jwt_decode from "jwt-decode";
 import PrivateRoute from "./components/private_route/privateRoute";
 
 function App() {
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [hasAccount, setHasAccount] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({
@@ -32,16 +33,16 @@ function App() {
       setCurrentUser(jwt_decode(token));
       setIsLoggedIn(true);
     }
-  }, [showLoginModal]);
+  }, [showModal]);
 
   const manageLoginModal = () => {
     setHasAccount(true);
-    setShowLoginModal(!showLoginModal);
+    setShowModal(!showModal);
   };
 
   const manageSignUpModal = () => {
     setHasAccount(false);
-    setShowLoginModal(!showLoginModal);
+    setShowModal(!showModal);
   };
 
   const changeModalType = () => {
@@ -51,7 +52,7 @@ function App() {
   const handleSignIn = (res) => {
     Cookie.set("easyQ", res.data.authToken, { path: "/" });
     setCurrentUser(jwt_decode(res.data.authToken));
-    setShowLoginModal(false);
+    setShowModal(false);
     setIsLoggedIn(true);
     window.location.assign(`${window.location.origin}/dashboard`);
   };
@@ -99,14 +100,23 @@ function App() {
             <Line />
           </PrivateRoute>
           <Route path="/">
-            <Home handleSignUp={() => manageSignUpModal()} />
+            <Home
+              handleSignUp={() => manageSignUpModal()}
+              isLoggedIn={isLoggedIn}
+            />
             <LoginModal
-              showModal={showLoginModal}
+              showModal={showModal}
               closeModal={() => manageLoginModal()}
               hasAccount={hasAccount}
               handleSignIn={(res) => {
                 handleSignIn(res);
               }}
+              changeModalType={() => changeModalType()}
+            />
+            <SignupModal
+              showModal={showModal}
+              closeModal={() => manageSignUpModal()}
+              hasAccount={hasAccount}
               changeModalType={() => changeModalType()}
             />
           </Route>
