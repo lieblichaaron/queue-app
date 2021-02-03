@@ -1,7 +1,8 @@
 .form-input {
+  box-sizing: border-box;
   color: black;
   width: 100%;
-  padding: 4px 2px 4px 2px;
+  padding: 6px 12px;
 }
 
 .no-edit-field {
@@ -9,6 +10,7 @@
   border: none;
   outline: none;
   color: white;
+  padding: 8px 2px;
 }
 
 .modal-content * {

@@ -155,7 +155,7 @@ function Account(props) {
                   <>
                     <Col>
                       <Button
-                        className="w-100"
+                        className="w-100 mt-3"
                         type="submit"
                         value="submit"
                         disabled={
@@ -167,7 +167,7 @@ function Account(props) {
                     </Col>
                     <Col>
                       <Button
-                        className="w-100"
+                        className="w-100 mt-3"
                         type="reset"
                         onClick={() => {
                           props.resetForm();
