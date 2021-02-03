@@ -28,6 +28,7 @@ class LoginModal extends React.Component {
         this.props.handleSignIn(res);
       })
       .catch((err) => {
+        // console.log(err);
         alert(err.response.data.error);
       });
   }
