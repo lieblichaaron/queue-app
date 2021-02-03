@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { getOwnerLines } from "../../serverFuncs";
 import UserContext from "../../contexts/UserContext";
 import LineList from "../line_list/LineList";
 import "./Dashboard.css";
@@ -10,18 +10,17 @@ function Dashboard() {
   const [lines, setLines] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const user = useContext(UserContext);
-  const getLines = async () => {
-    try {
-      const res = await axios.get(
-        "http://localhost:5000" + "/owner/" + user._id + "/lines"
-      );
-      setLines(res.data);
-    } catch (err) {}
-    setIsLoading(false);
-  };
 
   useEffect(() => {
-    getLines();
+    if (user._id) {
+      try {
+        getOwnerLines(user._id).then((data) => {
+          setLines(data);
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    }
   }, [user]);
 
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Container,
   Button,
@@ -7,13 +7,11 @@ import {
   Modal,
 } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
-import axios from "axios";
 import * as Yup from "yup";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import "./PasswordModal.css";
 import Cookie from "js-cookie";
 import jwt_decode from "jwt-decode";
+import { updatePassword } from "../../serverFuncs";
 
 function PasswordModal(props) {
   const { isOpen, onCloseModal } = props;
@@ -21,13 +19,10 @@ function PasswordModal(props) {
 
   const changePassword = async (form, actions) => {
     setLoadingSubmit(true);
-    await axios
-      .put("http://localhost:5000" + "/owner/password", form, {
-        headers: { authorization: Cookie.get("iQueue") },
-      })
-      .then((res) => {
-        Cookie.set("iQueue", res.data, { path: "/" });
-        props.onUserInfoChange(jwt_decode(res.data));
+    updatePassword(form)
+      .then((data) => {
+        Cookie.set("easyQ", data, { path: "/" });
+        props.onUserInfoChange(jwt_decode(data));
         props.onCloseModal();
         props.onPasswordSuccess();
       })
