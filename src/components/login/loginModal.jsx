@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, Button } from "react-bootstrap";
 import Modal from "react-modal";
-import axios from "axios";
+import { loginOwner } from "../../serverFuncs";
 
 class LoginModal extends React.Component {
   constructor(props) {
@@ -23,11 +23,7 @@ class LoginModal extends React.Component {
       email: email,
       password: password,
     };
-    return axios({
-      method: "post",
-      url: "http://localhost:5000/owner/login",
-      data: ownerObject,
-    })
+    loginOwner(ownerObject)
       .then((res) => {
         this.props.handleSignIn(res);
       })
