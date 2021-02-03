@@ -26,6 +26,10 @@ const CreateLine = () => {
   const [lng, setLng] = useState(34.774254);
   const [finished, setFinished] = useState(false);
   const setMap = (place) => {
+    if (!place.geometry)
+      return alert(
+        "Please choose a location fron the autocomplete suggestions"
+      );
     setLat(place.geometry.location.lat());
     setLng(place.geometry.location.lng());
     setAddress(place.formatted_address);
@@ -51,6 +55,7 @@ const CreateLine = () => {
       },
     };
     setLineId(await addNewLine(lineObj));
+    setButtonDisabled(true);
     generateQr();
   };
   const generateQr = async () => {
@@ -61,13 +66,10 @@ const CreateLine = () => {
         scale: 5,
       }
     );
-    setButtonDisabled(true);
     qrRef.current.scrollIntoView({ behavior: "smooth" });
   };
   if (finished) {
-    history.push({
-      pathname: `/line/${lineId}`,
-    });
+    history.push(`/line/${lineId}`);
   }
   return (
     <div>
@@ -94,6 +96,7 @@ const CreateLine = () => {
             <Form.Label>Store location*</Form.Label>
 
             <Autocomplete
+              data-testid="Auto complete"
               style={{
                 width: "100%",
                 height: "calc(1.5em + .75rem + 2px)",
@@ -116,12 +119,21 @@ const CreateLine = () => {
 
           <Form.Group controlId="serviceTime">
             <Form.Label>Average service time - per customer*</Form.Label>
-            <Form.Control required as="select" onChange={handleServiceTime}>
-              <option value="" disabled selected>
+
+            <Form.Control
+              required
+              as="select"
+              onChange={handleServiceTime}
+              data-testid="avg time select"
+              defaultValue="0"
+            >
+              <option value="0" disabled>
                 Select time
               </option>
               {serviceTimeOptions.map((option) => (
-                <option key={option}>{option + 1 + " min"}</option>
+                <option key={option} value={option + 1}>
+                  {option + 1 + " min"}
+                </option>
               ))}
             </Form.Control>
           </Form.Group>
@@ -133,6 +145,7 @@ const CreateLine = () => {
             aria-hidden="true"
           ></button>
           <Button
+            aria-label="submit"
             style={{
               backgroundColor: "#fca311",
               color: "#14213d",
@@ -149,6 +162,7 @@ const CreateLine = () => {
         {lineId && (
           <div ref={qrRef} className="text-center p-3">
             <QRCode
+              data-testid="qr"
               id="qr"
               value={`http://localhost:3000/ticket/${lineId}`}
               renderAs="svg"
