@@ -1,8 +1,8 @@
 import React from "react";
 import { Form, Button } from "react-bootstrap";
 import Modal from "react-modal";
-import axios from "axios";
 import Cookie from "js-cookie";
+import { signupOwner } from "../../serverFuncs";
 
 class SignupModal extends React.Component {
   constructor(props) {
@@ -24,11 +24,7 @@ class SignupModal extends React.Component {
       email: email,
       password: password,
     };
-    return axios({
-      method: "post",
-      url: "http://localhost:5000/owner",
-      data: ownerObject,
-    })
+    signupOwner(ownerObject)
       .then((res) => {
         Cookie.set("easyQ", res.data.authToken, { path: "/" });
         window.location.assign(`${window.location.origin}/dashboard`);

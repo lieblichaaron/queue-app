@@ -1,8 +1,7 @@
 import React from "react";
 import { Form, Button } from "react-bootstrap";
 import Modal from "react-modal";
-import axios from "axios";
-import loginOwner from "../../serverFuncs";
+import { loginOwner } from "../../serverFuncs";
 
 class LoginModal extends React.Component {
   constructor(props) {
