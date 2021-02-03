@@ -76,7 +76,7 @@ const Line = () => {
               <NowServing
                 textColor="#14213d"
                 backgroundColor="#e5e5e5"
-                currentCustomer={queue.line.length > 0 && queue.line[0].number}
+                currentCustomer={queue.line.length > 0 ? queue.line[0].number : ""}
               />
             </div>
             <h5 className="text-center my-5">
