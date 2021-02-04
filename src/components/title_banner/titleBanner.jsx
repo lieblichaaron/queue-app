@@ -2,13 +2,18 @@ const TitleBanner = (props) => {
   return (
     <header
       style={{
-        height: "2.5rem",
-        backgroundColor: "#fca311",
+        backgroundImage: "linear-gradient(black, #14213D)",
+        borderTop: "2px solid black",
+        color: "white",
         opacity: "0.9",
         textAlign: "center",
       }}
     >
-      <h3>{props.title}</h3>
+      <h2 className="py-2 my-0 mx-3"
+      style={{
+        borderBottom: "4px solid white"
+      }}
+      >{props.title}</h2>
     </header>
   );
 };
