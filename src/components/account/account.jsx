@@ -15,6 +15,7 @@ import UserContext from "../../contexts/UserContext";
 import Cookie from "js-cookie";
 import jwt_decode from "jwt-decode";
 import { updateUserInfo } from "../../serverFuncs";
+import TitleBanner from "../title_banner/titleBanner";
 
 function Account(props) {
   const user = useContext(UserContext);
@@ -83,9 +84,8 @@ function Account(props) {
         }}
         centered
       />
-      <h2 className="w-100 py-3 px-1 text-center text-wrap white-text">
-        Account Settings
-      </h2>
+      <TitleBanner title={"Account Settings"}/>
+      <div className="mb-4"/>
       <Formik
         initialValues={{
           displayName: user.displayName,
