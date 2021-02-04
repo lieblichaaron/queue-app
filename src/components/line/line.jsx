@@ -5,53 +5,55 @@ import Autocomplete from "react-google-autocomplete";
 import TitleBanner from "../title_banner/titleBanner";
 import MyMapComponent from "../map/map";
 import NowServing from "../now_serving/nowServing";
-import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChartArea } from "@fortawesome/free-solid-svg-icons";
+import {
+  getLineById,
+  serveNextCustomer,
+  pauseQueue,
+  resumeQueue,
+} from "../../serverFuncs";
 
 const Line = () => {
   const { lineId } = useParams();
   const [isLoading, setIsLoading] = useState();
   const [queue, setQueue] = useState();
-  const baseUrl = "http://localhost:5000";
   const [avgService, setAvgService] = useState();
   const [avgWait, setAvgWait] = useState(0);
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get(baseUrl + "/line/" + lineId).then((res) => {
-      setQueue(res.data);
+    getLineById(lineId).then((data) => {
+      setQueue(data);
       setIsLoading(false);
-      setAvgService(res.data.estServiceTime);
+      setAvgService(data.estServiceTime);
     });
   }, []);
 
   const handleServeNext = async () => {
-    axios.put(baseUrl + "/line/served-one/" + queue._id).then((res) => {
-      setAvgService(res.data.avgServiceTime);
-      setAvgWait(res.data.avgWaitTime);
-      axios.get(baseUrl + "/line/" + lineId).then((res) => {
-        setQueue(res.data);
+    serveNextCustomer(queue._id).then((data) => {
+      setAvgService(data.avgServiceTime);
+      setAvgWait(data.avgWaitTime);
+      getLineById(queue._id).then((data) => {
+        setQueue(data);
       });
     });
   };
 
   const handlePauseQueue = () => {
-    axios
-      .put(baseUrl + "/line/status/" + queue._id, { isActive: false })
-      .then(() => {
-        axios.get(baseUrl + "/line/" + lineId).then((res) => {
-          setQueue(res.data);
-        });
+    pauseQueue(queue._id).then(() => {
+      getLineById(queue._id).then((data) => {
+        setQueue(data);
       });
+    });
   };
 
   const handleResumeQueue = () => {
-    axios
-      .put(baseUrl + "/line/status/" + queue._id, { isActive: true })
-      .then(() => {
-        axios.get(baseUrl + "/line/" + lineId).then((res) => {
-          setQueue(res.data);
-        });
+    resumeQueue(queue._id).then(() => {
+      getLineById(queue._id).then((data) => {
+        setQueue(data);
       });
+    });
   };
 
   const buttonStyle = {
@@ -76,12 +78,17 @@ const Line = () => {
               <NowServing
                 textColor="#14213d"
                 backgroundColor="#e5e5e5"
-                currentCustomer={(queue.line && queue.line.length > 0) ? queue.line[0].number : ""}
+                currentCustomer={
+                  queue.line && queue.line.length > 0
+                    ? queue.line[0].number
+                    : ""
+                }
               />
             </div>
             <h5 className="text-center my-5">
               Currently waiting:{" "}
-              {(queue.line && queue.line.length > 0) ? queue.line.length - 1 : 0} people
+              {queue.line && queue.line.length > 0 ? queue.line.length - 1 : 0}{" "}
+              people
             </h5>
             <div
               className="my-5 d-flex flex-column justify-content-center align-items-center"
@@ -111,17 +118,9 @@ const Line = () => {
                 className="d-flex justify-content-center align-items-center mb-4"
                 style={{ height: "30px" }}
               >
-                <img
-                alt="customer analytics"
-                  src={`${process.env.PUBLIC_URL}/icons/analytics_icon.png`}
-                  style={{
-                    height: "24px",
-                    width: "24px",
-                    marginRight: "10px",
-                    marginBottom: "5px",
-                  }}
-                ></img>
-                <h4>Customer Analytics</h4>
+                <h4>
+                  <FontAwesomeIcon icon={faChartArea} /> Customer Analytics
+                </h4>
               </div>
               <div>
                 <div className="d-flex justify-content-between align-items-center mx-4">
@@ -145,7 +144,9 @@ const Line = () => {
                       pill
                       style={{ color: "black", backgroundColor: "#fca318" }}
                     >
-                      {`${queue.line ? avgService * queue.line.length : 0} mins`}
+                      {`${
+                        queue.line ? avgService * queue.line.length : 0
+                      } mins`}
                     </Badge>
                   </p>
                 </div>

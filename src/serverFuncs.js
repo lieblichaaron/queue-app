@@ -99,7 +99,7 @@ export const updatePassword = async (form) => {
     return res.data;
   } catch (err) {
     throw err;
-  };
+  }
 };
 
 export const loginOwner = async (ownerObject) => {
@@ -118,4 +118,41 @@ export const signupOwner = async (ownerObject) => {
     data: ownerObject,
   });
   return res;
+};
+
+export const serveNextCustomer = async (lineId) => {
+  try {
+    const res = await axios.put(baseUrl + "/line/served-one/" + lineId, {
+      headers: { authorization: Cookie.get("easyQ") },
+    });
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const pauseQueue = async (lineId) => {
+  try {
+    const res = await axios.put(
+      baseUrl + "/line/status/" + lineId,
+      { isActive: false },
+      { headers: { authorization: Cookie.get("easyQ") } }
+    );
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const resumeQueue = async (lineId) => {
+  try {
+    const res = await axios.put(
+      baseUrl + "/line/status/" + lineId,
+      { isActive: true },
+      { headers: { authorization: Cookie.get("easyQ") } }
+    );
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
 };
