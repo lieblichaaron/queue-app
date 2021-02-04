@@ -76,12 +76,12 @@ const Line = () => {
               <NowServing
                 textColor="#14213d"
                 backgroundColor="#e5e5e5"
-                currentCustomer={queue.line.length > 0 ? queue.line[0].number : ""}
+                currentCustomer={(queue.line && queue.line.length > 0) ? queue.line[0].number : ""}
               />
             </div>
             <h5 className="text-center my-5">
               Currently waiting:{" "}
-              {queue.line.length > 0 ? queue.line.length - 1 : 0} people
+              {(queue.line && queue.line.length > 0) ? queue.line.length - 1 : 0} people
             </h5>
             <div
               className="my-5 d-flex flex-column justify-content-center align-items-center"
@@ -112,6 +112,7 @@ const Line = () => {
                 style={{ height: "30px" }}
               >
                 <img
+                alt="customer analytics"
                   src={`${process.env.PUBLIC_URL}/icons/analytics_icon.png`}
                   style={{
                     height: "24px",
@@ -144,7 +145,7 @@ const Line = () => {
                       pill
                       style={{ color: "black", backgroundColor: "#fca318" }}
                     >
-                      {`${avgService * queue.line.length} mins`}
+                      {`${queue.line ? avgService * queue.line.length : 0} mins`}
                     </Badge>
                   </p>
                 </div>
